@@ -5,7 +5,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 
 import { AppSidebar } from '@/components/layout/app-sidebar'
 import { LocatorInit } from '@/components/locator-init'
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { ScrollArea, SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,11 +33,13 @@ export default function RootLayout({
         <LocatorInit />
         <SidebarProvider>
           <AppSidebar />
-          <SidebarInset>
-            <header className="flex h-12 items-center border-b px-4">
+          <SidebarInset className="flex h-screen flex-col">
+            <header className="flex h-12 shrink-0 items-center border-b px-4">
               <SidebarTrigger />
             </header>
-            <main className="flex-1 p-6">{children}</main>
+            <ScrollArea className="min-h-0 flex-1">
+              <main className="p-6">{children}</main>
+            </ScrollArea>
           </SidebarInset>
         </SidebarProvider>
       </body>

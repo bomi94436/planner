@@ -38,7 +38,7 @@ export default function RootLayout({
               <SidebarTrigger />
             </header>
             <ScrollArea className="min-h-0 flex-1">
-              <main className="p-6">{children}</main>
+              <main className="py-6 px-10">{children}</main>
             </ScrollArea>
           </SidebarInset>
         </SidebarProvider>

@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// DB 컬럼: snake_case, Prisma 모델: camelCase
+model Todo {
+  id             String   @id @default(uuid())
+  title          String   @db.VarChar(255)
+  completed      Boolean  @default(false)
+  startTimestamp DateTime @map("start_timestamp")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("todos")
+}

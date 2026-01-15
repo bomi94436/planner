@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 import type { Todo } from '@/types/daily'
 
 // 초기 mock 데이터 (서버 시작 시 로드)
@@ -6,31 +8,31 @@ const initialTodos: Todo[] = [
     id: '1',
     title: '아침 운동하기',
     completed: true,
-    start_timestamp: new Date().toISOString(),
+    startTimestamp: new Date().toISOString(),
   },
   {
     id: '2',
     title: '프로젝트 회의 준비',
     completed: false,
-    start_timestamp: new Date().toISOString(),
+    startTimestamp: new Date().toISOString(),
   },
   {
     id: '3',
     title: '이메일 확인 및 답장',
     completed: false,
-    start_timestamp: new Date().toISOString(),
+    startTimestamp: new Date().toISOString(),
   },
   {
     id: '4',
     title: '점심 약속',
     completed: false,
-    start_timestamp: new Date().toISOString(),
+    startTimestamp: new Date().toISOString(),
   },
   {
     id: '5',
     title: '독서 30분',
     completed: false,
-    start_timestamp: new Date().toISOString(),
+    startTimestamp: new Date().toISOString(),
   },
 ]
 
@@ -54,7 +56,7 @@ class TodoStore {
   // 날짜별 필터링 조회
   getByDate(date: string): Todo[] {
     return this.getAll().filter((todo) => {
-      const todoDate = todo.start_timestamp.split('T')[0]
+      const todoDate = dayjs(todo.startTimestamp).format('YYYY-MM-DD')
       return todoDate === date
     })
   }

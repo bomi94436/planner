@@ -13,7 +13,7 @@ export interface ErrorResponse {
 // Todo 생성 요청 타입
 export interface CreateTodoRequest {
   title: string
-  start_timestamp: string // ISO 8601 형식
+  startTimestamp: string // ISO 8601 형식
   completed?: boolean // 기본값: false
 }
 
@@ -21,7 +21,7 @@ export interface CreateTodoRequest {
 export interface UpdateTodoRequest {
   title?: string
   completed?: boolean
-  start_timestamp?: string
+  startTimestamp?: string
 }
 
 // Todo 목록 조회 응답 타입

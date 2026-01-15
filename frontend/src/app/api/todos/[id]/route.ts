@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
-import type { DeleteTodoResponse, TodoResponse } from '@/types/api'
+import type { DeleteTodoResponse, TodoResponse } from '@/types/todo'
 
 import { withErrorHandler } from '../../_lib/with-error-handler'
 import { updateTodoSchema } from '../../_validations/todo'
@@ -21,12 +21,7 @@ export const GET = withErrorHandler<{ id: string }>(async (_request, context) =>
     )
   }
 
-  return NextResponse.json<TodoResponse>({
-    data: {
-      ...todo,
-      startTimestamp: todo.startTimestamp.toISOString(),
-    },
-  })
+  return NextResponse.json<TodoResponse>({ data: todo })
 })
 
 // PATCH /api/todos/[id] - 수정
@@ -69,12 +64,7 @@ export const PATCH = withErrorHandler<{ id: string }>(async (request, context) =
     data: updateData,
   })
 
-  return NextResponse.json<TodoResponse>({
-    data: {
-      ...updated,
-      startTimestamp: updated.startTimestamp.toISOString(),
-    },
-  })
+  return NextResponse.json<TodoResponse>({ data: updated })
 })
 
 // DELETE /api/todos/[id] - 삭제

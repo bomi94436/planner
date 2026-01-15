@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { prisma } from '@/lib/prisma'
-import type { TodoListResponse, TodoResponse } from '@/types/api'
+import type { TodoListResponse, TodoResponse } from '@/types/todo'
 
 import { withErrorHandler } from '../_lib/with-error-handler'
 import { createTodoSchema } from '../_validations/todo'
@@ -41,12 +41,7 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
     })
   }
 
-  return NextResponse.json<TodoListResponse>({
-    data: todos.map((todo) => ({
-      ...todo,
-      startTimestamp: todo.startTimestamp.toISOString(),
-    })),
-  })
+  return NextResponse.json<TodoListResponse>({ data: todos })
 })
 
 // POST /api/todos - 생성
@@ -62,13 +57,5 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     },
   })
 
-  return NextResponse.json<TodoResponse>(
-    {
-      data: {
-        ...newTodo,
-        startTimestamp: newTodo.startTimestamp.toISOString(),
-      },
-    },
-    { status: 201 }
-  )
+  return NextResponse.json<TodoResponse>({ data: newTodo }, { status: 201 })
 })

@@ -1,14 +1,6 @@
-import type { Todo } from './daily'
+import type { Todo as PrismaTodo } from '@prisma/client'
 
-// 성공 응답 타입
-export interface SuccessResponse<T> {
-  data: T
-}
-
-// 에러 응답 타입
-export interface ErrorResponse {
-  error: string
-}
+import type { Response } from './index'
 
 // Todo 생성 요청 타입
 export interface CreateTodoRequest {
@@ -25,10 +17,10 @@ export interface UpdateTodoRequest {
 }
 
 // Todo 목록 조회 응답 타입
-export type TodoListResponse = SuccessResponse<Todo[]> | ErrorResponse
+export type TodoListResponse = Response<PrismaTodo[]>
 
 // Todo 단일 조회/생성/수정 응답 타입
-export type TodoResponse = SuccessResponse<Todo> | ErrorResponse
+export type TodoResponse = Response<PrismaTodo>
 
 // Todo 삭제 응답 타입
-export type DeleteTodoResponse = SuccessResponse<{ id: string }> | ErrorResponse
+export type DeleteTodoResponse = Response<{ id: string }>

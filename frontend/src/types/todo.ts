@@ -1,26 +1,24 @@
-import type { Todo as PrismaTodo } from '@prisma/client'
+import type { Todo } from '@prisma/client'
+import type { z } from 'zod'
+
+import type {
+  createTodoSchema,
+  getTodosQuerySchema,
+  updateTodoSchema,
+} from '@/app/api/_validations'
 
 import type { Response } from './index'
 
-// Todo 생성 요청 타입
-export interface CreateTodoRequest {
-  title: string
-  startTimestamp: string // ISO 8601 형식
-  completed?: boolean // 기본값: false
-}
-
-// Todo 수정 요청 타입 (모든 필드 선택적)
-export interface UpdateTodoRequest {
-  title?: string
-  completed?: boolean
-  startTimestamp?: string
-}
+// 타입 추론
+export type CreateTodoBody = z.infer<typeof createTodoSchema>
+export type UpdateTodoBody = z.infer<typeof updateTodoSchema>
+export type GetTodosQuery = z.infer<typeof getTodosQuerySchema>
 
 // Todo 목록 조회 응답 타입
-export type TodoListResponse = Response<PrismaTodo[]>
+export type TodosResponse = Response<Todo[]>
 
 // Todo 단일 조회/생성/수정 응답 타입
-export type TodoResponse = Response<PrismaTodo>
+export type TodoResponse = Response<Todo>
 
 // Todo 삭제 응답 타입
-export type DeleteTodoResponse = Response<{ id: string }>
+export type DeleteTodoResponse = Response<{ id: number }>

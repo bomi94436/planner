@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend
 
-## Getting Started
+## 기술 스택
 
-First, run the development server:
+| 영역 | 기술 | 버전 |
+|------|------|------|
+| 프레임워크 | Next.js (App Router) | 16.1.1 |
+| 언어 | TypeScript | 5.x |
+| 스타일링 | Tailwind CSS | 4.x |
+| UI 컴포넌트 | shadcn/ui (Radix UI) | - |
+| 상태 관리 | Zustand | 5.x |
+| ORM | Prisma | 7.2.0 |
+| DB | PostgreSQL | - |
+| Validation | Zod | 4.x |
+| 날짜 처리 | dayjs | - |
+
+## 개발 명령어
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev      # 개발 서버 실행
+npm run build    # 프로덕션 빌드
+npm run lint     # 린트 검사
+npm run lint:fix # 린트 자동 수정
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Prisma 명령어
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 자주 사용하는 명령어
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Prisma Client 생성 (스키마 변경 후 필수)
+npx prisma generate
 
-## Learn More
+# 마이그레이션 생성 및 적용 (개발 환경)
+npx prisma migrate dev --name <마이그레이션_이름>
 
-To learn more about Next.js, take a look at the following resources:
+# 마이그레이션 적용 (프로덕션 환경)
+npx prisma migrate deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# DB 스키마 직접 반영 (마이그레이션 없이, 개발용)
+npx prisma db push
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Prisma Studio 실행 (DB GUI)
+npx prisma studio
+```
 
-## Deploy on Vercel
+### 기타 명령어
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# DB 시드 데이터 삽입
+npx prisma db seed
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# 마이그레이션 상태 확인
+npx prisma migrate status
+
+# DB 스키마를 schema.prisma로 가져오기 (기존 DB 연동 시)
+npx prisma db pull
+
+# 마이그레이션 초기화 (주의: 데이터 손실)
+npx prisma migrate reset
+```
+
+### 스키마 변경 워크플로우
+
+1. `prisma/schema.prisma` 수정
+2. `npx prisma migrate dev --name <설명>` 실행
+3. 자동으로 `npx prisma generate` 실행됨
+4. 코드에서 변경된 타입 사용
+
+### Prisma Client 경로
+
+```typescript
+import { PrismaClient } from '@/generated/prisma/client'
+```
+
+### 네이밍 컨벤션
+
+- **DB 컬럼**: `snake_case` (예: `start_timestamp`, `created_at`)
+- **Prisma 모델**: `camelCase` (예: `startTimestamp`, `createdAt`)
+
+`@map()` 데코레이터를 사용하여 DB 컬럼명과 Prisma 필드명을 매핑합니다.

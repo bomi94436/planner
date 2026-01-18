@@ -1,25 +1,4 @@
-import dayjs from 'dayjs'
-
-import type { TimeBlock, Todo } from '@/types/daily'
-
-// 샘플 TODO 데이터
-export const mockTodos: Todo[] = [
-  { id: '1', title: '아침 운동하기', completed: true, startTimestamp: dayjs().toISOString() },
-  {
-    id: '2',
-    title: '프로젝트 회의 준비',
-    completed: false,
-    startTimestamp: dayjs().toISOString(),
-  },
-  {
-    id: '3',
-    title: '이메일 확인 및 답장',
-    completed: false,
-    startTimestamp: dayjs().toISOString(),
-  },
-  { id: '4', title: '점심 약속', completed: false, startTimestamp: dayjs().toISOString() },
-  { id: '5', title: '독서 30분', completed: false, startTimestamp: dayjs().toISOString() },
-]
+import type { TimeBlock } from '@/types/daily'
 
 // 샘플 타임블록 데이터 (오늘 날짜 기준)
 const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD

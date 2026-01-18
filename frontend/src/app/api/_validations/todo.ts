@@ -4,7 +4,7 @@ import { z } from 'zod'
 export const createTodoSchema = z.object({
   title: z.string().min(1, 'title은 필수 항목입니다.'),
   startTimestamp: z.string().datetime({ message: 'startTimestamp 형식이 올바르지 않습니다.' }),
-  completed: z.boolean().optional().default(false),
+  completed: z.boolean().default(false).optional(),
 })
 
 // Todo 수정 스키마
@@ -19,6 +19,14 @@ export const updateTodoSchema = z
   })
   .refine((data) => Object.keys(data).length > 0, { message: '수정할 내용이 없습니다.' })
 
-// 타입 추론
-export type CreateTodoInput = z.infer<typeof createTodoSchema>
-export type UpdateTodoInput = z.infer<typeof updateTodoSchema>
+// Todo 목록 조회 쿼리 파라미터 스키마
+export const getTodosQuerySchema = z.object({
+  startTimestamp: z
+    .string()
+    .datetime({ message: 'startTimestamp 형식이 올바르지 않습니다. (ISO 8601)' })
+    .optional(),
+  endTimestamp: z
+    .string()
+    .datetime({ message: 'endTimestamp 형식이 올바르지 않습니다. (ISO 8601)' })
+    .optional(),
+})

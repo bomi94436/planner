@@ -1,31 +1,12 @@
 import { NextResponse } from 'next/server'
 
+import { withErrorHandler } from '@/app/api/_lib'
+import { updateTodoSchema } from '@/app/api/_validations'
 import { prisma } from '@/lib/prisma'
 import type { DeleteTodoResponse, TodoResponse } from '@/types/todo'
 
-import { withErrorHandler } from '../../_lib/with-error-handler'
-import { updateTodoSchema } from '../../_validations/todo'
-
-// GET /api/todos/[id] - 단일 조회
-export const GET = withErrorHandler<{ id: string }>(async (_request, context) => {
-  const { id } = await context!.params
-
-  const todo = await prisma.todo.findUnique({
-    where: { id },
-  })
-
-  if (!todo) {
-    return NextResponse.json<TodoResponse>(
-      { error: '해당 Todo를 찾을 수 없습니다.' },
-      { status: 404 }
-    )
-  }
-
-  return NextResponse.json<TodoResponse>({ data: todo })
-})
-
 // PATCH /api/todos/[id] - 수정
-export const PATCH = withErrorHandler<{ id: string }>(async (request, context) => {
+export const PATCH = withErrorHandler<{ id: number }>(async (request, context) => {
   const { id } = await context!.params
 
   // 존재 여부 확인
@@ -68,7 +49,7 @@ export const PATCH = withErrorHandler<{ id: string }>(async (request, context) =
 })
 
 // DELETE /api/todos/[id] - 삭제
-export const DELETE = withErrorHandler<{ id: string }>(async (_request, context) => {
+export const DELETE = withErrorHandler<{ id: number }>(async (_request, context) => {
   const { id } = await context!.params
 
   // 존재 여부 확인

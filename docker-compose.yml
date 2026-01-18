@@ -40,6 +40,7 @@ services:
       - '3000:3000'
     environment:
       DATABASE_URL: postgresql://planner:planner_password@postgres:5432/planner_db
+      NEXT_PUBLIC_PROJECT_PATH: ${PWD}/frontend
     depends_on:
       postgres:
         condition: service_healthy

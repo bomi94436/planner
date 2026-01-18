@@ -35,8 +35,8 @@ type ProcessedBlock = { block: TimeBlock; blockStart: number; blockEnd: number }
 function preprocessBlocks(timeBlocks: TimeBlock[]): ProcessedBlock[] {
   return timeBlocks.map((block) => ({
     block,
-    blockStart: toAbsoluteBlock(block.startTime),
-    blockEnd: toAbsoluteBlock(block.endTime),
+    blockStart: toAbsoluteBlock(block.startTimestamp),
+    blockEnd: toAbsoluteBlock(block.endTimestamp),
   }))
 }
 

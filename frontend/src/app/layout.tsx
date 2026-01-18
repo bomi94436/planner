@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 
 import { AppSidebar } from '@/components/layout/app-sidebar'
-import { LocatorInit } from '@/components/locator-init'
+import { Providers } from '@/components/providers'
 import { ScrollArea, SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui'
 
 const geistSans = Geist({
@@ -30,18 +30,19 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <LocatorInit />
-        <SidebarProvider>
-          <AppSidebar />
-          <SidebarInset className="flex h-screen flex-col">
-            <header className="flex h-12 shrink-0 items-center border-b px-4">
-              <SidebarTrigger />
-            </header>
-            <ScrollArea className="min-h-0 flex-1">
-              <main className="py-6 px-10">{children}</main>
-            </ScrollArea>
-          </SidebarInset>
-        </SidebarProvider>
+        <Providers>
+          <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset className="flex h-screen flex-col">
+              <header className="flex h-12 shrink-0 items-center border-b px-4">
+                <SidebarTrigger />
+              </header>
+              <ScrollArea className="min-h-0 flex-1">
+                <main className="py-6 px-10">{children}</main>
+              </ScrollArea>
+            </SidebarInset>
+          </SidebarProvider>
+        </Providers>
       </body>
     </html>
   )

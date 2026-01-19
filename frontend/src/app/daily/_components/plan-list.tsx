@@ -13,7 +13,7 @@ import { updatePlan } from '../_api/func'
 export function PlanList() {
   const { selectedDate } = useDateStore()
   const { data: plans } = useQuery({
-    queryKey: ['plans'],
+    queryKey: ['plans', selectedDate],
     queryFn: () =>
       getPlans({
         startTimestamp: dayjs(selectedDate).startOf('day').toISOString(),
@@ -22,7 +22,7 @@ export function PlanList() {
   })
   const queryClient = useQueryClient()
   const { mutate: updatePlanMutation } = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdatePlanBody }) => updatePlan(id, data),
+    mutationFn: ({ id, data }: { id: number; data: UpdatePlanBody }) => updatePlan(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['plans'] })
     },
@@ -34,7 +34,7 @@ export function PlanList() {
         {plans?.map((plan) => (
           <div key={plan.id} className="flex items-center gap-3">
             <Checkbox
-              id={plan.id}
+              id={plan.id.toString()}
               checked={plan.completed}
               onCheckedChange={() => {
                 updatePlanMutation({
@@ -44,7 +44,7 @@ export function PlanList() {
               }}
             />
             <label
-              htmlFor={plan.id}
+              htmlFor={plan.id.toString()}
               className={plan.completed ? 'text-muted-foreground line-through' : 'text-foreground'}
             >
               {plan.title}

@@ -6,7 +6,7 @@ import { prisma } from '@/lib/prisma'
 import type { DeletePlanResponse, PlanResponse } from '@/types/plan'
 
 // PATCH /api/plans/[id] - 수정
-export const PATCH = withErrorHandler<{ id: number }>(async (request, context) => {
+export const PATCH = withErrorHandler<{ id: string }>(async (request, context) => {
   const params = await context!.params
   const id = Number(params.id)
 
@@ -50,7 +50,7 @@ export const PATCH = withErrorHandler<{ id: number }>(async (request, context) =
 })
 
 // DELETE /api/plans/[id] - 삭제
-export const DELETE = withErrorHandler<{ id: number }>(async (_request, context) => {
+export const DELETE = withErrorHandler<{ id: string }>(async (_request, context) => {
   const params = await context!.params
   const id = Number(params.id)
 

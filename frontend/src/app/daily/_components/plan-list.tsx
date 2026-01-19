@@ -31,26 +31,33 @@ export function PlanList() {
   return (
     <Card className="h-full py-4">
       <CardContent className="space-y-2">
-        {plans?.map((plan) => (
-          <div key={plan.id} className="flex items-center gap-3">
-            <Checkbox
-              id={plan.id.toString()}
-              checked={plan.completed}
-              onCheckedChange={() => {
-                updatePlanMutation({
-                  id: plan.id,
-                  data: { completed: !plan.completed },
-                })
-              }}
-            />
-            <label
-              htmlFor={plan.id.toString()}
-              className={plan.completed ? 'text-muted-foreground line-through' : 'text-foreground'}
-            >
-              {plan.title}
-            </label>
-          </div>
-        ))}
+        {plans?.map((plan) => {
+          const dDay = dayjs(plan.endTimestamp).diff(dayjs(selectedDate), 'day')
+          return (
+            <div key={plan.id} className="flex items-center gap-3">
+              <Checkbox
+                id={plan.id.toString()}
+                checked={plan.completed}
+                onCheckedChange={() => {
+                  updatePlanMutation({
+                    id: plan.id,
+                    data: { completed: !plan.completed },
+                  })
+                }}
+              />
+              <label
+                htmlFor={plan.id.toString()}
+                className={
+                  plan.completed ? 'text-muted-foreground line-through' : 'text-foreground'
+                }
+              >
+                {plan.title}
+              </label>
+
+              {dDay > 0 && <span className="ml-auto text-muted-foreground text-sm">D-{dDay}</span>}
+            </div>
+          )
+        })}
       </CardContent>
     </Card>
   )

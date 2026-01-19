@@ -1,19 +1,19 @@
 import { NextResponse } from 'next/server'
 
 import { withErrorHandler } from '@/app/api/_lib'
-import { createTodoSchema, getTodosQuerySchema } from '@/app/api/_validations'
+import { createPlanSchema, getPlansQuerySchema } from '@/app/api/_validations'
 import { prisma } from '@/lib/prisma'
-import type { TodoResponse, TodosResponse } from '@/types/todo'
+import type { PlanResponse, PlansResponse } from '@/types/plan'
 
-// GET /api/todos - 전체 조회 (날짜 필터링 가능)
+// GET /api/plans - 전체 조회 (날짜 필터링 가능)
 export const GET = withErrorHandler(async (request) => {
   const searchParams = new URLSearchParams(request.url)
-  const { startTimestamp, endTimestamp } = getTodosQuerySchema.parse({
+  const { startTimestamp, endTimestamp } = getPlansQuerySchema.parse({
     startTimestamp: searchParams.get('startTimestamp') ?? undefined,
     endTimestamp: searchParams.get('endTimestamp') ?? undefined,
   })
 
-  const todos = await prisma.todo.findMany({
+  const plans = await prisma.plan.findMany({
     where: {
       startTimestamp: {
         gte: startTimestamp,
@@ -22,21 +22,22 @@ export const GET = withErrorHandler(async (request) => {
     },
     orderBy: { startTimestamp: 'asc' },
   })
-  return NextResponse.json<TodosResponse>({ data: todos })
+  return NextResponse.json<PlansResponse>({ data: plans })
 })
 
-// POST /api/todos - 생성
+// POST /api/plans - 생성
 export const POST = withErrorHandler(async (request) => {
   const body = await request.json()
-  const validated = createTodoSchema.parse(body)
+  const validated = createPlanSchema.parse(body)
 
-  const newTodo = await prisma.todo.create({
+  const newPlan = await prisma.plan.create({
     data: {
       title: validated.title.trim(),
-      completed: validated.completed,
       startTimestamp: new Date(validated.startTimestamp),
+      endTimestamp: new Date(validated.endTimestamp || validated.startTimestamp),
+      isAllDay: validated.isAllDay,
     },
   })
 
-  return NextResponse.json<TodoResponse>({ data: newTodo }, { status: 201 })
+  return NextResponse.json<PlanResponse>({ data: newPlan }, { status: 201 })
 })

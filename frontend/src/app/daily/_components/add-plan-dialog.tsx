@@ -16,13 +16,13 @@ import {
 } from '@/components/ui'
 import { useDateStore } from '@/store'
 
-import { createTodo } from '../_api/func'
+import { createPlan } from '../_api/func'
 
-interface AddTodoDialogProps {
+interface AddPlanDialogProps {
   children: React.ReactNode
 }
 
-export function AddTodoDialog({ children }: AddTodoDialogProps) {
+export function AddPlanDialog({ children }: AddPlanDialogProps) {
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState('')
   const { selectedDate } = useDateStore()
@@ -30,10 +30,10 @@ export function AddTodoDialog({ children }: AddTodoDialogProps) {
 
   const queryClient = useQueryClient()
 
-  const { mutate: createTodoMutation, isPending } = useMutation({
-    mutationFn: createTodo,
+  const { mutate: createPlanMutation, isPending } = useMutation({
+    mutationFn: createPlan,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['todos'] })
+      queryClient.invalidateQueries({ queryKey: ['plans'] })
       setOpen(false)
       setTitle('')
     },
@@ -43,7 +43,7 @@ export function AddTodoDialog({ children }: AddTodoDialogProps) {
     e.preventDefault()
     if (!title.trim()) return
 
-    createTodoMutation({
+    createPlanMutation({
       title: title.trim(),
       startTimestamp: dayjs(timestamp).toISOString(),
     })
@@ -62,18 +62,18 @@ export function AddTodoDialog({ children }: AddTodoDialogProps) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>할 일 추가</DialogTitle>
+          <DialogTitle>계획 추가</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="title" className="text-sm font-medium">
-              제목
+              계획 제목
             </label>
             <Input
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="할 일을 입력하세요"
+              placeholder="계획을 입력하세요"
               autoFocus
             />
           </div>

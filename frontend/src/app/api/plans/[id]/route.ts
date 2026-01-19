@@ -1,28 +1,29 @@
 import { NextResponse } from 'next/server'
 
 import { withErrorHandler } from '@/app/api/_lib'
-import { updateTodoSchema } from '@/app/api/_validations'
+import { updatePlanSchema } from '@/app/api/_validations'
 import { prisma } from '@/lib/prisma'
-import type { DeleteTodoResponse, TodoResponse } from '@/types/todo'
+import type { DeletePlanResponse, PlanResponse } from '@/types/plan'
 
-// PATCH /api/todos/[id] - 수정
+// PATCH /api/plans/[id] - 수정
 export const PATCH = withErrorHandler<{ id: number }>(async (request, context) => {
-  const { id } = await context!.params
+  const params = await context!.params
+  const id = Number(params.id)
 
   // 존재 여부 확인
-  const existing = await prisma.todo.findUnique({
+  const existing = await prisma.plan.findUnique({
     where: { id },
   })
 
   if (!existing) {
-    return NextResponse.json<TodoResponse>(
-      { error: '해당 Todo를 찾을 수 없습니다.' },
+    return NextResponse.json<PlanResponse>(
+      { error: '해당 Plan을 찾을 수 없습니다.' },
       { status: 404 }
     )
   }
 
   const body = await request.json()
-  const validated = updateTodoSchema.parse(body)
+  const validated = updatePlanSchema.parse(body)
 
   const updateData: {
     title?: string
@@ -40,33 +41,34 @@ export const PATCH = withErrorHandler<{ id: number }>(async (request, context) =
     updateData.startTimestamp = new Date(validated.startTimestamp)
   }
 
-  const updated = await prisma.todo.update({
+  const updated = await prisma.plan.update({
     where: { id },
     data: updateData,
   })
 
-  return NextResponse.json<TodoResponse>({ data: updated })
+  return NextResponse.json<PlanResponse>({ data: updated })
 })
 
-// DELETE /api/todos/[id] - 삭제
+// DELETE /api/plans/[id] - 삭제
 export const DELETE = withErrorHandler<{ id: number }>(async (_request, context) => {
-  const { id } = await context!.params
+  const params = await context!.params
+  const id = Number(params.id)
 
   // 존재 여부 확인
-  const existing = await prisma.todo.findUnique({
+  const existing = await prisma.plan.findUnique({
     where: { id },
   })
 
   if (!existing) {
-    return NextResponse.json<DeleteTodoResponse>(
-      { error: '해당 Todo를 찾을 수 없습니다.' },
+    return NextResponse.json<DeletePlanResponse>(
+      { error: '해당 Plan을 찾을 수 없습니다.' },
       { status: 404 }
     )
   }
 
-  await prisma.todo.delete({
+  await prisma.plan.delete({
     where: { id },
   })
 
-  return NextResponse.json<DeleteTodoResponse>({ data: { id } })
+  return NextResponse.json<DeletePlanResponse>({ data: { id } })
 })

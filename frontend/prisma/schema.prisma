@@ -13,13 +13,15 @@ datasource db {
   provider = "postgresql"
 }
 
-model Todo {
+model Plan {
   id             Int      @id @default(autoincrement())
   title          String   @db.VarChar(255)
   completed      Boolean  @default(false)
   startTimestamp DateTime @map("start_timestamp")
+  endTimestamp   DateTime @map("end_timestamp")
+  isAllDay       Boolean  @default(false)
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
-  @@map("todos")
+  @@map("plans")
 }

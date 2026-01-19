@@ -51,7 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Todo: 'Todo'
+  Plan: 'Plan'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -70,16 +70,18 @@ export const TransactionIsolationLevel = {
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const TodoScalarFieldEnum = {
+export const PlanScalarFieldEnum = {
   id: 'id',
   title: 'title',
   completed: 'completed',
   startTimestamp: 'startTimestamp',
+  endTimestamp: 'endTimestamp',
+  isAllDay: 'isAllDay',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type TodoScalarFieldEnum = (typeof TodoScalarFieldEnum)[keyof typeof TodoScalarFieldEnum]
+export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
 
 
 export const SortOrder = {

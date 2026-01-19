@@ -8,5 +8,5 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Todo'
+export type * from './models/Plan'
 export type * from './commonInputTypes'

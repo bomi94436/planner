@@ -1,50 +1,34 @@
 import axios from 'axios'
 
 import {
-  CreateTodoBody,
-  GetTodosQuery,
-  TodoResponse,
-  TodosResponse,
-  UpdateTodoBody,
-} from '@/types/todo'
+  CreatePlanBody,
+  GetPlansQuery,
+  PlanResponse,
+  PlansResponse,
+  UpdatePlanBody,
+} from '@/types/plan'
 
-export const getTodos = async ({ startTimestamp, endTimestamp }: GetTodosQuery) => {
-  try {
-    const response = await axios.get<TodosResponse>('/api/todos', {
-      params: {
-        startTimestamp,
-        endTimestamp,
-      },
-    })
-    return response.data?.data
-  } catch (error) {
-    throw error
-  }
+export const getPlans = async ({ startTimestamp, endTimestamp }: GetPlansQuery) => {
+  const response = await axios.get<PlansResponse>('/api/plans', {
+    params: {
+      startTimestamp,
+      endTimestamp,
+    },
+  })
+  return response.data?.data
 }
 
-export const createTodo = async (data: CreateTodoBody) => {
-  try {
-    const response = await axios.post<TodoResponse>('/api/todos', data)
-    return response.data?.data
-  } catch (error) {
-    throw error
-  }
+export const createPlan = async (data: CreatePlanBody) => {
+  const response = await axios.post<PlanResponse>('/api/plans', data)
+  return response.data?.data
 }
 
-export const updateTodo = async (id: string, data: UpdateTodoBody) => {
-  try {
-    const response = await axios.patch<TodoResponse>(`/api/todos/${id}`, data)
-    return response.data?.data
-  } catch (error) {
-    throw error
-  }
+export const updatePlan = async (id: number, data: UpdatePlanBody) => {
+  const response = await axios.patch<PlanResponse>(`/api/plans/${id}`, data)
+  return response.data?.data
 }
 
-export const deleteTodo = async (id: string) => {
-  try {
-    const response = await axios.delete<TodoResponse>(`/api/todos/${id}`)
-    return response.data?.data
-  } catch (error) {
-    throw error
-  }
+export const deletePlan = async (id: number) => {
+  const response = await axios.delete<PlanResponse>(`/api/plans/${id}`)
+  return response.data?.data
 }

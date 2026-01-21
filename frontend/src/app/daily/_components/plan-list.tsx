@@ -1,17 +1,35 @@
 'use client'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
+import { PencilIcon, TrashIcon } from 'lucide-react'
+import { useState } from 'react'
 
-import { getPlans } from '@/app/daily/_api/func'
-import { Card, CardContent, Checkbox } from '@/components/ui'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  Card,
+  CardContent,
+  Checkbox,
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '@/components/ui'
 import { useDateStore } from '@/store'
 import { UpdatePlanBody } from '@/types/plan'
 
-import { updatePlan } from '../_api/func'
+import { deletePlan, getPlans, updatePlan } from '../_api/func'
 
 export function PlanList() {
   const { selectedDate } = useDateStore()
+  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null)
+
   const { data: plans } = useQuery({
     queryKey: ['plans', selectedDate],
     queryFn: () =>
@@ -20,7 +38,9 @@ export function PlanList() {
         endTimestamp: dayjs(selectedDate).endOf('day').toISOString(),
       }),
   })
+
   const queryClient = useQueryClient()
+
   const { mutate: updatePlanMutation } = useMutation({
     mutationFn: ({ id, data }: { id: number; data: UpdatePlanBody }) => updatePlan(id, data),
     onSuccess: () => {
@@ -28,37 +48,82 @@ export function PlanList() {
     },
   })
 
-  return (
-    <Card className="h-full py-4">
-      <CardContent className="space-y-2">
-        {plans?.map((plan) => {
-          const dDay = dayjs(plan.endTimestamp).diff(dayjs(selectedDate), 'day')
-          return (
-            <div key={plan.id} className="flex items-center gap-3">
-              <Checkbox
-                id={plan.id.toString()}
-                checked={plan.completed}
-                onCheckedChange={() => {
-                  updatePlanMutation({
-                    id: plan.id,
-                    data: { completed: !plan.completed },
-                  })
-                }}
-              />
-              <label
-                htmlFor={plan.id.toString()}
-                className={
-                  plan.completed ? 'text-muted-foreground line-through' : 'text-foreground'
-                }
-              >
-                {plan.title}
-              </label>
+  const { mutate: deletePlanMutation } = useMutation({
+    mutationFn: (id: number) => deletePlan(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['plans'] })
+      setDeleteTargetId(null)
+    },
+  })
 
-              {dDay > 0 && <span className="ml-auto text-muted-foreground text-sm">D-{dDay}</span>}
-            </div>
-          )
-        })}
-      </CardContent>
-    </Card>
+  const handlePlanClick = (id: number, completed: boolean) => {
+    updatePlanMutation({
+      id,
+      data: { completed },
+    })
+  }
+
+  return (
+    <>
+      <Card className="h-full py-4">
+        <CardContent className="space-y-2">
+          {plans?.map((plan) => {
+            const dDay = dayjs(plan.endTimestamp).diff(dayjs(selectedDate), 'day')
+            return (
+              <ContextMenu key={`plan-${plan.id}`}>
+                <ContextMenuTrigger asChild>
+                  <div
+                    className="flex items-center gap-3 hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground cursor-pointer rounded-md py-1 px-2"
+                    onClick={() => handlePlanClick(plan.id, !plan.completed)}
+                  >
+                    <Checkbox
+                      id={plan.id.toString()}
+                      checked={plan.completed}
+                      onCheckedChange={() => handlePlanClick(plan.id, !plan.completed)}
+                    />
+                    <label
+                      htmlFor={plan.id.toString()}
+                      className={
+                        plan.completed ? 'text-muted-foreground line-through' : 'text-foreground'
+                      }
+                    >
+                      {plan.title}
+                    </label>
+
+                    {dDay > 0 && (
+                      <span className="ml-auto text-muted-foreground text-sm">D-{dDay}</span>
+                    )}
+                  </div>
+                </ContextMenuTrigger>
+
+                <ContextMenuContent>
+                  <ContextMenuItem>
+                    <PencilIcon /> Edit
+                  </ContextMenuItem>
+                  <ContextMenuItem variant="destructive" onClick={() => setDeleteTargetId(plan.id)}>
+                    <TrashIcon /> Delete
+                  </ContextMenuItem>
+                </ContextMenuContent>
+              </ContextMenu>
+            )
+          })}
+        </CardContent>
+      </Card>
+
+      <AlertDialog open={deleteTargetId !== null} onOpenChange={() => setDeleteTargetId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>정말 삭제하시겠습니까?</AlertDialogTitle>
+            <AlertDialogDescription>이 작업은 되돌릴 수 없습니다.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>취소</AlertDialogCancel>
+            <AlertDialogAction onClick={() => deleteTargetId && deletePlanMutation(deleteTargetId)}>
+              삭제
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   )
 }

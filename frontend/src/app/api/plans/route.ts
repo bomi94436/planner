@@ -34,7 +34,7 @@ export const GET = withErrorHandler(async (request) => {
         { endTimestamp: { gte: startTimestamp } }, // 조회 시작 <= Plan 끝
       ],
     },
-    orderBy: { startTimestamp: 'asc' },
+    orderBy: [{ startTimestamp: 'asc' }, { title: 'asc' }],
   })
   return NextResponse.json<PlansResponse>({ data: plans })
 })

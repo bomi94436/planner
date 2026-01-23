@@ -1,6 +1,5 @@
 'use client'
 
-import dayjs from 'dayjs'
 import {
   Calendar as CalendarIcon,
   CalendarDays as CalendarDaysIcon,
@@ -12,11 +11,11 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import {
-  Button,
   Calendar,
   Separator,
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -37,7 +36,6 @@ const menuItems = [
 export function AppSidebar() {
   const pathname = usePathname()
   const { selectedDate, setSelectedDate } = useDateStore()
-  const isToday = dayjs(selectedDate).isSame(dayjs(), 'day')
 
   return (
     <Sidebar>
@@ -45,36 +43,8 @@ export function AppSidebar() {
         <h1 className="text-lg font-bold">Planner</h1>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup className="px-0">
-          <div className="px-4 pt-2 pb-2 flex items-center justify-between">
-            <p className="text-2xl font-bold tracking-tight italic">
-              {dayjs(selectedDate).format('MM. DD. ddd').toUpperCase()}
-            </p>
-
-            <Button
-              variant={isToday ? 'secondary' : 'default'}
-              size="sm"
-              disabled={isToday}
-              onClick={() => setSelectedDate(dayjs().toDate())}
-            >
-              Today
-            </Button>
-          </div>
-
-          <div>
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={setSelectedDate}
-              className="w-full bg-sidebar-background"
-              captionLayout="dropdown"
-              required
-            />
-          </div>
-
-          <Separator />
-
-          <SidebarGroupContent className="px-2 mt-2">
+        <SidebarGroup>
+          <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
@@ -90,6 +60,19 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter className="px-0">
+        <Separator />
+
+        <Calendar
+          mode="single"
+          selected={selectedDate}
+          onSelect={setSelectedDate}
+          className="w-full bg-sidebar-background"
+          captionLayout="dropdown"
+          required
+        />
+      </SidebarFooter>
     </Sidebar>
   )
 }

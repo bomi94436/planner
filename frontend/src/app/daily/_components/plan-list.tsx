@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { PencilIcon, TrashIcon } from 'lucide-react'
 import { useState } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
 
 import {
   AlertDialog,
@@ -59,11 +60,15 @@ export function PlanList() {
     },
   })
 
+  const debouncedUpdate = useDebouncedCallback((id: number, completed: boolean) => {
+    updatePlanMutation({ id, data: { completed } })
+  }, 300)
+
   const handlePlanClick = (id: number, completed: boolean) => {
-    updatePlanMutation({
-      id,
-      data: { completed },
-    })
+    queryClient.setQueryData(['plans', selectedDate], (old: Plan[]) =>
+      old?.map((p) => (p.id === id ? { ...p, completed } : p))
+    )
+    debouncedUpdate(id, completed)
   }
 
   return (

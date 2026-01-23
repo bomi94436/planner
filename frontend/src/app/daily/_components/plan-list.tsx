@@ -21,14 +21,17 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from '@/components/ui'
+import type { Plan } from '@/generated/prisma/client'
 import { useDateStore } from '@/store'
 import { UpdatePlanBody } from '@/types/plan'
 
 import { deletePlan, getPlans, updatePlan } from '../_api/func'
+import { PlanFormDialog } from './plan-form-dialog'
 
 export function PlanList() {
   const { selectedDate } = useDateStore()
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null)
+  const [editTargetPlan, setEditTargetPlan] = useState<Plan | null>(null)
 
   const { data: plans } = useQuery({
     queryKey: ['plans', selectedDate],
@@ -97,7 +100,7 @@ export function PlanList() {
                 </ContextMenuTrigger>
 
                 <ContextMenuContent>
-                  <ContextMenuItem>
+                  <ContextMenuItem onClick={() => setEditTargetPlan(plan)}>
                     <PencilIcon /> Edit
                   </ContextMenuItem>
                   <ContextMenuItem variant="destructive" onClick={() => setDeleteTargetId(plan.id)}>
@@ -110,6 +113,7 @@ export function PlanList() {
         </CardContent>
       </Card>
 
+      {/* Plan 삭제 AlertDialog */}
       <AlertDialog open={deleteTargetId !== null} onOpenChange={() => setDeleteTargetId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -124,6 +128,16 @@ export function PlanList() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Plan 수정 Dialog */}
+      <PlanFormDialog
+        mode="edit"
+        plan={editTargetPlan ?? undefined}
+        open={editTargetPlan !== null}
+        onOpenChange={(open) => {
+          if (!open) setEditTargetPlan(null)
+        }}
+      />
     </>
   )
 }

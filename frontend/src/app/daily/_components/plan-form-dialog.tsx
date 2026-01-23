@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { ChevronDownIcon, ChevronRightIcon, Clock9Icon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   Button,
@@ -19,74 +19,113 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui'
+import type { Plan } from '@/generated/prisma/client'
 import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
+import type { UpdatePlanBody } from '@/types/plan'
 
-import { createPlan } from '../_api/func'
+import { createPlan, updatePlan } from '../_api/func'
 
-interface AddPlanDialogProps {
-  children: React.ReactNode
+type DialogMode = 'add' | 'edit'
+
+interface PlanFormDialogProps {
+  mode: DialogMode
+  /** edit 모드에서 필수 - 수정할 Plan 데이터 */
+  plan?: Plan
+  /** Dialog open 상태 (controlled mode) */
+  open?: boolean
+  /** Dialog open 상태 변경 핸들러 (controlled mode) */
+  onOpenChange?: (open: boolean) => void
+  /** Trigger element (uncontrolled mode에서 사용) */
+  children?: React.ReactNode
 }
 
-export function AddPlanDialog({ children }: AddPlanDialogProps) {
-  const [openDialog, setOpenDialog] = useState(false)
+export function PlanFormDialog({ mode, plan, open, onOpenChange, children }: PlanFormDialogProps) {
+  const [internalOpen, setInternalOpen] = useState(false)
   const { selectedDate, setSelectedDate } = useDateStore()
+  const queryClient = useQueryClient()
 
+  // controlled vs uncontrolled
+  const isOpen = open !== undefined ? open : internalOpen
+
+  // 폼 상태
   const [title, setTitle] = useState('')
-  const [startTimestamp, setStartTimestamp] = useState(() =>
-    dayjs(selectedDate).format('YYYY-MM-DDTHH:mm')
-  )
-  const [endTimestamp, setEndTimestamp] = useState(() =>
-    dayjs(selectedDate).format('YYYY-MM-DDTHH:mm')
-  )
-  const [isAllDay, setIsAllDay] = useState(false)
-
+  const [startTimestamp, setStartTimestamp] = useState('')
+  const [endTimestamp, setEndTimestamp] = useState('')
+  const [isAllDay, setIsAllDay] = useState(true)
   const [editDateMode, setEditDateMode] = useState<'start' | 'end' | null>(null)
   const [isOpenDatePicker, setIsOpenDatePicker] = useState(false)
 
-  const queryClient = useQueryClient()
+  // Dialog가 열릴 때 폼 초기화
+  useEffect(() => {
+    if (!isOpen) return
 
-  const { mutate: createPlanMutation, isPending } = useMutation({
+    if (mode === 'edit' && plan) {
+      setTitle(plan.title)
+      setStartTimestamp(dayjs(plan.startTimestamp).format('YYYY-MM-DDTHH:mm'))
+      setEndTimestamp(dayjs(plan.endTimestamp).format('YYYY-MM-DDTHH:mm'))
+      setIsAllDay(plan.isAllDay)
+    } else {
+      setTitle('')
+      setStartTimestamp(dayjs(selectedDate).format('YYYY-MM-DDTHH:mm'))
+      setEndTimestamp(dayjs(selectedDate).format('YYYY-MM-DDTHH:mm'))
+      setIsAllDay(true)
+    }
+    setEditDateMode(null)
+    setIsOpenDatePicker(false)
+  }, [isOpen, mode, plan, selectedDate])
+
+  const { mutate: createPlanMutation, isPending: isCreating } = useMutation({
     mutationFn: createPlan,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['plans'] })
-      setOpenDialog(false)
-      setTitle('')
+      handleOpenChange(false)
       setSelectedDate(dayjs(variables.startTimestamp).toDate())
     },
   })
+
+  const { mutate: updatePlanMutation, isPending: isUpdating } = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: UpdatePlanBody }) => updatePlan(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['plans'] })
+      handleOpenChange(false)
+    },
+  })
+
+  const isPending = isCreating || isUpdating
+
+  const handleOpenChange = (newOpen: boolean) => {
+    if (onOpenChange) {
+      onOpenChange(newOpen)
+    } else {
+      setInternalOpen(newOpen)
+    }
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!title.trim()) return
 
-    createPlanMutation({
+    const planData = {
       title: title.trim(),
       startTimestamp: dayjs(startTimestamp).toISOString(),
       endTimestamp: dayjs(endTimestamp).toISOString(),
       isAllDay,
-    })
-  }
+    }
 
-  // selectedDate가 변경되면 timestamp 초기값 업데이트
-  const handleOpenChange = (isOpen: boolean) => {
-    setOpenDialog(isOpen)
-    if (isOpen) {
-      setStartTimestamp(dayjs(selectedDate).format('YYYY-MM-DDTHH:mm'))
-      setEndTimestamp(dayjs(selectedDate).format('YYYY-MM-DDTHH:mm'))
-      setIsAllDay(true)
-      setEditDateMode(null)
-      setIsOpenDatePicker(false)
-      setTitle('')
+    if (mode === 'edit' && plan) {
+      updatePlanMutation({ id: plan.id, data: planData })
+    } else {
+      createPlanMutation(planData)
     }
   }
 
   return (
-    <Dialog open={openDialog} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      {children && <DialogTrigger asChild>{children}</DialogTrigger>}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>계획 추가</DialogTitle>
+          <DialogTitle>{mode === 'edit' ? '계획 수정' : '계획 추가'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -231,7 +270,13 @@ export function AddPlanDialog({ children }: AddPlanDialogProps) {
 
           <DialogFooter>
             <Button type="submit" disabled={isPending || !title.trim()}>
-              {isPending ? '추가 중...' : '추가'}
+              {isPending
+                ? mode === 'edit'
+                  ? '수정 중...'
+                  : '추가 중...'
+                : mode === 'edit'
+                  ? '수정'
+                  : '추가'}
             </Button>
           </DialogFooter>
         </form>

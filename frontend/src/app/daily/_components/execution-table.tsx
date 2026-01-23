@@ -1,8 +1,8 @@
 import { Card } from '@/components/ui'
-import type { TimeBlock } from '@/types/daily'
+import type { Execution } from '@/types/daily'
 
-interface TimetableProps {
-  timeBlocks: TimeBlock[]
+interface ExecutionTableProps {
+  executions: Execution[]
 }
 
 // 시작 시간 (04:00)
@@ -29,41 +29,43 @@ function formatHour(hourIndex: number): string {
 }
 
 // 절대 블럭 인덱스가 계산된 타임블럭
-type ProcessedBlock = { block: TimeBlock; blockStart: number; blockEnd: number }
+type ProcessedExecution = { execution: Execution; executionStart: number; executionEnd: number }
 
-// timeBlocks를 미리 처리 (절대 블럭 인덱스 계산)
-function preprocessBlocks(timeBlocks: TimeBlock[]): ProcessedBlock[] {
-  return timeBlocks.map((block) => ({
-    block,
-    blockStart: toAbsoluteBlock(block.startTimestamp),
-    blockEnd: toAbsoluteBlock(block.endTimestamp),
+// executions를 미리 처리 (절대 블럭 인덱스 계산)
+function preprocessExecutions(executions: Execution[]): ProcessedExecution[] {
+  return executions.map((execution) => ({
+    execution,
+    executionStart: toAbsoluteBlock(execution.startTimestamp),
+    executionEnd: toAbsoluteBlock(execution.endTimestamp),
   }))
 }
 
 // 특정 row에서 렌더링할 타임블럭 정보 계산
-function getBlocksForRow(processedBlocks: ProcessedBlock[], hourIndex: number) {
+function getExecutionsForRow(processedExecutions: ProcessedExecution[], hourIndex: number) {
   const rowStart = hourIndex * BLOCKS_PER_HOUR
   const rowEnd = rowStart + BLOCKS_PER_HOUR
 
-  return processedBlocks
-    .filter(({ blockStart, blockEnd }) => blockStart < rowEnd && blockEnd > rowStart)
-    .map(({ block, blockStart, blockEnd }) => ({
-      block,
-      startBlock: Math.max(blockStart, rowStart) - rowStart,
-      spanBlocks: Math.min(blockEnd, rowEnd) - Math.max(blockStart, rowStart),
-      isStart: blockStart >= rowStart,
+  return processedExecutions
+    .filter(
+      ({ executionStart, executionEnd }) => executionStart < rowEnd && executionEnd > rowStart
+    )
+    .map(({ execution, executionStart, executionEnd }) => ({
+      execution,
+      startExecution: Math.max(executionStart, rowStart) - rowStart,
+      spanExecutions: Math.min(executionEnd, rowEnd) - Math.max(executionStart, rowStart),
+      isStart: executionStart >= rowStart,
     }))
 }
 
-export function Timetable({ timeBlocks }: TimetableProps) {
+export function ExecutionTable({ executions }: ExecutionTableProps) {
   const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => i)
-  const processedBlocks = preprocessBlocks(timeBlocks)
+  const processedExecutions = preprocessExecutions(executions)
 
   return (
     <Card className="gap-0 py-0">
       <div className="min-w-fit">
         {hours.map((hourIndex) => {
-          const rowBlocks = getBlocksForRow(processedBlocks, hourIndex)
+          const rowExecutions = getExecutionsForRow(processedExecutions, hourIndex)
 
           return (
             <div
@@ -88,23 +90,23 @@ export function Timetable({ timeBlocks }: TimetableProps) {
                 </div>
 
                 {/* 타임블럭 (그리드 위에 overlay) */}
-                {rowBlocks.map(({ block, startBlock, spanBlocks, isStart }) => {
-                  const leftPercent = (startBlock / BLOCKS_PER_HOUR) * 100
-                  const widthPercent = (spanBlocks / BLOCKS_PER_HOUR) * 100
+                {rowExecutions.map(({ execution, startExecution, spanExecutions, isStart }) => {
+                  const leftPercent = (startExecution / BLOCKS_PER_HOUR) * 100
+                  const widthPercent = (spanExecutions / BLOCKS_PER_HOUR) * 100
 
                   return (
                     <div
-                      key={`${block.id}-${hourIndex}`}
+                      key={`${execution.id}-${hourIndex}`}
                       className="absolute flex items-center overflow-hidden rounded px-2 text-sm text-white"
                       style={{
                         bottom: `${BLOCK_PADDING}px`,
                         top: `${BLOCK_PADDING}px`,
                         left: `calc(${leftPercent}% + ${BLOCK_PADDING}px)`,
                         width: `calc(${widthPercent}% - ${BLOCK_PADDING * 2}px)`,
-                        backgroundColor: block.color || '#3b82f6',
+                        backgroundColor: execution.color || '#3b82f6',
                       }}
                     >
-                      {isStart && <span className="truncate">{block.title}</span>}
+                      {isStart && <span className="truncate">{execution.title}</span>}
                     </div>
                   )
                 })}

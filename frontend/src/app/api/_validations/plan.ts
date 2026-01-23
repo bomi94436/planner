@@ -4,10 +4,7 @@ import { z } from 'zod'
 export const createPlanSchema = z.object({
   title: z.string().min(1, 'title은 필수 항목입니다.'),
   startTimestamp: z.string().datetime({ message: 'startTimestamp 형식이 올바르지 않습니다.' }),
-  endTimestamp: z
-    .string()
-    .datetime({ message: 'endTimestamp 형식이 올바르지 않습니다.' })
-    .optional(),
+  endTimestamp: z.string().datetime({ message: 'endTimestamp 형식이 올바르지 않습니다.' }),
   isAllDay: z.boolean().default(false).optional(),
 })
 

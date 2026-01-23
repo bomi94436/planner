@@ -4,7 +4,7 @@ import { PlusIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui'
 
-import { AddPlanDialog } from './_components/add-plan-dialog'
+import { PlanFormDialog } from './_components/plan-form-dialog'
 import { PlanList } from './_components/plan-list'
 import { Timetable } from './_components/timetable'
 import { mockTimeBlocks } from './mock-data'
@@ -15,11 +15,11 @@ export default function DailyPage() {
       <aside className="flex w-80 shrink-0 flex-col gap-2">
         <div className="flex items-center gap-x-2">
           <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">계획</h2>
-          <AddPlanDialog>
+          <PlanFormDialog mode="add">
             <Button variant="secondary" size="icon-sm">
               <PlusIcon />
             </Button>
-          </AddPlanDialog>
+          </PlanFormDialog>
         </div>
         <PlanList />
       </aside>

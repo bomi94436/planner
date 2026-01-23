@@ -42,6 +42,9 @@ const eslintConfig = defineConfig([
 
       // TypeScript (기본 규칙 비활성화 - unused-imports가 대체)
       '@typescript-eslint/no-unused-vars': 'off',
+
+      // React Hooks (폼 초기화 등 의도적인 경우 허용)
+      'react-hooks/set-state-in-effect': 'off',
     },
   },
   // Override default ignores of eslint-config-next.

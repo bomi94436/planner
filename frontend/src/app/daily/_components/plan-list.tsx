@@ -131,6 +131,7 @@ export function PlanList() {
 
       {/* Plan 수정 Dialog */}
       <PlanFormDialog
+        key={editTargetPlan?.id ?? 'new'}
         mode="edit"
         plan={editTargetPlan ?? undefined}
         open={editTargetPlan !== null}

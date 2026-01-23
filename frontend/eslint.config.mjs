@@ -45,6 +45,8 @@ const eslintConfig = defineConfig([
 
       // React Hooks (폼 초기화 등 의도적인 경우 허용)
       'react-hooks/set-state-in-effect': 'off',
+
+      'react-hooks/incompatible-library': 'off',
     },
   },
   // Override default ignores of eslint-config-next.

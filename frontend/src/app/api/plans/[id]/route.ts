@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { withErrorHandler } from '@/app/api/_lib'
 import { updatePlanSchema } from '@/app/api/_validations'
+import type { PlanUpdateInput } from '@/generated/prisma/models/Plan'
 import { prisma } from '@/lib/prisma'
 import type { DeletePlanResponse, PlanResponse } from '@/types/plan'
 
@@ -25,20 +26,12 @@ export const PATCH = withErrorHandler<{ id: string }>(async (request, context) =
   const body = await request.json()
   const validated = updatePlanSchema.parse(body)
 
-  const updateData: {
-    title?: string
-    completed?: boolean
-    startTimestamp?: Date
-  } = {}
-
-  if (validated.title !== undefined) {
-    updateData.title = validated.title.trim()
-  }
-  if (validated.completed !== undefined) {
-    updateData.completed = validated.completed
-  }
-  if (validated.startTimestamp !== undefined) {
-    updateData.startTimestamp = new Date(validated.startTimestamp)
+  const updateData: PlanUpdateInput = {
+    title: validated.title?.trim(),
+    completed: validated.completed,
+    startTimestamp: validated.startTimestamp ? new Date(validated.startTimestamp) : undefined,
+    endTimestamp: validated.endTimestamp ? new Date(validated.endTimestamp) : undefined,
+    isAllDay: validated.isAllDay,
   }
 
   const updated = await prisma.plan.update({

@@ -3,9 +3,9 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 
-import { AppSidebar } from '@/components/layout/app-sidebar'
+import { AppHeader, AppSidebar } from '@/components/layout'
 import { Providers } from '@/components/providers'
-import { ScrollArea, SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui'
+import { ScrollArea, SidebarInset, SidebarProvider } from '@/components/ui'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,10 +33,9 @@ export default function RootLayout({
         <Providers>
           <SidebarProvider>
             <AppSidebar />
+
             <SidebarInset className="flex h-screen flex-col">
-              <header className="flex h-12 shrink-0 items-center border-b px-4">
-                <SidebarTrigger />
-              </header>
+              <AppHeader />
               <ScrollArea className="min-h-0 flex-1">
                 <main className="py-6 px-10">{children}</main>
               </ScrollArea>

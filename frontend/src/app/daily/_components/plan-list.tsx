@@ -87,7 +87,10 @@ export function PlanList() {
             </div>
           ) : (
             plans?.map((plan) => {
-              const dDay = dayjs(plan.endTimestamp).diff(dayjs(selectedDate), 'day')
+              const dDay = dayjs(plan.endTimestamp)
+                .startOf('day')
+                .diff(dayjs(selectedDate).startOf('day'), 'day')
+
               return (
                 <ContextMenu key={`plan-${plan.id}`}>
                   <ContextMenuTrigger asChild>

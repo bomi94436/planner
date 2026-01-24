@@ -1,65 +1,16 @@
 import { Card } from '@/components/ui'
 import type { Execution } from '@/types/daily'
 
+import { BLOCK_PADDING, BLOCKS_PER_HOUR, TOTAL_HOURS } from '../_constants'
+import { formatHour, getExecutionsForRow, preprocessExecutions } from '../_utils'
+
 interface ExecutionTableProps {
   executions: Execution[]
 }
 
-// 시작 시간 (04:00)
-const START_HOUR = 4
-// 총 시간 수 (24시간)
-const TOTAL_HOURS = 24
-// 한 시간당 블럭 수
-const BLOCKS_PER_HOUR = 6
-// 블럭 패딩
-const BLOCK_PADDING = 2
-
-// ISO 시간을 절대 블럭 인덱스로 변환 (04:00 = 0)
-function toAbsoluteBlock(isoTime: string): number {
-  const date = new Date(isoTime)
-  let hour = date.getHours()
-  if (hour < START_HOUR) hour += 24
-  return (hour - START_HOUR) * BLOCKS_PER_HOUR + Math.floor(date.getMinutes() / 10)
-}
-
-// 시간 포맷팅
-function formatHour(hourIndex: number): string {
-  const hour = (START_HOUR + hourIndex) % 24
-  return hour.toString().padStart(2, '0')
-}
-
-// 절대 블럭 인덱스가 계산된 타임블럭
-type ProcessedExecution = { execution: Execution; executionStart: number; executionEnd: number }
-
-// executions를 미리 처리 (절대 블럭 인덱스 계산)
-function preprocessExecutions(executions: Execution[]): ProcessedExecution[] {
-  return executions.map((execution) => ({
-    execution,
-    executionStart: toAbsoluteBlock(execution.startTimestamp),
-    executionEnd: toAbsoluteBlock(execution.endTimestamp),
-  }))
-}
-
-// 특정 row에서 렌더링할 타임블럭 정보 계산
-function getExecutionsForRow(processedExecutions: ProcessedExecution[], hourIndex: number) {
-  const rowStart = hourIndex * BLOCKS_PER_HOUR
-  const rowEnd = rowStart + BLOCKS_PER_HOUR
-
-  return processedExecutions
-    .filter(
-      ({ executionStart, executionEnd }) => executionStart < rowEnd && executionEnd > rowStart
-    )
-    .map(({ execution, executionStart, executionEnd }) => ({
-      execution,
-      startExecution: Math.max(executionStart, rowStart) - rowStart,
-      spanExecutions: Math.min(executionEnd, rowEnd) - Math.max(executionStart, rowStart),
-      isStart: executionStart >= rowStart,
-    }))
-}
-
 export function ExecutionTable({ executions }: ExecutionTableProps) {
-  const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => i)
   const processedExecutions = preprocessExecutions(executions)
+  const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => i)
 
   return (
     <Card className="gap-0 py-0">
@@ -68,10 +19,7 @@ export function ExecutionTable({ executions }: ExecutionTableProps) {
           const rowExecutions = getExecutionsForRow(processedExecutions, hourIndex)
 
           return (
-            <div
-              key={hourIndex}
-              className="flex border-b border-zinc-200 last:border-b-0 dark:border-zinc-800"
-            >
+            <div key={hourIndex} className="flex border-b border-zinc-200 last:border-b-0">
               {/* 시간 라벨 */}
               <div className="flex h-8 w-10 shrink-0 items-center justify-end border-r border-zinc-200 px-2 text-right text-sm text-zinc-500 dark:border-zinc-800">
                 {formatHour(hourIndex)}
@@ -84,15 +32,15 @@ export function ExecutionTable({ executions }: ExecutionTableProps) {
                   {Array.from({ length: BLOCKS_PER_HOUR }, (_, i) => (
                     <div
                       key={i}
-                      className="h-full flex-1 border-r border-zinc-100 last:border-r-0 dark:border-zinc-900"
+                      className="h-full flex-1 border-r border-zinc-100 last:border-r-0"
                     />
                   ))}
                 </div>
 
                 {/* 타임블럭 (그리드 위에 overlay) */}
-                {rowExecutions.map(({ execution, startExecution, spanExecutions, isStart }) => {
-                  const leftPercent = (startExecution / BLOCKS_PER_HOUR) * 100
-                  const widthPercent = (spanExecutions / BLOCKS_PER_HOUR) * 100
+                {rowExecutions.map(({ execution, offsetInRow, span, isStart }) => {
+                  const leftPercent = (offsetInRow / BLOCKS_PER_HOUR) * 100
+                  const widthPercent = (span / BLOCKS_PER_HOUR) * 100
 
                   return (
                     <div

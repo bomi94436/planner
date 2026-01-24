@@ -7,7 +7,6 @@ import { Button } from '@/components/ui'
 import { ExecutionTable } from './_components/execution-table'
 import { PlanFormDialog } from './_components/plan-form-dialog'
 import { PlanList } from './_components/plan-list'
-import { mockTimeBlocks } from './mock-data'
 
 export default function DailyPage() {
   return (
@@ -25,7 +24,7 @@ export default function DailyPage() {
       </aside>
       <main className="flex min-h-0 flex-1 flex-col gap-2">
         <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">실행</h2>
-        <ExecutionTable executions={mockTimeBlocks} />
+        <ExecutionTable />
       </main>
     </div>
   )

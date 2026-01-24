@@ -1,15 +1,10 @@
 import { Card } from '@/components/ui'
-import type { Execution } from '@/types/daily'
 
 import { BLOCK_PADDING, BLOCKS_PER_HOUR, TOTAL_HOURS } from '../_constants'
 import { formatHour, getExecutionsForRow, preprocessExecutions } from '../_utils'
 
-interface ExecutionTableProps {
-  executions: Execution[]
-}
-
-export function ExecutionTable({ executions }: ExecutionTableProps) {
-  const processedExecutions = preprocessExecutions(executions)
+export function ExecutionTable() {
+  const processedExecutions = preprocessExecutions([])
   const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => i)
 
   return (

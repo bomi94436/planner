@@ -5,7 +5,12 @@ import type {
   getExecutionsQuerySchema,
   updateExecutionSchema,
 } from '@/app/api/_validations'
-import type { Execution } from '@/generated/prisma/client'
+import type { Execution as PrismaExecution } from '@/generated/prisma/client'
+
+export type Execution = Pick<
+  PrismaExecution,
+  'id' | 'startTimestamp' | 'endTimestamp' | 'title' | 'color'
+>
 
 import type { Response } from './index'
 

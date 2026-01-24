@@ -16,10 +16,9 @@ import {
   DialogTrigger,
   Input,
 } from '@/components/ui'
-import type { Plan } from '@/generated/prisma/client'
 import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
-import type { UpdatePlanBody } from '@/types/plan'
+import type { Plan, UpdatePlanBody } from '@/types/plan'
 
 import { createPlan, updatePlan } from '../../_api/func'
 import { PlanDatePicker } from './plan-date-picker'

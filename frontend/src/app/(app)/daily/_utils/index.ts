@@ -1,4 +1,4 @@
-import type { Execution } from '@/types/daily'
+import type { Execution } from '@/types/execution'
 
 import { BLOCKS_PER_HOUR, START_HOUR } from '../_constants'
 
@@ -23,8 +23,8 @@ type ProcessedExecution = { execution: Execution; startIndex: number; endIndex: 
 export function preprocessExecutions(executions: Execution[]): ProcessedExecution[] {
   return executions.map((execution) => ({
     execution,
-    startIndex: toAbsoluteBlock(execution.startTimestamp),
-    endIndex: toAbsoluteBlock(execution.endTimestamp),
+    startIndex: toAbsoluteBlock(execution.startTimestamp.toISOString()),
+    endIndex: toAbsoluteBlock(execution.endTimestamp.toISOString()),
   }))
 }
 

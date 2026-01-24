@@ -23,9 +23,8 @@ import {
   ContextMenuTrigger,
   Skeleton,
 } from '@/components/ui'
-import type { Plan } from '@/generated/prisma/client'
 import { useDateStore } from '@/store'
-import { UpdatePlanBody } from '@/types/plan'
+import type { Plan, UpdatePlanBody } from '@/types/plan'
 
 import { deletePlan, getPlans, updatePlan } from '../_api/func'
 import { PlanFormDialog } from './plan-form-dialog'

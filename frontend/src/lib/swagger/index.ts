@@ -1,8 +1,10 @@
 import { createSwaggerSpec } from 'next-swagger-doc'
 
+import { schemas } from './schemas'
+
 export const getApiDocs = async () => {
   const spec = createSwaggerSpec({
-    apiFolder: 'app/api', // define api folder under app folder
+    apiFolder: 'src/app/api',
     definition: {
       openapi: '3.0.0',
       info: {
@@ -10,6 +12,7 @@ export const getApiDocs = async () => {
         version: '1.0',
       },
       components: {
+        schemas,
         securitySchemes: {
           BearerAuth: {
             type: 'http',

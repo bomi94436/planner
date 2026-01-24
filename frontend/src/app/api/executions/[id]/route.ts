@@ -6,7 +6,46 @@ import type { ExecutionUpdateInput } from '@/generated/prisma/models/Execution'
 import { prisma } from '@/lib/prisma'
 import type { DeleteExecutionResponse, ExecutionResponse } from '@/types/execution'
 
-// PATCH /api/executions/[id] - 수정
+/**
+ * @swagger
+ * /api/executions/{id}:
+ *   patch:
+ *     tags:
+ *       - Execution
+ *     summary: Execution 수정
+ *     description: Execution을 수정합니다.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: Execution ID
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateExecutionBody'
+ *     responses:
+ *       200:
+ *         description: Execution 수정 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/Execution'
+ *       404:
+ *         description: 수정할 Execution을 찾을 수 없습니다.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: 'string' }
+ */
 export const PATCH = withErrorHandler<{ id: string }>(async (request, context) => {
   const params = await context!.params
   const id = Number(params.id)
@@ -41,7 +80,42 @@ export const PATCH = withErrorHandler<{ id: string }>(async (request, context) =
   return NextResponse.json<ExecutionResponse>({ data: updated })
 })
 
-// DELETE /api/executions/[id] - 삭제
+/**
+ * @swagger
+ * /api/executions/{id}:
+ *   delete:
+ *     tags:
+ *       - Execution
+ *     summary: Execution 삭제
+ *     description: Execution을 삭제합니다.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: Execution ID
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Execution 삭제 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id: { type: 'integer' }
+ *       404:
+ *         description: 삭제할 Execution을 찾을 수 없습니다.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error: { type: 'string' }
+ */
 export const DELETE = withErrorHandler<{ id: string }>(async (_request, context) => {
   const params = await context!.params
   const id = Number(params.id)

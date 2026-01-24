@@ -5,7 +5,12 @@ import type {
   getPlansQuerySchema,
   updatePlanSchema,
 } from '@/app/api/_validations'
-import type { Plan } from '@/generated/prisma/client'
+import type { Plan as PrismaPlan } from '@/generated/prisma/client'
+
+export type Plan = Pick<
+  PrismaPlan,
+  'id' | 'title' | 'completed' | 'startTimestamp' | 'endTimestamp' | 'isAllDay'
+>
 
 import type { Response } from './index'
 

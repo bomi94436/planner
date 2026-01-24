@@ -1,0 +1,68 @@
+import { createSwaggerSpec } from 'next-swagger-doc'
+
+type Schemas = NonNullable<
+  NonNullable<
+    NonNullable<Parameters<typeof createSwaggerSpec>[0]>['definition']['components']
+  >['schemas']
+>
+
+export const schemas: Schemas = {
+  Plan: {
+    type: 'object',
+    properties: {
+      id: { type: 'integer' },
+      title: { type: 'string' },
+      completed: { type: 'boolean' },
+      startTimestamp: { type: 'string', format: 'date-time' },
+      endTimestamp: { type: 'string', format: 'date-time' },
+      isAllDay: { type: 'boolean' },
+    },
+  },
+  CreatePlanBody: {
+    type: 'object',
+    properties: {
+      title: { type: 'string' },
+      startTimestamp: { type: 'string', format: 'date-time' },
+      endTimestamp: { type: 'string', format: 'date-time' },
+      isAllDay: { type: 'boolean' },
+    },
+  },
+  UpdatePlanBody: {
+    type: 'object',
+    properties: {
+      title: { type: 'string' },
+      completed: { type: 'boolean' },
+      startTimestamp: { type: 'string', format: 'date-time' },
+      endTimestamp: { type: 'string', format: 'date-time' },
+      isAllDay: { type: 'boolean' },
+    },
+  },
+  Execution: {
+    type: 'object',
+    properties: {
+      id: { type: 'integer' },
+      startTimestamp: { type: 'string', format: 'date-time' },
+      endTimestamp: { type: 'string', format: 'date-time' },
+      title: { type: 'string' },
+      color: { type: 'string' },
+    },
+  },
+  CreateExecutionBody: {
+    type: 'object',
+    properties: {
+      startTimestamp: { type: 'string', format: 'date-time' },
+      endTimestamp: { type: 'string', format: 'date-time' },
+      title: { type: 'string' },
+      color: { type: 'string' },
+    },
+  },
+  UpdateExecutionBody: {
+    type: 'object',
+    properties: {
+      startTimestamp: { type: 'string', format: 'date-time' },
+      endTimestamp: { type: 'string', format: 'date-time' },
+      title: { type: 'string' },
+      color: { type: 'string' },
+    },
+  },
+}

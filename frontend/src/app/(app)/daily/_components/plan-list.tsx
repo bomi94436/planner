@@ -23,9 +23,8 @@ import {
   ContextMenuTrigger,
   Skeleton,
 } from '@/components/ui'
-import type { Plan } from '@/generated/prisma/client'
 import { useDateStore } from '@/store'
-import { UpdatePlanBody } from '@/types/plan'
+import type { Plan, UpdatePlanBody } from '@/types/plan'
 
 import { deletePlan, getPlans, updatePlan } from '../_api/func'
 import { PlanFormDialog } from './plan-form-dialog'
@@ -95,7 +94,7 @@ export function PlanList() {
                 <ContextMenu key={`plan-${plan.id}`}>
                   <ContextMenuTrigger asChild>
                     <div
-                      className="flex items-center gap-3 hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground cursor-pointer rounded-md py-1 px-2"
+                      className="flex items-center gap-3 hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground rounded-md py-1 px-2 cursor-context-menu"
                       onClick={() => handlePlanClick(plan.id, !plan.completed)}
                     >
                       <Checkbox

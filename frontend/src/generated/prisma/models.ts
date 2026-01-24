@@ -9,4 +9,6 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Plan'
+export type * from './models/Execution'
+export type * from './models/PlanExecution'
 export type * from './commonInputTypes'

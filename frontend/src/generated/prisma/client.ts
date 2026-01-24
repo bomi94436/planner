@@ -44,3 +44,13 @@ export { Prisma }
  * 
  */
 export type Plan = Prisma.PlanModel
+/**
+ * Model Execution
+ * 
+ */
+export type Execution = Prisma.ExecutionModel
+/**
+ * Model PlanExecution
+ * 
+ */
+export type PlanExecution = Prisma.PlanExecutionModel

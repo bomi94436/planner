@@ -14,14 +14,38 @@ datasource db {
 }
 
 model Plan {
-  id             Int      @id @default(autoincrement())
-  title          String   @db.VarChar(255)
-  completed      Boolean  @default(false)
-  startTimestamp DateTime @map("start_timestamp")
-  endTimestamp   DateTime @map("end_timestamp")
-  isAllDay       Boolean  @default(false)
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
+  id             Int             @id @default(autoincrement())
+  title          String          @db.VarChar(255)
+  completed      Boolean         @default(false)
+  startTimestamp DateTime        @map("start_timestamp")
+  endTimestamp   DateTime        @map("end_timestamp")
+  isAllDay       Boolean         @default(false)
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  planExecutions PlanExecution[]
 
   @@map("plans")
+}
+
+model Execution {
+  id             Int             @id @default(autoincrement())
+  startTimestamp DateTime        @map("start_timestamp")
+  endTimestamp   DateTime        @map("end_timestamp")
+  title          String          @db.VarChar(255)
+  color          String          @db.VarChar(255)
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  planExecutions PlanExecution[]
+
+  @@map("executions")
+}
+
+model PlanExecution {
+  planId      Int
+  executionId Int
+
+  plan      Plan      @relation(fields: [planId], references: [id])
+  execution Execution @relation(fields: [executionId], references: [id])
+
+  @@id([planId, executionId]) // 복합 PK
 }

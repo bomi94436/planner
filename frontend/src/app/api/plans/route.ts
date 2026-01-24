@@ -48,7 +48,7 @@ export const POST = withErrorHandler(async (request) => {
     data: {
       title: validated.title.trim(),
       startTimestamp: new Date(validated.startTimestamp),
-      endTimestamp: new Date(validated.endTimestamp || validated.startTimestamp),
+      endTimestamp: new Date(validated.endTimestamp),
       isAllDay: validated.isAllDay,
     },
   })

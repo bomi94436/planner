@@ -240,6 +240,7 @@ export type PlanWhereInput = {
   isAllDay?: Prisma.BoolFilter<"Plan"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
+  planExecutions?: Prisma.PlanExecutionListRelationFilter
 }
 
 export type PlanOrderByWithRelationInput = {
@@ -251,6 +252,7 @@ export type PlanOrderByWithRelationInput = {
   isAllDay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  planExecutions?: Prisma.PlanExecutionOrderByRelationAggregateInput
 }
 
 export type PlanWhereUniqueInput = Prisma.AtLeast<{
@@ -265,6 +267,7 @@ export type PlanWhereUniqueInput = Prisma.AtLeast<{
   isAllDay?: Prisma.BoolFilter<"Plan"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
+  planExecutions?: Prisma.PlanExecutionListRelationFilter
 }, "id">
 
 export type PlanOrderByWithAggregationInput = {
@@ -305,6 +308,7 @@ export type PlanCreateInput = {
   isAllDay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  planExecutions?: Prisma.PlanExecutionCreateNestedManyWithoutPlanInput
 }
 
 export type PlanUncheckedCreateInput = {
@@ -316,6 +320,7 @@ export type PlanUncheckedCreateInput = {
   isAllDay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  planExecutions?: Prisma.PlanExecutionUncheckedCreateNestedManyWithoutPlanInput
 }
 
 export type PlanUpdateInput = {
@@ -326,6 +331,7 @@ export type PlanUpdateInput = {
   isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  planExecutions?: Prisma.PlanExecutionUpdateManyWithoutPlanNestedInput
 }
 
 export type PlanUncheckedUpdateInput = {
@@ -337,6 +343,7 @@ export type PlanUncheckedUpdateInput = {
   isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  planExecutions?: Prisma.PlanExecutionUncheckedUpdateManyWithoutPlanNestedInput
 }
 
 export type PlanCreateManyInput = {
@@ -412,6 +419,11 @@ export type PlanSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+export type PlanScalarRelationFilter = {
+  is?: Prisma.PlanWhereInput
+  isNot?: Prisma.PlanWhereInput
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -432,6 +444,107 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type PlanCreateNestedOneWithoutPlanExecutionsInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutPlanExecutionsInput, Prisma.PlanUncheckedCreateWithoutPlanExecutionsInput>
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutPlanExecutionsInput
+  connect?: Prisma.PlanWhereUniqueInput
+}
+
+export type PlanUpdateOneRequiredWithoutPlanExecutionsNestedInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutPlanExecutionsInput, Prisma.PlanUncheckedCreateWithoutPlanExecutionsInput>
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutPlanExecutionsInput
+  upsert?: Prisma.PlanUpsertWithoutPlanExecutionsInput
+  connect?: Prisma.PlanWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlanUpdateToOneWithWhereWithoutPlanExecutionsInput, Prisma.PlanUpdateWithoutPlanExecutionsInput>, Prisma.PlanUncheckedUpdateWithoutPlanExecutionsInput>
+}
+
+export type PlanCreateWithoutPlanExecutionsInput = {
+  title: string
+  completed?: boolean
+  startTimestamp: Date | string
+  endTimestamp: Date | string
+  isAllDay?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PlanUncheckedCreateWithoutPlanExecutionsInput = {
+  id?: number
+  title: string
+  completed?: boolean
+  startTimestamp: Date | string
+  endTimestamp: Date | string
+  isAllDay?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PlanCreateOrConnectWithoutPlanExecutionsInput = {
+  where: Prisma.PlanWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlanCreateWithoutPlanExecutionsInput, Prisma.PlanUncheckedCreateWithoutPlanExecutionsInput>
+}
+
+export type PlanUpsertWithoutPlanExecutionsInput = {
+  update: Prisma.XOR<Prisma.PlanUpdateWithoutPlanExecutionsInput, Prisma.PlanUncheckedUpdateWithoutPlanExecutionsInput>
+  create: Prisma.XOR<Prisma.PlanCreateWithoutPlanExecutionsInput, Prisma.PlanUncheckedCreateWithoutPlanExecutionsInput>
+  where?: Prisma.PlanWhereInput
+}
+
+export type PlanUpdateToOneWithWhereWithoutPlanExecutionsInput = {
+  where?: Prisma.PlanWhereInput
+  data: Prisma.XOR<Prisma.PlanUpdateWithoutPlanExecutionsInput, Prisma.PlanUncheckedUpdateWithoutPlanExecutionsInput>
+}
+
+export type PlanUpdateWithoutPlanExecutionsInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type PlanUncheckedUpdateWithoutPlanExecutionsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type PlanCountOutputType
+ */
+
+export type PlanCountOutputType = {
+  planExecutions: number
+}
+
+export type PlanCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  planExecutions?: boolean | PlanCountOutputTypeCountPlanExecutionsArgs
+}
+
+/**
+ * PlanCountOutputType without action
+ */
+export type PlanCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlanCountOutputType
+   */
+  select?: Prisma.PlanCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * PlanCountOutputType without action
+ */
+export type PlanCountOutputTypeCountPlanExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlanExecutionWhereInput
+}
 
 
 export type PlanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -443,6 +556,8 @@ export type PlanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   isAllDay?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  planExecutions?: boolean | Prisma.Plan$planExecutionsArgs<ExtArgs>
+  _count?: boolean | Prisma.PlanCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["plan"]>
 
 export type PlanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -479,10 +594,18 @@ export type PlanSelectScalar = {
 }
 
 export type PlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "completed" | "startTimestamp" | "endTimestamp" | "isAllDay" | "createdAt" | "updatedAt", ExtArgs["result"]["plan"]>
+export type PlanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  planExecutions?: boolean | Prisma.Plan$planExecutionsArgs<ExtArgs>
+  _count?: boolean | Prisma.PlanCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type PlanIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type PlanIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $PlanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Plan"
-  objects: {}
+  objects: {
+    planExecutions: Prisma.$PlanExecutionPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     title: string
@@ -886,6 +1009,7 @@ readonly fields: PlanFieldRefs;
  */
 export interface Prisma__PlanClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  planExecutions<T extends Prisma.Plan$planExecutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plan$planExecutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -940,6 +1064,10 @@ export type PlanFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.PlanOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanInclude<ExtArgs> | null
+  /**
    * Filter, which Plan to fetch.
    */
   where: Prisma.PlanWhereUniqueInput
@@ -958,6 +1086,10 @@ export type PlanFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.PlanOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanInclude<ExtArgs> | null
+  /**
    * Filter, which Plan to fetch.
    */
   where: Prisma.PlanWhereUniqueInput
@@ -975,6 +1107,10 @@ export type PlanFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Plan
    */
   omit?: Prisma.PlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanInclude<ExtArgs> | null
   /**
    * Filter, which Plan to fetch.
    */
@@ -1024,6 +1160,10 @@ export type PlanFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.PlanOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanInclude<ExtArgs> | null
+  /**
    * Filter, which Plan to fetch.
    */
   where?: Prisma.PlanWhereInput
@@ -1072,6 +1212,10 @@ export type PlanFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   omit?: Prisma.PlanOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanInclude<ExtArgs> | null
+  /**
    * Filter, which Plans to fetch.
    */
   where?: Prisma.PlanWhereInput
@@ -1114,6 +1258,10 @@ export type PlanCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    * Omit specific fields from the Plan
    */
   omit?: Prisma.PlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanInclude<ExtArgs> | null
   /**
    * The data needed to create a Plan.
    */
@@ -1162,6 +1310,10 @@ export type PlanUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    * Omit specific fields from the Plan
    */
   omit?: Prisma.PlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanInclude<ExtArgs> | null
   /**
    * The data needed to update a Plan.
    */
@@ -1229,6 +1381,10 @@ export type PlanUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   omit?: Prisma.PlanOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanInclude<ExtArgs> | null
+  /**
    * The filter to search for the Plan to update in case it exists.
    */
   where: Prisma.PlanWhereUniqueInput
@@ -1255,6 +1411,10 @@ export type PlanDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   omit?: Prisma.PlanOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanInclude<ExtArgs> | null
+  /**
    * Filter which Plan to delete.
    */
   where: Prisma.PlanWhereUniqueInput
@@ -1275,6 +1435,30 @@ export type PlanDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * Plan.planExecutions
+ */
+export type Plan$planExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlanExecution
+   */
+  select?: Prisma.PlanExecutionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlanExecution
+   */
+  omit?: Prisma.PlanExecutionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanExecutionInclude<ExtArgs> | null
+  where?: Prisma.PlanExecutionWhereInput
+  orderBy?: Prisma.PlanExecutionOrderByWithRelationInput | Prisma.PlanExecutionOrderByWithRelationInput[]
+  cursor?: Prisma.PlanExecutionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlanExecutionScalarFieldEnum | Prisma.PlanExecutionScalarFieldEnum[]
+}
+
+/**
  * Plan without action
  */
 export type PlanDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1286,4 +1470,8 @@ export type PlanDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    * Omit specific fields from the Plan
    */
   omit?: Prisma.PlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanInclude<ExtArgs> | null
 }

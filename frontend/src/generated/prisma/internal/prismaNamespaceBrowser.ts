@@ -51,7 +51,9 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Plan: 'Plan'
+  Plan: 'Plan',
+  Execution: 'Execution',
+  PlanExecution: 'PlanExecution'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -82,6 +84,27 @@ export const PlanScalarFieldEnum = {
 } as const
 
 export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
+
+
+export const ExecutionScalarFieldEnum = {
+  id: 'id',
+  startTimestamp: 'startTimestamp',
+  endTimestamp: 'endTimestamp',
+  title: 'title',
+  color: 'color',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ExecutionScalarFieldEnum = (typeof ExecutionScalarFieldEnum)[keyof typeof ExecutionScalarFieldEnum]
+
+
+export const PlanExecutionScalarFieldEnum = {
+  planId: 'planId',
+  executionId: 'executionId'
+} as const
+
+export type PlanExecutionScalarFieldEnum = (typeof PlanExecutionScalarFieldEnum)[keyof typeof PlanExecutionScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import type { Execution } from '@/types/execution'
 
 // ISO 시간을 절대 블럭 인덱스로 변환 (04:00 = 0)
-export function toAbsoluteBlock(isoTime: string): number {
+export function toAbsoluteBlock(isoTime: Date): number {
   const date = new Date(isoTime)
   let hour = date.getHours()
   if (hour < START_HOUR) hour += 24
@@ -23,11 +23,17 @@ type ProcessedExecution = { execution: Execution; startIndex: number; endIndex: 
 
 // executions를 미리 처리 (절대 블럭 인덱스 계산)
 export function preprocessExecutions(executions: Execution[]): ProcessedExecution[] {
-  return executions.map((execution) => ({
-    execution,
-    startIndex: toAbsoluteBlock(execution.startTimestamp.toISOString()),
-    endIndex: toAbsoluteBlock(execution.endTimestamp.toISOString()),
-  }))
+  return executions.map((execution) => {
+    const startIndex = toAbsoluteBlock(execution.startTimestamp)
+    const endIndex = toAbsoluteBlock(execution.endTimestamp)
+
+    return {
+      execution,
+      startIndex,
+      // 최소 1블럭 보장 (시작과 끝이 같은 블럭일 경우)
+      endIndex: endIndex <= startIndex ? startIndex + 1 : endIndex,
+    }
+  })
 }
 
 // 특정 row에서 렌더링할 타임블럭 정보 계산

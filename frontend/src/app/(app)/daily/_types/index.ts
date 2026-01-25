@@ -6,3 +6,9 @@ export interface TimePosition {
   x: number
   rowTop: number
 }
+
+// 정규화된 selection (start < end 보장)
+export interface NormalizedSelection {
+  start: Minutes
+  end: Minutes
+}

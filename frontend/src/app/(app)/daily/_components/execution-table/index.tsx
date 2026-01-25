@@ -1,7 +1,9 @@
 'use client'
 
+import { getExecutions } from '@daily/_api/func'
 import { TOTAL_HOURS } from '@daily/_constants'
 import { useCurrentTime, useDragSelection } from '@daily/_hooks'
+import type { NormalizedSelection } from '@daily/_types'
 import {
   formatHour,
   getCurrentTimePosition,
@@ -10,20 +12,24 @@ import {
   minutesToDayjs,
   preprocessExecutions,
 } from '@daily/_utils'
+import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
+import { InfoIcon } from 'lucide-react'
+import { useCallback, useState } from 'react'
 
-import { Card } from '@/components/ui'
+import { Card, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
+import { Execution } from '@/types/execution'
 
 import { CurrentTimeIndicator } from './current-time-indicator'
 import { ExecutionBlock } from './execution-block'
+import { ExecutionFormDialog } from './execution-form-dialog'
 import { GridBackground } from './grid-background'
 import { SelectionOverlay } from './selection-overlay'
 import { TimeTooltip } from './time-tooltip'
 
 export function ExecutionTable() {
-  const processedExecutions = preprocessExecutions([])
   const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => i)
 
   const {
@@ -38,15 +44,57 @@ export function ExecutionTable() {
     handleClick,
     handleGlobalMouseUp,
     clearHoveredTime,
+    clearDragSelection,
   } = useDragSelection()
 
   const now = useCurrentTime()
   const { hourIndex: currentHourIndex, minutePercent } = getCurrentTimePosition(now)
   const { selectedDate } = useDateStore()
+  const [targetPartialExecution, setTargetPartialExecution] = useState<Partial<Execution> | null>(
+    null
+  )
+
+  const { data: processedExecutions } = useQuery({
+    queryKey: ['executions', selectedDate],
+    queryFn: () =>
+      getExecutions({
+        startTimestamp: dayjs(selectedDate).startOf('day').toISOString(),
+        endTimestamp: dayjs(selectedDate).endOf('day').toISOString(),
+      }),
+    select: (data) => preprocessExecutions(data ?? []),
+  })
+
+  const handleSelectionClick = useCallback(
+    (normalizedSelection: NormalizedSelection): React.MouseEventHandler<HTMLDivElement> =>
+      (e) => {
+        e.stopPropagation()
+        setTargetPartialExecution({
+          startTimestamp: minutesToDayjs(normalizedSelection.start, selectedDate).toDate(),
+          endTimestamp: minutesToDayjs(normalizedSelection.end, selectedDate).toDate(),
+        })
+      },
+    [selectedDate]
+  )
 
   return (
     <main className="flex min-h-0 flex-1 flex-col gap-2">
-      <h2 className="text-lg font-semibold">실행</h2>
+      <div className="flex items-center gap-2">
+        <h2 className="text-lg font-semibold">실행</h2>
+        {/* 정보 tooltip */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <InfoIcon className="w-4 h-4 text-muted-foreground" />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>
+              영역을 드래그하여 실행 블럭을 <b>생성</b>할 수 있습니다.
+            </p>
+            <p>
+              실행 블럭을 클릭하여 <b>수정</b> 또는 <b>삭제</b>할 수 있습니다.
+            </p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
 
       <Card className="gap-0 py-0">
         <div
@@ -57,7 +105,7 @@ export function ExecutionTable() {
           onMouseLeave={clearHoveredTime}
         >
           {hours.map((hourIndex) => {
-            const rowExecutions = getExecutionsForRow(processedExecutions, hourIndex)
+            const rowExecutions = getExecutionsForRow(processedExecutions ?? [], hourIndex)
             const rowSelection = normalizedSelection
               ? getSelectionForRow(normalizedSelection.start, normalizedSelection.end, hourIndex)
               : null
@@ -85,10 +133,11 @@ export function ExecutionTable() {
                 >
                   <GridBackground />
 
-                  {rowSelection && (
+                  {rowSelection && normalizedSelection && (
                     <SelectionOverlay
                       startPercent={rowSelection.startPercent}
                       endPercent={rowSelection.endPercent}
+                      onClick={handleSelectionClick(normalizedSelection)}
                     />
                   )}
 
@@ -109,6 +158,18 @@ export function ExecutionTable() {
           })}
         </div>
       </Card>
+
+      <ExecutionFormDialog
+        mode="add"
+        open={!!targetPartialExecution}
+        execution={targetPartialExecution}
+        onOpenChange={(open) => {
+          if (!open) {
+            setTargetPartialExecution(null)
+            clearDragSelection()
+          }
+        }}
+      />
 
       {/* 시간 Tooltip (selection이 없을 때만 표시) */}
       {hoveredTime && !dragSelection && (

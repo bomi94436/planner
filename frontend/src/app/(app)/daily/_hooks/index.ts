@@ -1,4 +1,4 @@
-import type { Minutes, TimePosition } from '@daily/_types'
+import type { Minutes, NormalizedSelection, TimePosition } from '@daily/_types'
 import { useCallback, useMemo, useState } from 'react'
 import { useEffect } from 'react'
 
@@ -20,12 +20,6 @@ interface DragSelection {
   // tooltip 위치 정보
   tooltipX: number
   tooltipRowTop: number
-}
-
-// 정규화된 selection (start < end 보장)
-interface NormalizedSelection {
-  start: Minutes
-  end: Minutes
 }
 
 // 마우스 위치에서 totalMinutes 계산
@@ -51,6 +45,7 @@ interface UseDragSelectionReturn {
   handleClick: () => void
   handleGlobalMouseUp: () => void
   clearHoveredTime: () => void
+  clearDragSelection: () => void
 }
 
 export function useDragSelection(): UseDragSelectionReturn {
@@ -131,6 +126,10 @@ export function useDragSelection(): UseDragSelectionReturn {
     setHoveredTime(null)
   }, [])
 
+  const clearDragSelection = useCallback(() => {
+    setDragSelection(null)
+  }, [])
+
   // 정규화된 selection (start < end 보장)
   const normalizedSelection = useMemo((): NormalizedSelection | null => {
     if (!dragSelection) return null
@@ -150,5 +149,6 @@ export function useDragSelection(): UseDragSelectionReturn {
     handleClick,
     handleGlobalMouseUp,
     clearHoveredTime,
+    clearDragSelection,
   }
 }

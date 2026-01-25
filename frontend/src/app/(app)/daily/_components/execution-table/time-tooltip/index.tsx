@@ -9,7 +9,7 @@ interface TimeTooltipProps {
 export function TimeTooltip({ x, top, children }: TimeTooltipProps) {
   return (
     <div
-      className="pointer-events-none fixed z-50 flex flex-col items-center"
+      className="pointer-events-none fixed z-10 flex flex-col items-center"
       style={{
         left: x,
         top: top - TOOLTIP_OFFSET,

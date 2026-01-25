@@ -25,7 +25,7 @@ import { PlanDatePicker } from './plan-date-picker'
 import { PlanTimeInput } from './plan-time-input'
 
 type DialogMode = 'add' | 'edit'
-type PlanFormData = Omit<Plan, 'id' | 'createdAt' | 'updatedAt' | 'completed'>
+type PlanFormData = Omit<Plan, 'id' | 'completed'>
 
 interface PlanFormDialogProps {
   mode: DialogMode

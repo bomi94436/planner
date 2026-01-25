@@ -1,6 +1,6 @@
-import type { Execution } from '@/types/execution'
+import { BLOCKS_PER_HOUR, START_HOUR } from '@daily/_constants'
 
-import { BLOCKS_PER_HOUR, START_HOUR } from '../_constants'
+import type { Execution } from '@/types/execution'
 
 // ISO 시간을 절대 블럭 인덱스로 변환 (04:00 = 0)
 export function toAbsoluteBlock(isoTime: string): number {
@@ -41,4 +41,14 @@ export function getExecutionsForRow(processedExecutions: ProcessedExecution[], h
       span: Math.min(endIndex, rowEnd) - Math.max(startIndex, rowStart),
       isStart: startIndex >= rowStart,
     }))
+}
+
+// 현재 시간 위치 계산
+export function getCurrentTimePosition(now: Date | null) {
+  if (!now) return { hourIndex: 0, minutePercent: 0 }
+  let hour = now.getHours()
+  if (hour < START_HOUR) hour += 24
+  const hourIndex = hour - START_HOUR
+  const minutePercent = (now.getMinutes() / 60) * 100
+  return { hourIndex, minutePercent }
 }

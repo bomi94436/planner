@@ -1,7 +1,8 @@
 'use client'
+import { deletePlan, getPlans, updatePlan } from '@daily/_api/func'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { FileIcon, PencilIcon, TrashIcon } from 'lucide-react'
+import { FileIcon, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -14,6 +15,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  Button,
   Card,
   CardContent,
   Checkbox,
@@ -23,10 +25,10 @@ import {
   ContextMenuTrigger,
   Skeleton,
 } from '@/components/ui'
+import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
 import type { Plan, UpdatePlanBody } from '@/types/plan'
 
-import { deletePlan, getPlans, updatePlan } from '../_api/func'
 import { PlanFormDialog } from './plan-form-dialog'
 
 export function PlanList() {
@@ -72,7 +74,16 @@ export function PlanList() {
   }
 
   return (
-    <>
+    <aside className="flex w-80 shrink-0 flex-col gap-2">
+      <div className="flex items-center gap-x-2">
+        <h2 className="text-lg font-semibold">계획</h2>
+        <PlanFormDialog mode="add">
+          <Button variant="secondary" size="icon-sm">
+            <PlusIcon />
+          </Button>
+        </PlanFormDialog>
+      </div>
+
       <Card className="h-full py-4">
         <CardContent className="space-y-2 h-full">
           {isLoading ? (
@@ -104,9 +115,10 @@ export function PlanList() {
                       />
                       <label
                         htmlFor={plan.id.toString()}
-                        className={
-                          plan.completed ? 'text-muted-foreground line-through' : 'text-foreground'
-                        }
+                        className={cn({
+                          'text-muted-foreground line-through': plan.completed,
+                          'text-foreground': !plan.completed,
+                        })}
                       >
                         {plan.title}
                       </label>
@@ -161,6 +173,6 @@ export function PlanList() {
           if (!open) setEditTargetPlan(null)
         }}
       />
-    </>
+    </aside>
   )
 }

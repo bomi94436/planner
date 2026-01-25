@@ -1,6 +1,6 @@
 'use client'
 
-import { BLOCK_PADDING, BLOCKS_PER_HOUR, TOTAL_HOURS } from '@daily/_constants'
+import { BLOCK_PADDING, BLOCKS_PER_HOUR, START_HOUR, TOTAL_HOURS } from '@daily/_constants'
 import { useCurrentTime } from '@daily/_hooks'
 import {
   formatHour,
@@ -9,13 +9,23 @@ import {
   preprocessExecutions,
 } from '@daily/_utils'
 import dayjs from 'dayjs'
+import { useState } from 'react'
 
 import { Card } from '@/components/ui'
 import { useDateStore } from '@/store'
 
+interface HoveredTime {
+  hourIndex: number
+  minute: number
+  x: number
+  rowTop: number
+}
+
 export function ExecutionTable() {
   const processedExecutions = preprocessExecutions([])
   const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => i)
+  const [hoveredTime, setHoveredTime] = useState<HoveredTime | null>(null)
+
   const now = useCurrentTime()
   const { hourIndex: currentHourIndex, minutePercent } = getCurrentTimePosition(now)
   const { selectedDate } = useDateStore()
@@ -37,7 +47,22 @@ export function ExecutionTable() {
                 </div>
 
                 {/* 그리드 + 블럭 영역 */}
-                <div className="relative h-8 flex-1">
+                <div
+                  className="relative h-8 flex-1"
+                  onMouseMove={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect()
+                    const x = e.clientX - rect.left
+                    const percent = x / rect.width
+                    const minute = Math.floor(percent * 60)
+                    setHoveredTime({
+                      hourIndex,
+                      minute: Math.max(0, Math.min(59, minute)),
+                      x: e.clientX,
+                      rowTop: rect.top,
+                    })
+                  }}
+                  onMouseLeave={() => setHoveredTime(null)}
+                >
                   {/* 기본 그리드 (항상 표시) */}
                   <div className="absolute inset-0 flex">
                     {Array.from({ length: BLOCKS_PER_HOUR }, (_, i) => (
@@ -91,6 +116,25 @@ export function ExecutionTable() {
           })}
         </div>
       </Card>
+
+      {/* 시간 Tooltip */}
+      {hoveredTime && (
+        <div
+          className="pointer-events-none fixed z-50 flex flex-col items-center"
+          style={{
+            left: hoveredTime.x,
+            top: hoveredTime.rowTop - 4,
+            transform: 'translate(-50%, -100%)',
+          }}
+        >
+          <div className="bg-foreground text-background rounded-md px-3 py-1.5 text-xs">
+            {String((START_HOUR + hoveredTime.hourIndex) % 24).padStart(2, '0')}:
+            {String(hoveredTime.minute).padStart(2, '0')}
+          </div>
+          {/* Arrow */}
+          <div className="bg-foreground size-2.5 -mt-1.5 rotate-45 rounded-[2px]" />
+        </div>
+      )}
     </main>
   )
 }

@@ -3,7 +3,7 @@
 import { createPlan, updatePlan } from '@daily/_api/func'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { ChevronRightIcon, Clock9Icon } from 'lucide-react'
+import { ChevronRightIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -156,36 +156,56 @@ export function PlanFormDialog({ mode, plan, open, onOpenChange, children }: Pla
           </div>
 
           <div className="flex items-center gap-x-2">
-            <Clock9Icon className="h-4 w-4" />
-
             <div className="flex items-center">
               {/* 시작일시 */}
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => setEditDateMode((prev) => (prev === 'start' ? null : 'start'))}
-                className={cn({ 'opacity-50': editDateMode === 'end' })}
-              >
-                <div className="flex flex-col justify-center">
-                  <span>{dayjs(startTimestamp).format('M월 D일')}</span>
-                  {!isAllDay && <span>{dayjs(startTimestamp).format('hh:mm A')}</span>}
-                </div>
-              </Button>
+              <div className="flex flex-col">
+                <label
+                  htmlFor="start-date-time"
+                  className={cn('text-sm font-medium mb-0.5', {
+                    'opacity-50': editDateMode === 'end',
+                  })}
+                >
+                  시작일시
+                </label>
+                <Button
+                  id="start-date-time"
+                  type="button"
+                  variant="secondary"
+                  onClick={() => setEditDateMode((prev) => (prev === 'start' ? null : 'start'))}
+                  className={cn({ 'opacity-50': editDateMode === 'end' })}
+                >
+                  <div className="flex flex-col justify-center">
+                    <span>{dayjs(startTimestamp).format('M월 D일')}</span>
+                    {!isAllDay && <span>{dayjs(startTimestamp).format('hh:mm A')}</span>}
+                  </div>
+                </Button>
+              </div>
 
               <ChevronRightIcon className="h-4 w-4" />
 
               {/* 종료일시 */}
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => setEditDateMode((prev) => (prev === 'end' ? null : 'end'))}
-                className={cn({ 'opacity-50': editDateMode === 'start' })}
-              >
-                <div className="flex flex-col justify-center">
-                  <span>{dayjs(endTimestamp).format('M월 D일')}</span>
-                  {!isAllDay && <span>{dayjs(endTimestamp).format('hh:mm A')}</span>}
-                </div>
-              </Button>
+              <div className="flex flex-col">
+                <label
+                  htmlFor="end-date-time"
+                  className={cn('text-sm font-medium mb-0.5', {
+                    'opacity-50': editDateMode === 'start',
+                  })}
+                >
+                  종료일시
+                </label>
+                <Button
+                  id="end-date-time"
+                  type="button"
+                  variant="secondary"
+                  onClick={() => setEditDateMode((prev) => (prev === 'end' ? null : 'end'))}
+                  className={cn({ 'opacity-50': editDateMode === 'start' })}
+                >
+                  <div className="flex flex-col justify-center">
+                    <span>{dayjs(endTimestamp).format('M월 D일')}</span>
+                    {!isAllDay && <span>{dayjs(endTimestamp).format('hh:mm A')}</span>}
+                  </div>
+                </Button>
+              </div>
             </div>
 
             {/* 하루종일 버튼 */}

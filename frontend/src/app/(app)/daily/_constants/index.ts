@@ -6,6 +6,8 @@ export const TOTAL_HOURS = 24
 export const BLOCKS_PER_HOUR = 6
 /** 블럭 패딩 */
 export const BLOCK_PADDING = 2
+/** 행 높이 (h-8 = 32px) */
+export const ROW_HEIGHT = 32
 
 export const EXECUTION_COLOR_LIST: string[] = [
   '#57534e',

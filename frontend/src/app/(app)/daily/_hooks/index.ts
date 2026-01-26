@@ -1,5 +1,6 @@
-import type { Minutes, NormalizedSelection, TimePosition } from '@daily/_types'
-import { useCallback, useMemo, useState } from 'react'
+import type { Minutes, TimePosition } from '@daily/_types'
+import { getPositionFromPointerEvent } from '@daily/_utils'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useEffect } from 'react'
 
 export function useCurrentTime() {
@@ -14,141 +15,133 @@ export function useCurrentTime() {
   return now
 }
 
-interface DragSelection {
-  start: Minutes
-  end: Minutes
-  // tooltip 위치 정보
-  tooltipX: number
-  tooltipRowTop: number
-}
-
-// 마우스 위치에서 totalMinutes 계산
-function getMinutesFromMouseEvent(
-  e: React.MouseEvent<HTMLDivElement>,
-  rect: DOMRect,
-  hourIndex: number
-): Minutes {
-  const x = e.clientX - rect.left
-  const minuteInHour = Math.max(0, Math.min(60, Math.round((x / rect.width) * 60)))
-  return hourIndex * 60 + minuteInHour
+// ExecutionBlock hover 정보
+export interface ExecutionHoverInfo {
+  startTimestamp: Date
+  endTimestamp: Date
+  x: number
+  top: number
 }
 
 interface UseDragSelectionReturn {
-  hoveredTime: TimePosition | null
-  dragSelection: DragSelection | null
-  normalizedSelection: NormalizedSelection | null
+  containerRef: React.RefObject<HTMLDivElement | null>
+  timePosition: TimePosition | null
+  normalizedSelection: { start: Minutes; end: Minutes } | null
   isDragging: boolean
-  handleMouseDown: (e: React.MouseEvent<HTMLDivElement>, hourIndex: number) => void
-  handleMouseMove: (e: React.MouseEvent<HTMLDivElement>, hourIndex: number) => void
-  handleMouseUp: () => void
-  handleMouseLeave: (isDraggingOverride?: boolean) => void
+  handlePointerDown: (e: React.PointerEvent<HTMLDivElement>) => void
+  handlePointerMove: (e: React.PointerEvent<HTMLDivElement>) => void
+  handlePointerUp: (e: React.PointerEvent<HTMLDivElement>) => void
+  handlePointerLeave: () => void
   handleClick: () => void
-  handleGlobalMouseUp: () => void
-  clearHoveredTime: () => void
-  clearDragSelection: () => void
+  clearTimePosition: () => void
 }
 
 export function useDragSelection(): UseDragSelectionReturn {
-  const [hoveredTime, setHoveredTime] = useState<TimePosition | null>(null)
-  const [dragSelection, setDragSelection] = useState<DragSelection | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [timePosition, setTimePosition] = useState<TimePosition | null>(null)
   const [isDragging, setIsDragging] = useState(false)
 
   // 드래그 시작
-  const handleMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>, hourIndex: number) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const minutes = getMinutesFromMouseEvent(e, rect, hourIndex)
+  const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const container = containerRef.current
+    if (!container) return
 
-    setDragSelection({
+    const containerRect = container.getBoundingClientRect()
+    const { minutes, rowTop } = getPositionFromPointerEvent(e, containerRect)
+
+    // Pointer Capture 설정
+    container.setPointerCapture(e.pointerId)
+
+    setTimePosition({
       start: minutes,
       end: minutes,
-      tooltipX: e.clientX,
-      tooltipRowTop: rect.top,
+      x: e.clientX,
+      rowTop,
+      type: 'selection',
     })
     setIsDragging(true)
   }, [])
 
-  // 드래그 중 (row별 이벤트)
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>, hourIndex: number) => {
-      const rect = e.currentTarget.getBoundingClientRect()
-      const minutes = getMinutesFromMouseEvent(e, rect, hourIndex)
+  // 드래그 중
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      const container = containerRef.current
+      if (!container) return
 
-      // Tooltip 업데이트 (59분까지만 표시)
-      const displayMinutes = Math.min(minutes, hourIndex * 60 + 59)
-      setHoveredTime({
-        minutes: displayMinutes,
-        x: e.clientX,
-        rowTop: rect.top,
-      })
+      const containerRect = container.getBoundingClientRect()
+      const { hourIndex, minutes, rowTop } = getPositionFromPointerEvent(e, containerRect)
 
-      // 드래그 중일 때 selection 업데이트
+      // 드래그 중: end 업데이트
       if (isDragging) {
-        setDragSelection((prev) => (prev ? { ...prev, end: minutes } : null))
+        setTimePosition((prev) => (prev ? { ...prev, end: minutes } : null))
+        return
       }
+
+      // selection 중
+      if (timePosition?.type === 'selection' || timePosition?.end) {
+        return
+      }
+
+      // hover 중: 단일 시간 표시 (59분까지만)
+      const displayMinutes = Math.min(minutes, hourIndex * 60 + 59)
+      setTimePosition({
+        start: displayMinutes,
+        x: e.clientX,
+        rowTop,
+        type: 'hover',
+      })
     },
-    [isDragging]
+    [isDragging, timePosition]
   )
 
   // 드래그 종료
-  const handleMouseUp = useCallback(() => {
+  const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const container = containerRef.current
+    if (!container) return
+
+    container.releasePointerCapture(e.pointerId)
     setIsDragging(false)
   }, [])
 
-  // 마우스가 영역을 벗어날 때
-  const handleMouseLeave = useCallback(
-    (isDraggingOverride?: boolean) => {
-      if (!(isDraggingOverride ?? isDragging)) {
-        setHoveredTime(null)
-      }
-    },
-    [isDragging]
-  )
-
-  // 빈 영역 클릭 시 selection 해제 (드래그가 아닌 단순 클릭)
-  const handleClick = useCallback(() => {
-    if (dragSelection) {
-      // 드래그 거리가 거의 없으면 (단순 클릭) selection 해제
-      if (Math.abs(dragSelection.end - dragSelection.start) < 2) {
-        setDragSelection(null)
-      }
-    }
-  }, [dragSelection])
-
-  // 컴포넌트 영역 밖에서 mouseup 처리
-  const handleGlobalMouseUp = useCallback(() => {
-    if (isDragging) {
-      setIsDragging(false)
+  // 포인터가 영역을 벗어날 때
+  const handlePointerLeave = useCallback(() => {
+    if (!isDragging) {
+      setTimePosition(null)
     }
   }, [isDragging])
 
-  // hoveredTime 초기화
-  const clearHoveredTime = useCallback(() => {
-    setHoveredTime(null)
+  // 빈 영역 클릭 시 selection 해제 (드래그가 아닌 단순 클릭)
+  const handleClick = useCallback(() => {
+    if (timePosition?.end !== undefined) {
+      // 드래그 거리가 거의 없으면 (단순 클릭) selection 해제
+      if (Math.abs(timePosition.end - timePosition.start) < 2) {
+        setTimePosition(null)
+      }
+    }
+  }, [timePosition])
+
+  // timePosition 초기화
+  const clearTimePosition = useCallback(() => {
+    setTimePosition(null)
   }, [])
 
-  const clearDragSelection = useCallback(() => {
-    setDragSelection(null)
-  }, [])
-
-  // 정규화된 selection (start < end 보장)
-  const normalizedSelection = useMemo((): NormalizedSelection | null => {
-    if (!dragSelection) return null
-    const { start, end } = dragSelection
+  // 정규화된 selection (start < end 보장, selection일 때만)
+  const normalizedSelection = useMemo(() => {
+    if (!timePosition?.end) return null
+    const { start, end } = timePosition
     return start <= end ? { start, end } : { start: end, end: start }
-  }, [dragSelection])
+  }, [timePosition])
 
   return {
-    hoveredTime,
-    dragSelection,
+    containerRef,
+    timePosition,
     normalizedSelection,
     isDragging,
-    handleMouseDown,
-    handleMouseMove,
-    handleMouseUp,
-    handleMouseLeave,
+    handlePointerDown,
+    handlePointerMove,
+    handlePointerUp,
+    handlePointerLeave,
     handleClick,
-    handleGlobalMouseUp,
-    clearHoveredTime,
-    clearDragSelection,
+    clearTimePosition,
   }
 }

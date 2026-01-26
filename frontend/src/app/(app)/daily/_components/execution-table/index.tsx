@@ -3,7 +3,6 @@
 import { getExecutions } from '@daily/_api/func'
 import { TOTAL_HOURS } from '@daily/_constants'
 import { useCurrentTime, useDragSelection } from '@daily/_hooks'
-import type { NormalizedSelection } from '@daily/_types'
 import {
   formatHour,
   getCurrentTimePosition,
@@ -26,25 +25,23 @@ import { CurrentTimeIndicator } from './current-time-indicator'
 import { ExecutionBlock } from './execution-block'
 import { ExecutionFormDialog } from './execution-form-dialog'
 import { GridBackground } from './grid-background'
-import { SelectionOverlay } from './selection-overlay'
+import { SelectionBlock } from './selection-block'
 import { TimeTooltip } from './time-tooltip'
 
 export function ExecutionTable() {
   const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => i)
 
   const {
-    hoveredTime,
-    dragSelection,
+    containerRef,
+    timePosition,
     normalizedSelection,
     isDragging,
-    handleMouseDown,
-    handleMouseMove,
-    handleMouseUp,
-    handleMouseLeave,
+    handlePointerDown,
+    handlePointerMove,
+    handlePointerUp,
+    handlePointerLeave,
     handleClick,
-    handleGlobalMouseUp,
-    clearHoveredTime,
-    clearDragSelection,
+    clearTimePosition,
   } = useDragSelection()
 
   const now = useCurrentTime()
@@ -65,12 +62,12 @@ export function ExecutionTable() {
   })
 
   const handleSelectionClick = useCallback(
-    (normalizedSelection: NormalizedSelection): React.MouseEventHandler<HTMLDivElement> =>
+    (selection: { start: number; end: number }): React.MouseEventHandler<HTMLDivElement> =>
       (e) => {
         e.stopPropagation()
         setTargetPartialExecution({
-          startTimestamp: minutesToDayjs(normalizedSelection.start, selectedDate).toDate(),
-          endTimestamp: minutesToDayjs(normalizedSelection.end, selectedDate).toDate(),
+          startTimestamp: minutesToDayjs(selection.start, selectedDate).toDate(),
+          endTimestamp: minutesToDayjs(selection.end, selectedDate).toDate(),
         })
       },
     [selectedDate]
@@ -97,44 +94,49 @@ export function ExecutionTable() {
       </div>
 
       <Card className="gap-0 py-0">
-        <div
-          className={cn('min-w-fit', {
-            'cursor-col-resize select-none': isDragging,
-          })}
-          onMouseUp={handleGlobalMouseUp}
-          onMouseLeave={clearHoveredTime}
-        >
-          {hours.map((hourIndex) => {
-            const rowExecutions = getExecutionsForRow(processedExecutions ?? [], hourIndex)
-            const rowSelection = normalizedSelection
-              ? getSelectionForRow(normalizedSelection.start, normalizedSelection.end, hourIndex)
-              : null
+        {/* 시간 라벨 컬럼 */}
+        <div className="flex">
+          <div className="w-10 shrink-0">
+            {hours.map((hourIndex) => (
+              <div
+                key={hourIndex}
+                className="flex h-8 items-center justify-end border-b border-r border-zinc-200 px-2 text-right text-sm text-muted-foreground last:border-b-0"
+              >
+                {formatHour(hourIndex)}
+              </div>
+            ))}
+          </div>
 
-            const isToday = now && dayjs(selectedDate).isSame(dayjs(), 'day')
-            const showCurrentTime = isToday && currentHourIndex === hourIndex
+          {/* 그리드 + 블럭 영역 (부모 container에서 pointer 이벤트 처리) */}
+          <div
+            ref={containerRef}
+            className={cn('relative flex-1', {
+              'cursor-col-resize select-none': isDragging,
+            })}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerLeave}
+            onClick={handleClick}
+          >
+            {hours.map((hourIndex) => {
+              const rowExecutions = getExecutionsForRow(processedExecutions ?? [], hourIndex)
+              const rowSelection = normalizedSelection
+                ? getSelectionForRow(normalizedSelection.start, normalizedSelection.end, hourIndex)
+                : null
 
-            return (
-              <div key={hourIndex} className="flex border-b border-zinc-200 last:border-b-0">
-                {/* 시간 라벨 */}
-                <div className="flex h-8 w-10 shrink-0 items-center justify-end border-r border-zinc-200 px-2 text-right text-sm text-muted-foreground">
-                  {formatHour(hourIndex)}
-                </div>
+              const isToday = now && dayjs(selectedDate).isSame(dayjs(), 'day')
+              const showCurrentTime = isToday && currentHourIndex === hourIndex
 
-                {/* 그리드 + 블럭 영역 */}
+              return (
                 <div
-                  className={cn('relative h-8 flex-1', {
-                    'cursor-col-resize': isDragging,
-                  })}
-                  onMouseDown={(e) => handleMouseDown(e, hourIndex)}
-                  onMouseMove={(e) => handleMouseMove(e, hourIndex)}
-                  onMouseUp={handleMouseUp}
-                  onMouseLeave={() => handleMouseLeave(isDragging)}
-                  onClick={handleClick}
+                  key={hourIndex}
+                  className="relative h-8 border-b border-zinc-200 last:border-b-0"
                 >
                   <GridBackground />
 
                   {rowSelection && normalizedSelection && (
-                    <SelectionOverlay
+                    <SelectionBlock
                       startPercent={rowSelection.startPercent}
                       endPercent={rowSelection.endPercent}
                       onClick={handleSelectionClick(normalizedSelection)}
@@ -153,9 +155,9 @@ export function ExecutionTable() {
                     />
                   ))}
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
       </Card>
 
@@ -166,24 +168,17 @@ export function ExecutionTable() {
         onOpenChange={(open) => {
           if (!open) {
             setTargetPartialExecution(null)
-            clearDragSelection()
+            clearTimePosition()
           }
         }}
       />
 
-      {/* 시간 Tooltip (selection이 없을 때만 표시) */}
-      {hoveredTime && !dragSelection && (
-        <TimeTooltip x={hoveredTime.x} top={hoveredTime.rowTop}>
-          {minutesToDayjs(hoveredTime.minutes, selectedDate).format('HH:mm')}
-        </TimeTooltip>
-      )}
-
-      {/* Selection 시간 Tooltip */}
-      {dragSelection && normalizedSelection && (
-        <TimeTooltip x={dragSelection.tooltipX} top={dragSelection.tooltipRowTop}>
-          {minutesToDayjs(normalizedSelection.start, selectedDate).format('HH:mm')}
-          {' - '}
-          {minutesToDayjs(normalizedSelection.end, selectedDate).format('HH:mm')}
+      {/* 시간 Tooltip */}
+      {timePosition && (
+        <TimeTooltip x={timePosition.x} top={timePosition.rowTop}>
+          {timePosition.type === 'selection' && normalizedSelection
+            ? `${minutesToDayjs(normalizedSelection.start, selectedDate).format('HH:mm')} - ${minutesToDayjs(normalizedSelection.end, selectedDate).format('HH:mm')}`
+            : minutesToDayjs(timePosition.start, selectedDate).format('HH:mm')}
         </TimeTooltip>
       )}
     </main>

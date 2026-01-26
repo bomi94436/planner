@@ -1,6 +1,6 @@
 import { BLOCK_PADDING } from '@daily/_constants'
 
-interface SelectionOverlayProps {
+interface SelectionBlockProps {
   startPercent: number
   endPercent: number
   onClick: React.MouseEventHandler<HTMLDivElement>
@@ -9,9 +9,9 @@ interface SelectionOverlayProps {
 /**
  * Selection 영역
  */
-export function SelectionOverlay({ startPercent, endPercent, onClick }: SelectionOverlayProps) {
+export function SelectionBlock({ startPercent, endPercent, onClick }: SelectionBlockProps) {
   // 부모의 mousedown이 새 selection을 시작하는 것을 막기 위해 stopPropagation
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     e.stopPropagation()
   }
 
@@ -24,7 +24,7 @@ export function SelectionOverlay({ startPercent, endPercent, onClick }: Selectio
         left: `calc(${startPercent}% + ${BLOCK_PADDING}px)`,
         width: `calc(${endPercent - startPercent}% - ${BLOCK_PADDING * 2}px)`,
       }}
-      onMouseDown={handleMouseDown}
+      onPointerDown={handlePointerDown}
       onClick={onClick}
     />
   )

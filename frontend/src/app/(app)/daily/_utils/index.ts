@@ -1,11 +1,11 @@
-import { BLOCKS_PER_HOUR, START_HOUR } from '@daily/_constants'
+import { BLOCKS_PER_HOUR, ROW_HEIGHT, START_HOUR, TOTAL_HOURS } from '@daily/_constants'
 import type { Minutes } from '@daily/_types'
 import dayjs from 'dayjs'
 
 import type { Execution } from '@/types/execution'
 
 // ISO 시간을 절대 블럭 인덱스로 변환 (04:00 = 0)
-export function toAbsoluteBlock(isoTime: Date): number {
+export function toAbsoluteBlock(isoTime: Date): Minutes {
   const date = new Date(isoTime)
   let hour = date.getHours()
   if (hour < START_HOUR) hour += 24
@@ -95,5 +95,23 @@ export function getSelectionForRow(
   return {
     startPercent: ((clampedStart - rowStartMinutes) / 60) * 100,
     endPercent: ((clampedEnd - rowStartMinutes) / 60) * 100,
+  }
+}
+
+// 포인터 위치에서 hourIndex와 minutes 계산
+export function getPositionFromPointerEvent(
+  e: React.PointerEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement>,
+  containerRect: DOMRect
+): { hourIndex: number; minutes: Minutes; rowTop: number } {
+  const y = e.clientY - containerRect.top
+  const hourIndex = Math.max(0, Math.min(TOTAL_HOURS - 1, Math.floor(y / ROW_HEIGHT)))
+
+  const x = e.clientX - containerRect.left
+  const minuteInHour = Math.max(0, Math.min(60, Math.round((x / containerRect.width) * 60)))
+
+  return {
+    hourIndex,
+    minutes: hourIndex * 60 + minuteInHour,
+    rowTop: containerRect.top + hourIndex * ROW_HEIGHT,
   }
 }

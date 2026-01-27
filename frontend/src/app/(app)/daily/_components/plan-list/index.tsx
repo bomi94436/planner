@@ -1,7 +1,8 @@
 'use client'
+import { deletePlan, getPlans, updatePlan } from '@daily/_api/func'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { FileIcon, PencilIcon, TrashIcon } from 'lucide-react'
+import { EllipsisIcon, FileIcon, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -14,19 +15,20 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  Button,
   Card,
   CardContent,
   Checkbox,
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   Skeleton,
 } from '@/components/ui'
+import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
 import type { Plan, UpdatePlanBody } from '@/types/plan'
 
-import { deletePlan, getPlans, updatePlan } from '../_api/func'
 import { PlanFormDialog } from './plan-form-dialog'
 
 export function PlanList() {
@@ -72,7 +74,16 @@ export function PlanList() {
   }
 
   return (
-    <>
+    <aside className="flex w-80 shrink-0 flex-col gap-2">
+      <div className="flex items-center gap-x-2">
+        <h2 className="text-lg font-semibold">계획</h2>
+        <PlanFormDialog mode="add">
+          <Button variant="secondary" size="icon-sm">
+            <PlusIcon />
+          </Button>
+        </PlanFormDialog>
+      </div>
+
       <Card className="h-full py-4">
         <CardContent className="space-y-2 h-full">
           {isLoading ? (
@@ -91,44 +102,48 @@ export function PlanList() {
                 .diff(dayjs(selectedDate).startOf('day'), 'day')
 
               return (
-                <ContextMenu key={`plan-${plan.id}`}>
-                  <ContextMenuTrigger asChild>
-                    <div
-                      className="flex items-center gap-3 hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground rounded-md py-1 px-2 cursor-context-menu"
-                      onClick={() => handlePlanClick(plan.id, !plan.completed)}
-                    >
-                      <Checkbox
-                        id={plan.id.toString()}
-                        checked={plan.completed}
-                        onCheckedChange={() => handlePlanClick(plan.id, !plan.completed)}
-                      />
-                      <label
-                        htmlFor={plan.id.toString()}
-                        className={
-                          plan.completed ? 'text-muted-foreground line-through' : 'text-foreground'
-                        }
-                      >
-                        {plan.title}
-                      </label>
+                <div
+                  key={`plan-${plan.id}`}
+                  className="flex items-center gap-2 rounded-md py-1 px-2"
+                >
+                  <Checkbox
+                    id={plan.id.toString()}
+                    checked={plan.completed}
+                    onCheckedChange={() => handlePlanClick(plan.id, !plan.completed)}
+                  />
+                  <label
+                    htmlFor={plan.id.toString()}
+                    className={cn({
+                      'text-muted-foreground line-through': plan.completed,
+                      'text-foreground': !plan.completed,
+                    })}
+                  >
+                    {plan.title}
+                  </label>
 
-                      {dDay > 0 && (
-                        <span className="ml-auto text-muted-foreground text-sm">D-{dDay}</span>
-                      )}
-                    </div>
-                  </ContextMenuTrigger>
+                  <div className="flex items-center gap-2 ml-auto">
+                    {dDay > 0 && <span className="text-muted-foreground text-sm">D-{dDay}</span>}
 
-                  <ContextMenuContent>
-                    <ContextMenuItem onClick={() => setEditTargetPlan(plan)}>
-                      <PencilIcon /> Edit
-                    </ContextMenuItem>
-                    <ContextMenuItem
-                      variant="destructive"
-                      onClick={() => setDeleteTargetId(plan.id)}
-                    >
-                      <TrashIcon /> Delete
-                    </ContextMenuItem>
-                  </ContextMenuContent>
-                </ContextMenu>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                          <EllipsisIcon className="h-4 w-4 text-muted-foreground" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => setEditTargetPlan(plan)}>
+                          <PencilIcon /> Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          variant="destructive"
+                          onClick={() => setDeleteTargetId(plan.id)}
+                        >
+                          <TrashIcon /> Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </div>
               )
             })
           )}
@@ -161,6 +176,6 @@ export function PlanList() {
           if (!open) setEditTargetPlan(null)
         }}
       />
-    </>
+    </aside>
   )
 }

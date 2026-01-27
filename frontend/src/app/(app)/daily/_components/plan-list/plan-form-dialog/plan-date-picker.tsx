@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { ChevronDownIcon } from 'lucide-react'
+import { CalendarIcon, ChevronDownIcon } from 'lucide-react'
 
 import { Button, Calendar, Popover, PopoverContent, PopoverTrigger } from '@/components/ui'
 
@@ -27,8 +27,11 @@ export const PlanDatePicker: React.FC<PlanDatePickerProps> = ({
           id="date-picker"
           className="w-1/2 justify-between font-normal"
         >
-          {dayjs(value).format('M월 D일')}
-          <ChevronDownIcon />
+          <div className="flex items-center gap-1">
+            <CalendarIcon className="size-4 text-muted-foreground" />
+            <span>{dayjs(value).format('M월 D일')}</span>
+          </div>
+          <ChevronDownIcon className="size-4 text-muted-foreground" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto overflow-hidden p-0" align="start">

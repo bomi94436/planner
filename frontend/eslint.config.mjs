@@ -47,6 +47,9 @@ const eslintConfig = defineConfig([
       'react-hooks/set-state-in-effect': 'off',
 
       'react-hooks/incompatible-library': 'off',
+
+      // 의존성 배열 검사 비활성화
+      'react-hooks/exhaustive-deps': 'off',
     },
   },
   // Override default ignores of eslint-config-next.

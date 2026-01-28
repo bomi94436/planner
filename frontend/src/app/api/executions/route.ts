@@ -54,6 +54,13 @@ export const GET = withErrorHandler(async (request) => {
       startTimestamp: { lte: endTimestamp },
       endTimestamp: { gte: startTimestamp },
     },
+    select: {
+      id: true,
+      startTimestamp: true,
+      endTimestamp: true,
+      title: true,
+      color: true,
+    },
   })
   return NextResponse.json<ExecutionsResponse>({ data: executions })
 })
@@ -93,6 +100,13 @@ export const POST = withErrorHandler(async (request) => {
       endTimestamp: new Date(validated.endTimestamp),
       title: validated.title.trim(),
       color: validated.color,
+    },
+    select: {
+      id: true,
+      startTimestamp: true,
+      endTimestamp: true,
+      title: true,
+      color: true,
     },
   })
   return NextResponse.json<ExecutionResponse>({ data: newExecution }, { status: 201 })

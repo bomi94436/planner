@@ -62,7 +62,7 @@ fix: 플래너 날짜 선택 버그 수정
 refactor: 타임 트래커 컴포넌트 분리
 ```
 
-타입: `feat`, `fix`, `refactor`, `style`, `docs`, `test`, `chore`
+타입: `feat`, `fix`, `refactor`, `style`, `docs`, `test`, `chore`, `perf`
 
 ### 커밋 전 체크리스트
 

@@ -2,10 +2,9 @@
 export type Minutes = number
 
 // 시간 위치 정보 (hover, selection, execution)
-export interface TimePosition {
-  type: 'hover' | 'selection'
+export interface Selection {
   start: Minutes
-  end?: Minutes // selection 또는 execution일 때 존재
+  end: Minutes
   x: number
   rowTop: number
 }

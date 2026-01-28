@@ -2,7 +2,7 @@
 
 import { getExecutions } from '@daily/_api/func'
 import { TOTAL_HOURS } from '@daily/_constants'
-import { useCurrentTime, useDragSelection } from '@daily/_hooks'
+import { useCurrentTime, useHoveredTime, useSelection } from '@daily/_hooks'
 import {
   formatHour,
   getCurrentTimePosition,
@@ -14,7 +14,7 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { InfoIcon } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 
 import { Card, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui'
 import { cn } from '@/lib/utils'
@@ -29,27 +29,37 @@ import { SelectionBlock } from './selection-block'
 import { TimeTooltip } from './time-tooltip'
 
 export function ExecutionTable() {
+  const containerRef = useRef<HTMLDivElement>(null)
   const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => i)
+  const [targetPartialExecution, setTargetPartialExecution] = useState<Partial<Execution> | null>(
+    null
+  )
 
   const {
-    containerRef,
-    timePosition,
+    selection,
     normalizedSelection,
+    displaySelection,
     isDragging,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
-    handlePointerLeave,
     handleClick,
-    clearTimePosition,
-  } = useDragSelection()
+    clearSelection,
+  } = useSelection(containerRef)
 
   const now = useCurrentTime()
-  const { hourIndex: currentHourIndex, minutePercent } = getCurrentTimePosition(now)
-  const { selectedDate } = useDateStore()
-  const [targetPartialExecution, setTargetPartialExecution] = useState<Partial<Execution> | null>(
-    null
+  const { currentHourIndex, currerntMinutePercent } = useMemo(
+    () => getCurrentTimePosition(now),
+    [now]
   )
+  const {
+    hoveredTime,
+    handleMouseMove,
+    displayHoveredTime,
+    handleMouseLeave,
+    handleMouseMoveInExecution,
+  } = useHoveredTime(containerRef)
+  const { selectedDate } = useDateStore()
 
   const { data: processedExecutions } = useQuery({
     queryKey: ['executions', selectedDate],
@@ -115,9 +125,10 @@ export function ExecutionTable() {
             })}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
+            onMouseMove={handleMouseMove}
             onPointerUp={handlePointerUp}
-            onPointerLeave={handlePointerLeave}
             onClick={handleClick}
+            onMouseLeave={handleMouseLeave}
           >
             {hours.map((hourIndex) => {
               const rowExecutions = getExecutionsForRow(processedExecutions ?? [], hourIndex)
@@ -143,7 +154,9 @@ export function ExecutionTable() {
                     />
                   )}
 
-                  {showCurrentTime && <CurrentTimeIndicator minutePercent={minutePercent} />}
+                  {showCurrentTime && (
+                    <CurrentTimeIndicator minutePercent={currerntMinutePercent} />
+                  )}
 
                   {rowExecutions.map(({ execution, offsetInRow, span, isStart }) => (
                     <ExecutionBlock
@@ -152,6 +165,7 @@ export function ExecutionTable() {
                       offsetInRow={offsetInRow}
                       span={span}
                       isStart={isStart}
+                      onMouseMove={handleMouseMoveInExecution(execution)}
                     />
                   ))}
                 </div>
@@ -168,17 +182,22 @@ export function ExecutionTable() {
         onOpenChange={(open) => {
           if (!open) {
             setTargetPartialExecution(null)
-            clearTimePosition()
+            clearSelection()
           }
         }}
       />
 
       {/* 시간 Tooltip */}
-      {timePosition && (
-        <TimeTooltip x={timePosition.x} top={timePosition.rowTop}>
-          {timePosition.type === 'selection' && normalizedSelection
-            ? `${minutesToDayjs(normalizedSelection.start, selectedDate).format('HH:mm')} - ${minutesToDayjs(normalizedSelection.end, selectedDate).format('HH:mm')}`
-            : minutesToDayjs(timePosition.start, selectedDate).format('HH:mm')}
+      {selection && displaySelection && (
+        <TimeTooltip x={selection.x} top={selection.rowTop}>
+          {displaySelection}
+        </TimeTooltip>
+      )}
+
+      {/* hover 시간 Tooltip */}
+      {!selection && hoveredTime && displayHoveredTime && (
+        <TimeTooltip x={hoveredTime.x} top={hoveredTime.rowTop}>
+          {displayHoveredTime}
         </TimeTooltip>
       )}
     </main>

@@ -16,8 +16,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   Button,
-  Card,
-  CardContent,
   Checkbox,
   DropdownMenu,
   DropdownMenuContent,
@@ -84,71 +82,64 @@ export function PlanList() {
         </PlanFormDialog>
       </div>
 
-      <Card className="h-full py-4">
-        <CardContent className="space-y-2 h-full">
-          {isLoading ? (
-            Array.from({ length: 5 }).map((_, index) => (
-              <Skeleton key={index} className="h-8 w-full" />
-            ))
-          ) : !plans || plans.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full">
-              <FileIcon className="w-4 h-4 text-muted-foreground" />
-              <p className="text-muted-foreground text-sm mt-1">No Data</p>
+      {isLoading ? (
+        Array.from({ length: 5 }).map((_, index) => <Skeleton key={index} className="h-8 w-full" />)
+      ) : !plans || plans.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-full">
+          <FileIcon className="w-4 h-4 text-muted-foreground" />
+          <p className="text-muted-foreground text-sm mt-1">No Data</p>
+        </div>
+      ) : (
+        plans?.map((plan) => {
+          const dDay = dayjs(plan.endTimestamp)
+            .startOf('day')
+            .diff(dayjs(selectedDate).startOf('day'), 'day')
+
+          return (
+            <div key={`plan-${plan.id}`} className="flex items-center gap-2 rounded-md py-1 px-2">
+              <Checkbox
+                id={plan.id.toString()}
+                checked={plan.completed}
+                onCheckedChange={() => handlePlanClick(plan.id, !plan.completed)}
+              />
+              <label
+                htmlFor={plan.id.toString()}
+                className={cn('text-sm', {
+                  'text-muted-foreground line-through': plan.completed,
+                  'text-foreground': !plan.completed,
+                })}
+              >
+                {plan.title}
+              </label>
+
+              <div className="flex items-center gap-2 ml-auto">
+                {dDay > 0 && (
+                  <span className="text-muted-foreground text-sm truncate">D-{dDay}</span>
+                )}
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                      <EllipsisIcon className="h-4 w-4 text-muted-foreground" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => setEditTargetPlan(plan)}>
+                      <PencilIcon /> Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onClick={() => setDeleteTargetId(plan.id)}
+                    >
+                      <TrashIcon /> Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
-          ) : (
-            plans?.map((plan) => {
-              const dDay = dayjs(plan.endTimestamp)
-                .startOf('day')
-                .diff(dayjs(selectedDate).startOf('day'), 'day')
-
-              return (
-                <div
-                  key={`plan-${plan.id}`}
-                  className="flex items-center gap-2 rounded-md py-1 px-2"
-                >
-                  <Checkbox
-                    id={plan.id.toString()}
-                    checked={plan.completed}
-                    onCheckedChange={() => handlePlanClick(plan.id, !plan.completed)}
-                  />
-                  <label
-                    htmlFor={plan.id.toString()}
-                    className={cn({
-                      'text-muted-foreground line-through': plan.completed,
-                      'text-foreground': !plan.completed,
-                    })}
-                  >
-                    {plan.title}
-                  </label>
-
-                  <div className="flex items-center gap-2 ml-auto">
-                    {dDay > 0 && <span className="text-muted-foreground text-sm">D-{dDay}</span>}
-
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <EllipsisIcon className="h-4 w-4 text-muted-foreground" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => setEditTargetPlan(plan)}>
-                          <PencilIcon /> Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          variant="destructive"
-                          onClick={() => setDeleteTargetId(plan.id)}
-                        >
-                          <TrashIcon /> Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                </div>
-              )
-            })
-          )}
-        </CardContent>
-      </Card>
+          )
+        })
+      )}
 
       {/* Plan 삭제 AlertDialog */}
       <AlertDialog open={deleteTargetId !== null} onOpenChange={() => setDeleteTargetId(null)}>

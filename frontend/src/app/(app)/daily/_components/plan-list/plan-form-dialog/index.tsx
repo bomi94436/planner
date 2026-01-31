@@ -151,7 +151,7 @@ export function PlanFormDialog({ mode, plan, open, onOpenChange, children }: Pla
               id="title"
               placeholder="계획을 입력하세요"
               {...register('title', { required: true, validate: (v) => !!v.trim() })}
-              autoFocus
+              autoFocus={mode === 'add'}
             />
           </div>
 

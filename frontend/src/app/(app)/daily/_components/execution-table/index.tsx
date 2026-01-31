@@ -34,6 +34,7 @@ export function ExecutionTable() {
   const [targetPartialExecution, setTargetPartialExecution] = useState<Partial<Execution> | null>(
     null
   )
+  const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
 
   const {
     selection,
@@ -103,7 +104,7 @@ export function ExecutionTable() {
         </Tooltip>
       </div>
 
-      <Card className="gap-0 py-0">
+      <Card className="gap-0 py-0 rounded-lg">
         {/* 시간 라벨 컬럼 */}
         <div className="flex">
           <div className="w-10 shrink-0">
@@ -166,6 +167,7 @@ export function ExecutionTable() {
                       span={span}
                       isStart={isStart}
                       onMouseMove={handleMouseMoveInExecution(execution)}
+                      onContextMenuChange={setIsContextMenuOpen}
                     />
                   ))}
                 </div>
@@ -188,14 +190,14 @@ export function ExecutionTable() {
       />
 
       {/* 시간 Tooltip */}
-      {selection && displaySelection && (
+      {!isContextMenuOpen && selection && displaySelection && (
         <TimeTooltip x={selection.x} top={selection.rowTop}>
           {displaySelection}
         </TimeTooltip>
       )}
 
       {/* hover 시간 Tooltip */}
-      {!selection && hoveredTime && displayHoveredTime && (
+      {!isContextMenuOpen && !selection && hoveredTime && displayHoveredTime && (
         <TimeTooltip x={hoveredTime.x} top={hoveredTime.rowTop}>
           {displayHoveredTime}
         </TimeTooltip>

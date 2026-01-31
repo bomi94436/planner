@@ -4,7 +4,7 @@ import { createPlan, updatePlan } from '@daily/_api/func'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { ChevronRightIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -52,19 +52,26 @@ export function PlanFormDialog({ mode, plan, open, onOpenChange, children }: Pla
     handleSubmit,
     watch,
     setValue,
-    formState: { isValid },
+    reset,
+    formState: { isValid, isDirty },
   } = useForm<PlanFormData>({
-    defaultValues:
-      mode === 'edit' && plan
-        ? plan
-        : {
-            title: '',
-            startTimestamp: selectedDate,
-            endTimestamp: selectedDate,
-            isAllDay: true,
-          },
     mode: 'onChange',
   })
+
+  // dialog가 열릴 때 폼 데이터 초기화
+  useEffect(() => {
+    if (!isOpen) return
+    if (mode === 'edit' && plan) {
+      reset(plan)
+    } else {
+      reset({
+        title: '',
+        startTimestamp: selectedDate,
+        endTimestamp: selectedDate,
+        isAllDay: true,
+      })
+    }
+  }, [isOpen, mode, plan, reset, selectedDate])
 
   // 폼 값 watch
   const { startTimestamp, endTimestamp, isAllDay } = watch()
@@ -151,7 +158,6 @@ export function PlanFormDialog({ mode, plan, open, onOpenChange, children }: Pla
               id="title"
               placeholder="계획을 입력하세요"
               {...register('title', { required: true, validate: (v) => !!v.trim() })}
-              autoFocus={mode === 'add'}
             />
           </div>
 
@@ -255,7 +261,7 @@ export function PlanFormDialog({ mode, plan, open, onOpenChange, children }: Pla
           )}
 
           <DialogFooter>
-            <Button type="submit" disabled={isPending || !isValid}>
+            <Button type="submit" disabled={isPending || !isValid || !isDirty}>
               {isPending
                 ? mode === 'edit'
                   ? '수정 중...'

@@ -104,7 +104,7 @@ export function ExecutionTable() {
         </Tooltip>
       </div>
 
-      <Card className="gap-0 py-0 rounded-lg">
+      <Card className="gap-0 py-0 rounded">
         {/* 시간 라벨 컬럼 */}
         <div className="flex">
           <div className="w-10 shrink-0">

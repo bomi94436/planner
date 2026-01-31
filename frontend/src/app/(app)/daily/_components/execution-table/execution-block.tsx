@@ -49,7 +49,7 @@ export function ExecutionBlock({
     <ContextMenu onOpenChange={onContextMenuChange}>
       <ContextMenuTrigger asChild>
         <div
-          className="absolute flex items-center overflow-hidden rounded-lg text-sm text-white cursor-pointer"
+          className="absolute flex items-center overflow-hidden rounded text-sm text-white cursor-pointer"
           style={{
             bottom: `${BLOCK_PADDING}px`,
             top: `${BLOCK_PADDING}px`,

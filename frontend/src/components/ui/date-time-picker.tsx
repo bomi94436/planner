@@ -13,7 +13,7 @@ interface DateTimePickerProps {
   isAllDay: boolean
   onStartTimestampChange: (date: Date) => void
   onEndTimestampChange: (date: Date) => void
-  onIsAllDayChange: (isAllDay: boolean) => void
+  onIsAllDayChange?: (isAllDay: boolean) => void
 }
 
 export function DateTimePicker({
@@ -67,7 +67,12 @@ export function DateTimePicker({
             className="w-fit bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
             onChange={(e) => {
               const [hours, minutes] = e.target.value.split(':').map(Number)
-              const newDate = dayjs(startTimestamp).hour(hours).minute(minutes).second(0).toDate()
+              const newDate = dayjs(startTimestamp)
+                .hour(hours)
+                .minute(minutes)
+                .second(0)
+                .millisecond(0)
+                .toDate()
               onStartTimestampChange?.(newDate)
             }}
             onBlur={() => {
@@ -117,7 +122,12 @@ export function DateTimePicker({
             className="w-fit bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
             onChange={(e) => {
               const [hours, minutes] = e.target.value.split(':').map(Number)
-              const newDate = dayjs(endTimestamp).hour(hours).minute(minutes).second(0).toDate()
+              const newDate = dayjs(endTimestamp)
+                .hour(hours)
+                .minute(minutes)
+                .second(0)
+                .millisecond(0)
+                .toDate()
               onEndTimestampChange?.(newDate)
             }}
             onBlur={() => {
@@ -129,10 +139,12 @@ export function DateTimePicker({
         )}
       </div>
 
-      <div className="flex items-center space-x-2 h-9">
-        <Label htmlFor="all-day">하루종일</Label>
-        <Switch id="all-day" checked={isAllDay} onCheckedChange={onIsAllDayChange} />
-      </div>
+      {onIsAllDayChange && (
+        <div className="flex items-center space-x-2 h-9">
+          <Label htmlFor="all-day">하루종일</Label>
+          <Switch id="all-day" checked={isAllDay} onCheckedChange={onIsAllDayChange} />
+        </div>
+      )}
     </div>
   )
 }

@@ -112,8 +112,8 @@ export function PlanFormDialog({ mode, plan, open, onOpenChange, children }: Pla
   const onSubmit = (data: PlanFormData) => {
     const planData = {
       title: data.title.trim(),
-      startTimestamp: dayjs(data.startTimestamp).toISOString(),
-      endTimestamp: dayjs(data.endTimestamp).toISOString(),
+      startTimestamp: dayjs(data.startTimestamp).second(0).millisecond(0).toISOString(),
+      endTimestamp: dayjs(data.endTimestamp).second(0).millisecond(0).toISOString(),
       isAllDay: data.isAllDay,
     }
 

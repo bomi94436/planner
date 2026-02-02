@@ -17,6 +17,8 @@ interface ExecutionBlockProps {
   isStart: boolean
   onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => void
   onContextMenuChange?: (open: boolean) => void
+  handleEditClick: () => void
+  handleDeleteClick: () => void
 }
 
 /**
@@ -29,6 +31,8 @@ export function ExecutionBlock({
   isStart,
   onMouseMove,
   onContextMenuChange,
+  handleEditClick,
+  handleDeleteClick,
 }: ExecutionBlockProps) {
   const leftPercent = (offsetInRow / 60) * 100
   const widthPercent = (span / 60) * 100
@@ -65,11 +69,17 @@ export function ExecutionBlock({
         </div>
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem onPointerDown={(e) => e.stopPropagation()}>
-          <PencilIcon /> Edit
+        <ContextMenuItem onPointerDown={(e) => e.stopPropagation()} onClick={handleEditClick}>
+          <PencilIcon />
+          <span>Edit</span>
         </ContextMenuItem>
-        <ContextMenuItem variant="destructive" onPointerDown={(e) => e.stopPropagation()}>
-          <TrashIcon /> Delete
+        <ContextMenuItem
+          variant="destructive"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={handleDeleteClick}
+        >
+          <TrashIcon />
+          <span>Delete</span>
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 
 import {
   Button,
+  DateTimePicker,
   Dialog,
   DialogContent,
   DialogFooter,
@@ -46,27 +47,31 @@ export function ExecutionFormDialog({
     watch,
     reset,
   } = useForm<ExecutionFormData>({
-    defaultValues: {
+    mode: 'onChange',
+  })
+
+  const { startTimestamp, endTimestamp, color } = watch()
+
+  useEffect(() => {
+    if (!open) return
+    reset({
       title: '',
       startTimestamp: selectedDate,
       endTimestamp: selectedDate,
       color: '#000000',
-    },
-    mode: 'onChange',
-  })
+      ...(execution ?? {}),
+    })
+  }, [open, execution, reset, selectedDate])
 
-  const { color } = watch()
+  // 시작 시간 변경 핸들러
+  const handleStartChange = (date: Date) => {
+    setValue('startTimestamp', date, { shouldDirty: true })
+  }
 
-  useEffect(() => {
-    if (execution) {
-      reset({
-        title: execution.title,
-        startTimestamp: execution.startTimestamp,
-        endTimestamp: execution.endTimestamp,
-        color: execution.color,
-      })
-    }
-  }, [execution])
+  // 종료 시간 변경 핸들러
+  const handleEndChange = (date: Date) => {
+    setValue('endTimestamp', date, { shouldDirty: true })
+  }
 
   const { mutate: createExecutionMutation, isPending: isCreating } = useMutation({
     mutationFn: createExecution,
@@ -80,7 +85,7 @@ export function ExecutionFormDialog({
     mutationFn: ({ id, data }: { id: number; data: UpdateExecutionBody }) =>
       updateExecution(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['plans'] })
+      queryClient.invalidateQueries({ queryKey: ['executions'] })
       onOpenChange(false)
     },
   })
@@ -90,11 +95,8 @@ export function ExecutionFormDialog({
   const onSubmit = (data: ExecutionFormData) => {
     const executionData = {
       title: data.title.trim(),
-      startTimestamp: dayjs(data.startTimestamp)
-        .set('second', 0)
-        .set('millisecond', 0)
-        .toISOString(),
-      endTimestamp: dayjs(data.endTimestamp).set('second', 0).set('millisecond', 0).toISOString(),
+      startTimestamp: dayjs(data.startTimestamp).second(0).millisecond(0).toISOString(),
+      endTimestamp: dayjs(data.endTimestamp).second(0).millisecond(0).toISOString(),
       color: data.color,
     }
 
@@ -123,6 +125,14 @@ export function ExecutionFormDialog({
               placeholder="무엇을 실행했는지 입력하세요."
             />
           </div>
+
+          <DateTimePicker
+            startTimestamp={startTimestamp}
+            endTimestamp={endTimestamp}
+            isAllDay={false}
+            onStartTimestampChange={handleStartChange}
+            onEndTimestampChange={handleEndChange}
+          />
 
           <div className="space-y-2">
             <label htmlFor="color" className="text-sm font-medium">

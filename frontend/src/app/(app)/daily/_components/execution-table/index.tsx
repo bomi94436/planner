@@ -1,6 +1,6 @@
 'use client'
 
-import { getExecutions } from '@daily/_api/func'
+import { deleteExecution, getExecutions } from '@daily/_api/func'
 import { TOTAL_HOURS } from '@daily/_constants'
 import { useCurrentTime, useHoveredTime, useSelection } from '@daily/_hooks'
 import {
@@ -11,12 +11,25 @@ import {
   minutesToDayjs,
   preprocessExecutions,
 } from '@daily/_utils'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { InfoIcon } from 'lucide-react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 
-import { Card, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  Card,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui'
 import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
 import { Execution } from '@/types/execution'
@@ -31,9 +44,9 @@ import { TimeTooltip } from './time-tooltip'
 export function ExecutionTable() {
   const containerRef = useRef<HTMLDivElement>(null)
   const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => i)
-  const [targetPartialExecution, setTargetPartialExecution] = useState<Partial<Execution> | null>(
-    null
-  )
+  const [addTargetExecution, setAddTargetExecution] = useState<Partial<Execution> | null>(null)
+  const [editTargetExecution, setEditTargetExecution] = useState<Execution | null>(null)
+  const [deleteTargetExecutionId, setDeleteTargetExecutionId] = useState<number | null>(null)
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
 
   const {
@@ -72,16 +85,40 @@ export function ExecutionTable() {
     select: (data) => preprocessExecutions(data ?? []),
   })
 
+  const queryClient = useQueryClient()
+
+  const { mutate: deleteExecutionMutation } = useMutation({
+    mutationFn: (id: number) => deleteExecution(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['executions'] })
+      setDeleteTargetExecutionId(null)
+    },
+  })
+
   const handleSelectionClick = useCallback(
     (selection: { start: number; end: number }): React.MouseEventHandler<HTMLDivElement> =>
       (e) => {
         e.stopPropagation()
-        setTargetPartialExecution({
+        setAddTargetExecution({
           startTimestamp: minutesToDayjs(selection.start, selectedDate).toDate(),
           endTimestamp: minutesToDayjs(selection.end, selectedDate).toDate(),
         })
       },
     [selectedDate]
+  )
+
+  const handleEditExecutionClick = useCallback(
+    (execution: Execution) => () => {
+      setEditTargetExecution(execution)
+    },
+    []
+  )
+
+  const handleDeleteExecutionClick = useCallback(
+    (id: number) => () => {
+      setDeleteTargetExecutionId(id)
+    },
+    []
   )
 
   return (
@@ -168,6 +205,8 @@ export function ExecutionTable() {
                       isStart={isStart}
                       onMouseMove={handleMouseMoveInExecution(execution)}
                       onContextMenuChange={setIsContextMenuOpen}
+                      handleEditClick={handleEditExecutionClick(execution)}
+                      handleDeleteClick={handleDeleteExecutionClick(execution.id)}
                     />
                   ))}
                 </div>
@@ -179,15 +218,46 @@ export function ExecutionTable() {
 
       <ExecutionFormDialog
         mode="add"
-        open={!!targetPartialExecution}
-        execution={targetPartialExecution}
+        open={!!addTargetExecution}
+        execution={addTargetExecution}
         onOpenChange={(open) => {
           if (!open) {
-            setTargetPartialExecution(null)
+            setAddTargetExecution(null)
             clearSelection()
           }
         }}
       />
+
+      <ExecutionFormDialog
+        mode="edit"
+        open={!!editTargetExecution}
+        execution={editTargetExecution}
+        onOpenChange={(open) => {
+          if (!open) setEditTargetExecution(null)
+        }}
+      />
+
+      <AlertDialog
+        open={deleteTargetExecutionId !== null}
+        onOpenChange={() => setDeleteTargetExecutionId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>정말 삭제하시겠습니까?</AlertDialogTitle>
+            <AlertDialogDescription>이 작업은 되돌릴 수 없습니다.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>취소</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() =>
+                deleteTargetExecutionId && deleteExecutionMutation(deleteTargetExecutionId)
+              }
+            >
+              삭제
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* 시간 Tooltip */}
       {!isContextMenuOpen && selection && displaySelection && (

@@ -1,4 +1,4 @@
-import { AppHeader, AppSidebar } from '@/components/layout'
+import { AppHeader, AppSidebar } from '@/components'
 import { ScrollArea, SidebarInset, SidebarProvider } from '@/components/ui'
 
 export default function AppLayout({

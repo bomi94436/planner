@@ -64,14 +64,16 @@ export function AppSidebar() {
       <SidebarFooter className="px-0">
         <Separator />
 
-        <Calendar
-          mode="single"
-          selected={selectedDate}
-          onSelect={setSelectedDate}
-          className="w-full bg-sidebar-background"
-          captionLayout="dropdown"
-          required
-        />
+        <div className="px-4 py-1">
+          <Calendar
+            mode="single"
+            selected={selectedDate}
+            onSelect={setSelectedDate}
+            className="w-full bg-sidebar-background"
+            captionLayout="dropdown"
+            required
+          />
+        </div>
       </SidebarFooter>
     </Sidebar>
   )

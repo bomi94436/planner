@@ -1,18 +1,18 @@
 import { NextResponse } from 'next/server'
 
 import { withErrorHandler } from '@/app/api/_lib'
-import { createPlanSchema, getPlansQuerySchema } from '@/app/api/_validations'
+import { createTaskSchema, getTasksQuerySchema } from '@/app/api/_validations'
 import { prisma } from '@/lib/prisma'
-import type { PlanResponse, PlansResponse } from '@/types/plan'
+import type { TaskResponse, TasksResponse } from '@/types/task'
 
 /**
  * @swagger
- * /api/plans:
+ * /api/tasks:
  *   get:
  *     tags:
- *       - Plan
- *     summary: Plan 목록 조회
- *     description: Plan 목록을 조회합니다.
+ *       - Task
+ *     summary: Task 목록 조회
+ *     description: Task 목록을 조회합니다.
  *     parameters:
  *       - name: startTimestamp
  *         in: query
@@ -30,7 +30,7 @@ import type { PlanResponse, PlansResponse } from '@/types/plan'
  *           format: date-time
  *     responses:
  *       200:
- *         description: Plan 목록
+ *         description: Task 목록
  *         content:
  *           application/json:
  *             schema:
@@ -39,34 +39,34 @@ import type { PlanResponse, PlansResponse } from '@/types/plan'
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Plan'
+ *                     $ref: '#/components/schemas/Task'
  */
 export const GET = withErrorHandler(async (request) => {
   const searchParams = request.nextUrl.searchParams
-  const { startTimestamp, endTimestamp } = getPlansQuerySchema.parse({
+  const { startTimestamp, endTimestamp } = getTasksQuerySchema.parse({
     startTimestamp: searchParams.get('startTimestamp') ?? undefined,
     endTimestamp: searchParams.get('endTimestamp') ?? undefined,
   })
 
-  // 조회 범위와 겹치는 모든 Plan 조회
-  // 두 범위가 겹치는 조건: Plan.start <= 조회.end AND Plan.end >= 조회.start
+  // 조회 범위와 겹치는 모든 Task 조회
+  // 두 범위가 겹치는 조건: Task.start <= 조회.end AND Task.end >= 조회.start
   //
-  // [Case 1] Plan이 조회 범위 내에 있음
+  // [Case 1] Task이 조회 범위 내에 있음
   //   조회:  |---------|
-  //   Plan:    |---|
+  //   Task:    |---|
   //
-  // [Case 2] Plan이 조회 범위를 포함
+  // [Case 2] Task이 조회 범위를 포함
   //   조회:    |---|
-  //   Plan:  |---------|
+  //   Task:  |---------|
   //
   // [Case 3] 부분적으로 겹침
   //   조회:  |---------|
-  //   Plan:       |---------|
-  const plans = await prisma.plan.findMany({
+  //   Task:       |---------|
+  const tasks = await prisma.task.findMany({
     where: {
       AND: [
-        { startTimestamp: { lte: endTimestamp } }, // Plan 시작 <= 조회 끝
-        { endTimestamp: { gte: startTimestamp } }, // 조회 시작 <= Plan 끝
+        { startTimestamp: { lte: endTimestamp } }, // Task 시작 <= 조회 끝
+        { endTimestamp: { gte: startTimestamp } }, // 조회 시작 <= Task 끝
       ],
     },
     orderBy: [{ startTimestamp: 'asc' }, { title: 'asc' }],
@@ -79,39 +79,39 @@ export const GET = withErrorHandler(async (request) => {
       isAllDay: true,
     },
   })
-  return NextResponse.json<PlansResponse>({ data: plans })
+  return NextResponse.json<TasksResponse>({ data: tasks })
 })
 
 /**
  * @swagger
- * /api/plans:
+ * /api/tasks:
  *   post:
  *     tags:
- *       - Plan
- *     summary: Plan 생성
- *     description: Plan을 생성합니다.
+ *       - Task
+ *     summary: Task 생성
+ *     description: Task을 생성합니다.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/CreatePlanBody'
+ *             $ref: '#/components/schemas/CreateTaskBody'
  *     responses:
  *       201:
- *         description: Plan 생성 성공
+ *         description: Task 생성 성공
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
  *                 data:
- *                   $ref: '#/components/schemas/Plan'
+ *                   $ref: '#/components/schemas/Task'
  */
 export const POST = withErrorHandler(async (request) => {
   const body = await request.json()
-  const validated = createPlanSchema.parse(body)
+  const validated = createTaskSchema.parse(body)
 
-  const newPlan = await prisma.plan.create({
+  const newTask = await prisma.task.create({
     data: {
       title: validated.title.trim(),
       startTimestamp: new Date(validated.startTimestamp),
@@ -128,5 +128,5 @@ export const POST = withErrorHandler(async (request) => {
     },
   })
 
-  return NextResponse.json<PlanResponse>({ data: newPlan }, { status: 201 })
+  return NextResponse.json<TaskResponse>({ data: newTask }, { status: 201 })
 })

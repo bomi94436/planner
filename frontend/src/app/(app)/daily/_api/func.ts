@@ -8,15 +8,15 @@ import {
   UpdateExecutionBody,
 } from '@/types/execution'
 import {
-  CreatePlanBody,
-  GetPlansQuery,
-  PlanResponse,
-  PlansResponse,
-  UpdatePlanBody,
-} from '@/types/plan'
+  CreateTaskBody,
+  GetTasksQuery,
+  TaskResponse,
+  TasksResponse,
+  UpdateTaskBody,
+} from '@/types/task'
 
-export const getPlans = async ({ startTimestamp, endTimestamp }: GetPlansQuery) => {
-  const response = await axios.get<PlansResponse>('/api/plans', {
+export const getTasks = async ({ startTimestamp, endTimestamp }: GetTasksQuery) => {
+  const response = await axios.get<TasksResponse>('/api/tasks', {
     params: {
       startTimestamp,
       endTimestamp,
@@ -25,18 +25,18 @@ export const getPlans = async ({ startTimestamp, endTimestamp }: GetPlansQuery) 
   return response.data?.data
 }
 
-export const createPlan = async (data: CreatePlanBody) => {
-  const response = await axios.post<PlanResponse>('/api/plans', data)
+export const createTask = async (data: CreateTaskBody) => {
+  const response = await axios.post<TaskResponse>('/api/tasks', data)
   return response.data?.data
 }
 
-export const updatePlan = async (id: number, data: UpdatePlanBody) => {
-  const response = await axios.patch<PlanResponse>(`/api/plans/${id}`, data)
+export const updateTask = async (id: number, data: UpdateTaskBody) => {
+  const response = await axios.patch<TaskResponse>(`/api/tasks/${id}`, data)
   return response.data?.data
 }
 
-export const deletePlan = async (id: number) => {
-  const response = await axios.delete<PlanResponse>(`/api/plans/${id}`)
+export const deleteTask = async (id: number) => {
+  const response = await axios.delete<TaskResponse>(`/api/tasks/${id}`)
   return response.data?.data
 }
 

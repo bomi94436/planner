@@ -69,9 +69,10 @@ export const minutesToDayjs = (minutes: Minutes, baseDate: Date): dayjs.Dayjs =>
 // 현재 시간 위치 계산
 export function getCurrentTimePosition(now: Date | null) {
   if (!now) return { hourIndex: 0, minutePercent: 0 }
-  const minutes = dateToMinutes(now)
-  const currentHourIndex = toHourIndex(minutes)
-  const currerntMinutePercent = ((minutes % MINUTES_PER_HOUR) / MINUTES_PER_HOUR) * 100
+  let hour = now.getHours()
+  if (hour < START_HOUR) hour += 24
+  const currentHourIndex = hour - START_HOUR
+  const currerntMinutePercent = (now.getMinutes() / 60) * 100
   return { currentHourIndex, currerntMinutePercent }
 }
 

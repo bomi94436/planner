@@ -76,7 +76,7 @@ export function PlanList() {
       <div className="flex items-center gap-x-2">
         <h2 className="text-lg font-semibold">계획</h2>
         <PlanFormDialog mode="add">
-          <Button variant="secondary" size="icon-sm">
+          <Button variant="default" size="icon-xs">
             <PlusIcon />
           </Button>
         </PlanFormDialog>

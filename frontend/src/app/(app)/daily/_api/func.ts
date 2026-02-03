@@ -1,6 +1,13 @@
 import axios from 'axios'
 
 import {
+  CreateExecutionBody,
+  ExecutionResponse,
+  ExecutionsResponse,
+  GetExecutionsQuery,
+  UpdateExecutionBody,
+} from '@/types/execution'
+import {
   CreatePlanBody,
   GetPlansQuery,
   PlanResponse,
@@ -30,5 +37,30 @@ export const updatePlan = async (id: number, data: UpdatePlanBody) => {
 
 export const deletePlan = async (id: number) => {
   const response = await axios.delete<PlanResponse>(`/api/plans/${id}`)
+  return response.data?.data
+}
+
+export const getExecutions = async ({ startTimestamp, endTimestamp }: GetExecutionsQuery) => {
+  const response = await axios.get<ExecutionsResponse>('/api/executions', {
+    params: {
+      startTimestamp,
+      endTimestamp,
+    },
+  })
+  return response.data?.data
+}
+
+export const createExecution = async (data: CreateExecutionBody) => {
+  const response = await axios.post<ExecutionResponse>('/api/executions', data)
+  return response.data?.data
+}
+
+export const updateExecution = async (id: number, data: UpdateExecutionBody) => {
+  const response = await axios.patch<ExecutionResponse>(`/api/executions/${id}`, data)
+  return response.data?.data
+}
+
+export const deleteExecution = async (id: number) => {
+  const response = await axios.delete<ExecutionResponse>(`/api/executions/${id}`)
   return response.data?.data
 }

@@ -1,7 +1,8 @@
 'use client'
+import { deletePlan, getPlans, updatePlan } from '@daily/_api/func'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { FileIcon, PencilIcon, TrashIcon } from 'lucide-react'
+import { EllipsisIcon, FileIcon, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -14,19 +15,18 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  Card,
-  CardContent,
+  Button,
   Checkbox,
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   Skeleton,
 } from '@/components/ui'
+import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
 import type { Plan, UpdatePlanBody } from '@/types/plan'
 
-import { deletePlan, getPlans, updatePlan } from '../_api/func'
 import { PlanFormDialog } from './plan-form-dialog'
 
 export function PlanList() {
@@ -72,68 +72,74 @@ export function PlanList() {
   }
 
   return (
-    <>
-      <Card className="h-full py-4">
-        <CardContent className="space-y-2 h-full">
-          {isLoading ? (
-            Array.from({ length: 5 }).map((_, index) => (
-              <Skeleton key={index} className="h-8 w-full" />
-            ))
-          ) : !plans || plans.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full">
-              <FileIcon className="w-4 h-4 text-muted-foreground" />
-              <p className="text-muted-foreground text-sm mt-1">No Data</p>
-            </div>
-          ) : (
-            plans?.map((plan) => {
-              const dDay = dayjs(plan.endTimestamp)
-                .startOf('day')
-                .diff(dayjs(selectedDate).startOf('day'), 'day')
+    <aside className="flex w-80 shrink-0 flex-col gap-2">
+      <div className="flex items-center gap-x-2">
+        <h2 className="text-lg font-semibold">계획</h2>
+        <PlanFormDialog mode="add">
+          <Button variant="default" size="icon-xs">
+            <PlusIcon />
+          </Button>
+        </PlanFormDialog>
+      </div>
 
-              return (
-                <ContextMenu key={`plan-${plan.id}`}>
-                  <ContextMenuTrigger asChild>
-                    <div
-                      className="flex items-center gap-3 hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground rounded-md py-1 px-2 cursor-context-menu"
-                      onClick={() => handlePlanClick(plan.id, !plan.completed)}
-                    >
-                      <Checkbox
-                        id={plan.id.toString()}
-                        checked={plan.completed}
-                        onCheckedChange={() => handlePlanClick(plan.id, !plan.completed)}
-                      />
-                      <label
-                        htmlFor={plan.id.toString()}
-                        className={
-                          plan.completed ? 'text-muted-foreground line-through' : 'text-foreground'
-                        }
-                      >
-                        {plan.title}
-                      </label>
+      {isLoading ? (
+        Array.from({ length: 5 }).map((_, index) => <Skeleton key={index} className="h-8 w-full" />)
+      ) : !plans || plans.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-full">
+          <FileIcon className="w-4 h-4 text-muted-foreground" />
+          <p className="text-muted-foreground text-sm mt-1">No Data</p>
+        </div>
+      ) : (
+        plans?.map((plan) => {
+          const dDay = dayjs(plan.endTimestamp)
+            .startOf('day')
+            .diff(dayjs(selectedDate).startOf('day'), 'day')
 
-                      {dDay > 0 && (
-                        <span className="ml-auto text-muted-foreground text-sm">D-{dDay}</span>
-                      )}
-                    </div>
-                  </ContextMenuTrigger>
+          return (
+            <div key={`plan-${plan.id}`} className="flex items-center gap-2 rounded-md py-1 px-2">
+              <Checkbox
+                id={plan.id.toString()}
+                checked={plan.completed}
+                onCheckedChange={() => handlePlanClick(plan.id, !plan.completed)}
+              />
+              <label
+                htmlFor={plan.id.toString()}
+                className={cn('text-sm', {
+                  'text-muted-foreground line-through': plan.completed,
+                  'text-foreground': !plan.completed,
+                })}
+              >
+                {plan.title}
+              </label>
 
-                  <ContextMenuContent>
-                    <ContextMenuItem onClick={() => setEditTargetPlan(plan)}>
+              <div className="flex items-center gap-2 ml-auto">
+                {dDay > 0 && (
+                  <span className="text-muted-foreground text-sm truncate">D-{dDay}</span>
+                )}
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                      <EllipsisIcon className="h-4 w-4 text-muted-foreground" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => setEditTargetPlan(plan)}>
                       <PencilIcon /> Edit
-                    </ContextMenuItem>
-                    <ContextMenuItem
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
                       variant="destructive"
                       onClick={() => setDeleteTargetId(plan.id)}
                     >
                       <TrashIcon /> Delete
-                    </ContextMenuItem>
-                  </ContextMenuContent>
-                </ContextMenu>
-              )
-            })
-          )}
-        </CardContent>
-      </Card>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+          )
+        })
+      )}
 
       {/* Plan 삭제 AlertDialog */}
       <AlertDialog open={deleteTargetId !== null} onOpenChange={() => setDeleteTargetId(null)}>
@@ -153,7 +159,6 @@ export function PlanList() {
 
       {/* Plan 수정 Dialog */}
       <PlanFormDialog
-        key={editTargetPlan?.id ?? 'new'}
         mode="edit"
         plan={editTargetPlan ?? undefined}
         open={editTargetPlan !== null}
@@ -161,6 +166,6 @@ export function PlanList() {
           if (!open) setEditTargetPlan(null)
         }}
       />
-    </>
+    </aside>
   )
 }

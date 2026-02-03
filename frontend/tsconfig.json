@@ -16,7 +16,12 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@daily/*": ["./src/app/(app)/daily/*"],
+      "monthly/*": ["./src/app/(app)/monthly/*"],
+      "weekly/*": ["./src/app/(app)/weekly/*"],
+      "yearly/*": ["./src/app/(app)/yearly/*"],
+      "@api/*": ["./src/app/_api/*"]
     }
   },
   "include": [

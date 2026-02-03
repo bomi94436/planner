@@ -19,7 +19,7 @@ model Task {
   completed      Boolean         @default(false)
   startTimestamp DateTime        @map("start_timestamp")
   endTimestamp   DateTime        @map("end_timestamp")
-  isAllDay       Boolean         @default(false)
+  isAllDay       Boolean         @default(false) @map("is_all_day")
   createdAt      DateTime        @default(now()) @map("created_at")
   updatedAt      DateTime        @updatedAt @map("updated_at")
   taskExecutions TaskExecution[]
@@ -41,8 +41,8 @@ model Execution {
 }
 
 model TaskExecution {
-  taskId      Int
-  executionId Int
+  taskId      Int @map("task_id")
+  executionId Int @map("execution_id")
 
   task      Task      @relation(fields: [taskId], references: [id])
   execution Execution @relation(fields: [executionId], references: [id])

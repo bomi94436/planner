@@ -1,46 +1,26 @@
-/*
-  Warnings:
+-- Rename Plan to Task (데이터 보존)
 
-  - You are about to drop the `PlanExecution` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `plans` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
+-- 1. 기존 외래 키 제약 조건 삭제
 ALTER TABLE "PlanExecution" DROP CONSTRAINT "PlanExecution_executionId_fkey";
-
--- DropForeignKey
 ALTER TABLE "PlanExecution" DROP CONSTRAINT "PlanExecution_planId_fkey";
 
--- DropTable
-DROP TABLE "PlanExecution";
+-- 2. 기존 기본 키 제약 조건 삭제
+ALTER TABLE "PlanExecution" DROP CONSTRAINT "PlanExecution_pkey";
+ALTER TABLE "plans" DROP CONSTRAINT "plans_pkey";
 
--- DropTable
-DROP TABLE "plans";
+-- 3. 테이블명 변경
+ALTER TABLE "plans" RENAME TO "tasks";
+ALTER TABLE "PlanExecution" RENAME TO "task_execution";
 
--- CreateTable
-CREATE TABLE "tasks" (
-    "id" SERIAL NOT NULL,
-    "title" VARCHAR(255) NOT NULL,
-    "completed" BOOLEAN NOT NULL DEFAULT false,
-    "start_timestamp" TIMESTAMP(3) NOT NULL,
-    "end_timestamp" TIMESTAMP(3) NOT NULL,
-    "isAllDay" BOOLEAN NOT NULL DEFAULT false,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+-- 4. 컬럼명 변경
+ALTER TABLE "task_execution" RENAME COLUMN "planId" TO "task_id";
+ALTER TABLE "task_execution" RENAME COLUMN "executionId" TO "execution_id";
+ALTER TABLE "tasks" RENAME COLUMN "isAllDay" TO "is_all_day";
 
-    CONSTRAINT "tasks_pkey" PRIMARY KEY ("id")
-);
+-- 5. 기본 키 제약 조건 재생성
+ALTER TABLE "tasks" ADD CONSTRAINT "tasks_pkey" PRIMARY KEY ("id");
+ALTER TABLE "task_execution" ADD CONSTRAINT "task_execution_pkey" PRIMARY KEY ("task_id", "execution_id");
 
--- CreateTable
-CREATE TABLE "task_execution" (
-    "taskId" INTEGER NOT NULL,
-    "executionId" INTEGER NOT NULL,
-
-    CONSTRAINT "task_execution_pkey" PRIMARY KEY ("taskId","executionId")
-);
-
--- AddForeignKey
-ALTER TABLE "task_execution" ADD CONSTRAINT "task_execution_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "tasks"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "task_execution" ADD CONSTRAINT "task_execution_executionId_fkey" FOREIGN KEY ("executionId") REFERENCES "executions"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- 6. 외래 키 제약 조건 재생성
+ALTER TABLE "task_execution" ADD CONSTRAINT "task_execution_task_id_fkey" FOREIGN KEY ("task_id") REFERENCES "tasks"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "task_execution" ADD CONSTRAINT "task_execution_execution_id_fkey" FOREIGN KEY ("execution_id") REFERENCES "executions"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -13,7 +13,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model Plan {
+model Task {
   id             Int             @id @default(autoincrement())
   title          String          @db.VarChar(255)
   completed      Boolean         @default(false)
@@ -22,9 +22,9 @@ model Plan {
   isAllDay       Boolean         @default(false)
   createdAt      DateTime        @default(now()) @map("created_at")
   updatedAt      DateTime        @updatedAt @map("updated_at")
-  planExecutions PlanExecution[]
+  taskExecutions TaskExecution[]
 
-  @@map("plans")
+  @@map("tasks")
 }
 
 model Execution {
@@ -35,17 +35,18 @@ model Execution {
   color          String          @db.VarChar(255)
   createdAt      DateTime        @default(now()) @map("created_at")
   updatedAt      DateTime        @updatedAt @map("updated_at")
-  planExecutions PlanExecution[]
+  taskExecutions TaskExecution[]
 
   @@map("executions")
 }
 
-model PlanExecution {
-  planId      Int
+model TaskExecution {
+  taskId      Int
   executionId Int
 
-  plan      Plan      @relation(fields: [planId], references: [id])
+  task      Task      @relation(fields: [taskId], references: [id])
   execution Execution @relation(fields: [executionId], references: [id])
 
-  @@id([planId, executionId]) // 복합 PK
+  @@id([taskId, executionId]) // 복합 PK
+  @@map("task_execution")
 }

@@ -232,7 +232,7 @@ export type ExecutionWhereInput = {
   color?: Prisma.StringFilter<"Execution"> | string
   createdAt?: Prisma.DateTimeFilter<"Execution"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Execution"> | Date | string
-  planExecutions?: Prisma.PlanExecutionListRelationFilter
+  taskExecutions?: Prisma.TaskExecutionListRelationFilter
 }
 
 export type ExecutionOrderByWithRelationInput = {
@@ -243,7 +243,7 @@ export type ExecutionOrderByWithRelationInput = {
   color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  planExecutions?: Prisma.PlanExecutionOrderByRelationAggregateInput
+  taskExecutions?: Prisma.TaskExecutionOrderByRelationAggregateInput
 }
 
 export type ExecutionWhereUniqueInput = Prisma.AtLeast<{
@@ -257,7 +257,7 @@ export type ExecutionWhereUniqueInput = Prisma.AtLeast<{
   color?: Prisma.StringFilter<"Execution"> | string
   createdAt?: Prisma.DateTimeFilter<"Execution"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Execution"> | Date | string
-  planExecutions?: Prisma.PlanExecutionListRelationFilter
+  taskExecutions?: Prisma.TaskExecutionListRelationFilter
 }, "id">
 
 export type ExecutionOrderByWithAggregationInput = {
@@ -295,7 +295,7 @@ export type ExecutionCreateInput = {
   color: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  planExecutions?: Prisma.PlanExecutionCreateNestedManyWithoutExecutionInput
+  taskExecutions?: Prisma.TaskExecutionCreateNestedManyWithoutExecutionInput
 }
 
 export type ExecutionUncheckedCreateInput = {
@@ -306,7 +306,7 @@ export type ExecutionUncheckedCreateInput = {
   color: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  planExecutions?: Prisma.PlanExecutionUncheckedCreateNestedManyWithoutExecutionInput
+  taskExecutions?: Prisma.TaskExecutionUncheckedCreateNestedManyWithoutExecutionInput
 }
 
 export type ExecutionUpdateInput = {
@@ -316,7 +316,7 @@ export type ExecutionUpdateInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  planExecutions?: Prisma.PlanExecutionUpdateManyWithoutExecutionNestedInput
+  taskExecutions?: Prisma.TaskExecutionUpdateManyWithoutExecutionNestedInput
 }
 
 export type ExecutionUncheckedUpdateInput = {
@@ -327,7 +327,7 @@ export type ExecutionUncheckedUpdateInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  planExecutions?: Prisma.PlanExecutionUncheckedUpdateManyWithoutExecutionNestedInput
+  taskExecutions?: Prisma.TaskExecutionUncheckedUpdateManyWithoutExecutionNestedInput
 }
 
 export type ExecutionCreateManyInput = {
@@ -402,21 +402,21 @@ export type ExecutionScalarRelationFilter = {
   isNot?: Prisma.ExecutionWhereInput
 }
 
-export type ExecutionCreateNestedOneWithoutPlanExecutionsInput = {
-  create?: Prisma.XOR<Prisma.ExecutionCreateWithoutPlanExecutionsInput, Prisma.ExecutionUncheckedCreateWithoutPlanExecutionsInput>
-  connectOrCreate?: Prisma.ExecutionCreateOrConnectWithoutPlanExecutionsInput
+export type ExecutionCreateNestedOneWithoutTaskExecutionsInput = {
+  create?: Prisma.XOR<Prisma.ExecutionCreateWithoutTaskExecutionsInput, Prisma.ExecutionUncheckedCreateWithoutTaskExecutionsInput>
+  connectOrCreate?: Prisma.ExecutionCreateOrConnectWithoutTaskExecutionsInput
   connect?: Prisma.ExecutionWhereUniqueInput
 }
 
-export type ExecutionUpdateOneRequiredWithoutPlanExecutionsNestedInput = {
-  create?: Prisma.XOR<Prisma.ExecutionCreateWithoutPlanExecutionsInput, Prisma.ExecutionUncheckedCreateWithoutPlanExecutionsInput>
-  connectOrCreate?: Prisma.ExecutionCreateOrConnectWithoutPlanExecutionsInput
-  upsert?: Prisma.ExecutionUpsertWithoutPlanExecutionsInput
+export type ExecutionUpdateOneRequiredWithoutTaskExecutionsNestedInput = {
+  create?: Prisma.XOR<Prisma.ExecutionCreateWithoutTaskExecutionsInput, Prisma.ExecutionUncheckedCreateWithoutTaskExecutionsInput>
+  connectOrCreate?: Prisma.ExecutionCreateOrConnectWithoutTaskExecutionsInput
+  upsert?: Prisma.ExecutionUpsertWithoutTaskExecutionsInput
   connect?: Prisma.ExecutionWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ExecutionUpdateToOneWithWhereWithoutPlanExecutionsInput, Prisma.ExecutionUpdateWithoutPlanExecutionsInput>, Prisma.ExecutionUncheckedUpdateWithoutPlanExecutionsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ExecutionUpdateToOneWithWhereWithoutTaskExecutionsInput, Prisma.ExecutionUpdateWithoutTaskExecutionsInput>, Prisma.ExecutionUncheckedUpdateWithoutTaskExecutionsInput>
 }
 
-export type ExecutionCreateWithoutPlanExecutionsInput = {
+export type ExecutionCreateWithoutTaskExecutionsInput = {
   startTimestamp: Date | string
   endTimestamp: Date | string
   title: string
@@ -425,7 +425,7 @@ export type ExecutionCreateWithoutPlanExecutionsInput = {
   updatedAt?: Date | string
 }
 
-export type ExecutionUncheckedCreateWithoutPlanExecutionsInput = {
+export type ExecutionUncheckedCreateWithoutTaskExecutionsInput = {
   id?: number
   startTimestamp: Date | string
   endTimestamp: Date | string
@@ -435,23 +435,23 @@ export type ExecutionUncheckedCreateWithoutPlanExecutionsInput = {
   updatedAt?: Date | string
 }
 
-export type ExecutionCreateOrConnectWithoutPlanExecutionsInput = {
+export type ExecutionCreateOrConnectWithoutTaskExecutionsInput = {
   where: Prisma.ExecutionWhereUniqueInput
-  create: Prisma.XOR<Prisma.ExecutionCreateWithoutPlanExecutionsInput, Prisma.ExecutionUncheckedCreateWithoutPlanExecutionsInput>
+  create: Prisma.XOR<Prisma.ExecutionCreateWithoutTaskExecutionsInput, Prisma.ExecutionUncheckedCreateWithoutTaskExecutionsInput>
 }
 
-export type ExecutionUpsertWithoutPlanExecutionsInput = {
-  update: Prisma.XOR<Prisma.ExecutionUpdateWithoutPlanExecutionsInput, Prisma.ExecutionUncheckedUpdateWithoutPlanExecutionsInput>
-  create: Prisma.XOR<Prisma.ExecutionCreateWithoutPlanExecutionsInput, Prisma.ExecutionUncheckedCreateWithoutPlanExecutionsInput>
+export type ExecutionUpsertWithoutTaskExecutionsInput = {
+  update: Prisma.XOR<Prisma.ExecutionUpdateWithoutTaskExecutionsInput, Prisma.ExecutionUncheckedUpdateWithoutTaskExecutionsInput>
+  create: Prisma.XOR<Prisma.ExecutionCreateWithoutTaskExecutionsInput, Prisma.ExecutionUncheckedCreateWithoutTaskExecutionsInput>
   where?: Prisma.ExecutionWhereInput
 }
 
-export type ExecutionUpdateToOneWithWhereWithoutPlanExecutionsInput = {
+export type ExecutionUpdateToOneWithWhereWithoutTaskExecutionsInput = {
   where?: Prisma.ExecutionWhereInput
-  data: Prisma.XOR<Prisma.ExecutionUpdateWithoutPlanExecutionsInput, Prisma.ExecutionUncheckedUpdateWithoutPlanExecutionsInput>
+  data: Prisma.XOR<Prisma.ExecutionUpdateWithoutTaskExecutionsInput, Prisma.ExecutionUncheckedUpdateWithoutTaskExecutionsInput>
 }
 
-export type ExecutionUpdateWithoutPlanExecutionsInput = {
+export type ExecutionUpdateWithoutTaskExecutionsInput = {
   startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
@@ -460,7 +460,7 @@ export type ExecutionUpdateWithoutPlanExecutionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ExecutionUncheckedUpdateWithoutPlanExecutionsInput = {
+export type ExecutionUncheckedUpdateWithoutTaskExecutionsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -476,11 +476,11 @@ export type ExecutionUncheckedUpdateWithoutPlanExecutionsInput = {
  */
 
 export type ExecutionCountOutputType = {
-  planExecutions: number
+  taskExecutions: number
 }
 
 export type ExecutionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  planExecutions?: boolean | ExecutionCountOutputTypeCountPlanExecutionsArgs
+  taskExecutions?: boolean | ExecutionCountOutputTypeCountTaskExecutionsArgs
 }
 
 /**
@@ -496,8 +496,8 @@ export type ExecutionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
 /**
  * ExecutionCountOutputType without action
  */
-export type ExecutionCountOutputTypeCountPlanExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PlanExecutionWhereInput
+export type ExecutionCountOutputTypeCountTaskExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TaskExecutionWhereInput
 }
 
 
@@ -509,7 +509,7 @@ export type ExecutionSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   color?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  planExecutions?: boolean | Prisma.Execution$planExecutionsArgs<ExtArgs>
+  taskExecutions?: boolean | Prisma.Execution$taskExecutionsArgs<ExtArgs>
   _count?: boolean | Prisma.ExecutionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["execution"]>
 
@@ -545,7 +545,7 @@ export type ExecutionSelectScalar = {
 
 export type ExecutionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "startTimestamp" | "endTimestamp" | "title" | "color" | "createdAt" | "updatedAt", ExtArgs["result"]["execution"]>
 export type ExecutionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  planExecutions?: boolean | Prisma.Execution$planExecutionsArgs<ExtArgs>
+  taskExecutions?: boolean | Prisma.Execution$taskExecutionsArgs<ExtArgs>
   _count?: boolean | Prisma.ExecutionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ExecutionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -554,7 +554,7 @@ export type ExecutionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type $ExecutionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Execution"
   objects: {
-    planExecutions: Prisma.$PlanExecutionPayload<ExtArgs>[]
+    taskExecutions: Prisma.$TaskExecutionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -958,7 +958,7 @@ readonly fields: ExecutionFieldRefs;
  */
 export interface Prisma__ExecutionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  planExecutions<T extends Prisma.Execution$planExecutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Execution$planExecutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  taskExecutions<T extends Prisma.Execution$taskExecutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Execution$taskExecutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1383,27 +1383,27 @@ export type ExecutionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * Execution.planExecutions
+ * Execution.taskExecutions
  */
-export type Execution$planExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Execution$taskExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PlanExecution
+   * Select specific fields to fetch from the TaskExecution
    */
-  select?: Prisma.PlanExecutionSelect<ExtArgs> | null
+  select?: Prisma.TaskExecutionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PlanExecution
+   * Omit specific fields from the TaskExecution
    */
-  omit?: Prisma.PlanExecutionOmit<ExtArgs> | null
+  omit?: Prisma.TaskExecutionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.PlanExecutionInclude<ExtArgs> | null
-  where?: Prisma.PlanExecutionWhereInput
-  orderBy?: Prisma.PlanExecutionOrderByWithRelationInput | Prisma.PlanExecutionOrderByWithRelationInput[]
-  cursor?: Prisma.PlanExecutionWhereUniqueInput
+  include?: Prisma.TaskExecutionInclude<ExtArgs> | null
+  where?: Prisma.TaskExecutionWhereInput
+  orderBy?: Prisma.TaskExecutionOrderByWithRelationInput | Prisma.TaskExecutionOrderByWithRelationInput[]
+  cursor?: Prisma.TaskExecutionWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.PlanExecutionScalarFieldEnum | Prisma.PlanExecutionScalarFieldEnum[]
+  distinct?: Prisma.TaskExecutionScalarFieldEnum | Prisma.TaskExecutionScalarFieldEnum[]
 }
 
 /**

@@ -29,8 +29,8 @@ export * from "./enums"
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Plans
- * const plans = await prisma.plan.findMany()
+ * // Fetch zero or more Tasks
+ * const tasks = await prisma.task.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -40,17 +40,17 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model Plan
+ * Model Task
  * 
  */
-export type Plan = Prisma.PlanModel
+export type Task = Prisma.TaskModel
 /**
  * Model Execution
  * 
  */
 export type Execution = Prisma.ExecutionModel
 /**
- * Model PlanExecution
+ * Model TaskExecution
  * 
  */
-export type PlanExecution = Prisma.PlanExecutionModel
+export type TaskExecution = Prisma.TaskExecutionModel

@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.2.0",
   "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "postgresql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Plan {\n  id             Int             @id @default(autoincrement())\n  title          String          @db.VarChar(255)\n  completed      Boolean         @default(false)\n  startTimestamp DateTime        @map(\"start_timestamp\")\n  endTimestamp   DateTime        @map(\"end_timestamp\")\n  isAllDay       Boolean         @default(false)\n  createdAt      DateTime        @default(now()) @map(\"created_at\")\n  updatedAt      DateTime        @updatedAt @map(\"updated_at\")\n  planExecutions PlanExecution[]\n\n  @@map(\"plans\")\n}\n\nmodel Execution {\n  id             Int             @id @default(autoincrement())\n  startTimestamp DateTime        @map(\"start_timestamp\")\n  endTimestamp   DateTime        @map(\"end_timestamp\")\n  title          String          @db.VarChar(255)\n  color          String          @db.VarChar(255)\n  createdAt      DateTime        @default(now()) @map(\"created_at\")\n  updatedAt      DateTime        @updatedAt @map(\"updated_at\")\n  planExecutions PlanExecution[]\n\n  @@map(\"executions\")\n}\n\nmodel PlanExecution {\n  planId      Int\n  executionId Int\n\n  plan      Plan      @relation(fields: [planId], references: [id])\n  execution Execution @relation(fields: [executionId], references: [id])\n\n  @@id([planId, executionId]) // 복합 PK\n}\n",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Task {\n  id             Int             @id @default(autoincrement())\n  title          String          @db.VarChar(255)\n  completed      Boolean         @default(false)\n  startTimestamp DateTime        @map(\"start_timestamp\")\n  endTimestamp   DateTime        @map(\"end_timestamp\")\n  isAllDay       Boolean         @default(false)\n  createdAt      DateTime        @default(now()) @map(\"created_at\")\n  updatedAt      DateTime        @updatedAt @map(\"updated_at\")\n  taskExecutions TaskExecution[]\n\n  @@map(\"tasks\")\n}\n\nmodel Execution {\n  id             Int             @id @default(autoincrement())\n  startTimestamp DateTime        @map(\"start_timestamp\")\n  endTimestamp   DateTime        @map(\"end_timestamp\")\n  title          String          @db.VarChar(255)\n  color          String          @db.VarChar(255)\n  createdAt      DateTime        @default(now()) @map(\"created_at\")\n  updatedAt      DateTime        @updatedAt @map(\"updated_at\")\n  taskExecutions TaskExecution[]\n\n  @@map(\"executions\")\n}\n\nmodel TaskExecution {\n  taskId      Int\n  executionId Int\n\n  task      Task      @relation(fields: [taskId], references: [id])\n  execution Execution @relation(fields: [executionId], references: [id])\n\n  @@id([taskId, executionId]) // 복합 PK\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Plan\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"completed\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"startTimestamp\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"start_timestamp\"},{\"name\":\"endTimestamp\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"end_timestamp\"},{\"name\":\"isAllDay\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"},{\"name\":\"planExecutions\",\"kind\":\"object\",\"type\":\"PlanExecution\",\"relationName\":\"PlanToPlanExecution\"}],\"dbName\":\"plans\"},\"Execution\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"startTimestamp\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"start_timestamp\"},{\"name\":\"endTimestamp\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"end_timestamp\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"color\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"},{\"name\":\"planExecutions\",\"kind\":\"object\",\"type\":\"PlanExecution\",\"relationName\":\"ExecutionToPlanExecution\"}],\"dbName\":\"executions\"},\"PlanExecution\":{\"fields\":[{\"name\":\"planId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"executionId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"plan\",\"kind\":\"object\",\"type\":\"Plan\",\"relationName\":\"PlanToPlanExecution\"},{\"name\":\"execution\",\"kind\":\"object\",\"type\":\"Execution\",\"relationName\":\"ExecutionToPlanExecution\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Task\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"completed\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"startTimestamp\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"start_timestamp\"},{\"name\":\"endTimestamp\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"end_timestamp\"},{\"name\":\"isAllDay\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"},{\"name\":\"taskExecutions\",\"kind\":\"object\",\"type\":\"TaskExecution\",\"relationName\":\"TaskToTaskExecution\"}],\"dbName\":\"tasks\"},\"Execution\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"startTimestamp\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"start_timestamp\"},{\"name\":\"endTimestamp\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"end_timestamp\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"color\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"},{\"name\":\"taskExecutions\",\"kind\":\"object\",\"type\":\"TaskExecution\",\"relationName\":\"ExecutionToTaskExecution\"}],\"dbName\":\"executions\"},\"TaskExecution\":{\"fields\":[{\"name\":\"taskId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"executionId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"task\",\"kind\":\"object\",\"type\":\"Task\",\"relationName\":\"TaskToTaskExecution\"},{\"name\":\"execution\",\"kind\":\"object\",\"type\":\"Execution\",\"relationName\":\"ExecutionToTaskExecution\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -58,8 +58,8 @@ export interface PrismaClientConstructor {
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Plans
-   * const plans = await prisma.plan.findMany()
+   * // Fetch zero or more Tasks
+   * const tasks = await prisma.task.findMany()
    * ```
    * 
    * Read more in our [docs](https://pris.ly/d/client).
@@ -80,8 +80,8 @@ export interface PrismaClientConstructor {
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Plans
- * const plans = await prisma.plan.findMany()
+ * // Fetch zero or more Tasks
+ * const tasks = await prisma.task.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -175,14 +175,14 @@ export interface PrismaClient<
   }>>
 
       /**
-   * `prisma.plan`: Exposes CRUD operations for the **Plan** model.
+   * `prisma.task`: Exposes CRUD operations for the **Task** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Plans
-    * const plans = await prisma.plan.findMany()
+    * // Fetch zero or more Tasks
+    * const tasks = await prisma.task.findMany()
     * ```
     */
-  get plan(): Prisma.PlanDelegate<ExtArgs, { omit: OmitOpts }>;
+  get task(): Prisma.TaskDelegate<ExtArgs, { omit: OmitOpts }>;
 
   /**
    * `prisma.execution`: Exposes CRUD operations for the **Execution** model.
@@ -195,14 +195,14 @@ export interface PrismaClient<
   get execution(): Prisma.ExecutionDelegate<ExtArgs, { omit: OmitOpts }>;
 
   /**
-   * `prisma.planExecution`: Exposes CRUD operations for the **PlanExecution** model.
+   * `prisma.taskExecution`: Exposes CRUD operations for the **TaskExecution** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more PlanExecutions
-    * const planExecutions = await prisma.planExecution.findMany()
+    * // Fetch zero or more TaskExecutions
+    * const taskExecutions = await prisma.taskExecution.findMany()
     * ```
     */
-  get planExecution(): Prisma.PlanExecutionDelegate<ExtArgs, { omit: OmitOpts }>;
+  get taskExecution(): Prisma.TaskExecutionDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

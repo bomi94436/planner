@@ -7,7 +7,7 @@ type Schemas = NonNullable<
 >
 
 export const schemas: Schemas = {
-  Plan: {
+  Task: {
     type: 'object',
     properties: {
       id: { type: 'integer' },
@@ -18,7 +18,7 @@ export const schemas: Schemas = {
       isAllDay: { type: 'boolean' },
     },
   },
-  CreatePlanBody: {
+  CreateTaskBody: {
     type: 'object',
     properties: {
       title: { type: 'string' },
@@ -27,7 +27,7 @@ export const schemas: Schemas = {
       isAllDay: { type: 'boolean' },
     },
   },
-  UpdatePlanBody: {
+  UpdateTaskBody: {
     type: 'object',
     properties: {
       title: { type: 'string' },

@@ -1,5 +1,5 @@
 'use client'
-import { deletePlan, getPlans, updatePlan } from '@daily/_api/func'
+import { deleteTask, getTasks, updateTask } from '@daily/_api/func'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { EllipsisIcon, FileIcon, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react'
@@ -25,19 +25,19 @@ import {
 } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
-import type { Plan, UpdatePlanBody } from '@/types/plan'
+import type { Task, UpdateTaskBody } from '@/types/task'
 
-import { PlanFormDialog } from './plan-form-dialog'
+import { TaskFormDialog } from './task-form-dialog'
 
-export function PlanList() {
+export function TaskList() {
   const { selectedDate } = useDateStore()
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null)
-  const [editTargetPlan, setEditTargetPlan] = useState<Plan | null>(null)
+  const [editTargetTask, setEditTargetTask] = useState<Task | null>(null)
 
-  const { data: plans, isLoading } = useQuery({
-    queryKey: ['plans', selectedDate],
+  const { data: tasks, isLoading } = useQuery({
+    queryKey: ['tasks', selectedDate],
     queryFn: () =>
-      getPlans({
+      getTasks({
         startTimestamp: dayjs(selectedDate).startOf('day').toISOString(),
         endTimestamp: dayjs(selectedDate).endOf('day').toISOString(),
       }),
@@ -45,28 +45,28 @@ export function PlanList() {
 
   const queryClient = useQueryClient()
 
-  const { mutate: updatePlanMutation } = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UpdatePlanBody }) => updatePlan(id, data),
+  const { mutate: updateTaskMutation } = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: UpdateTaskBody }) => updateTask(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['plans'] })
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
     },
   })
 
-  const { mutate: deletePlanMutation } = useMutation({
-    mutationFn: (id: number) => deletePlan(id),
+  const { mutate: deleteTaskMutation } = useMutation({
+    mutationFn: (id: number) => deleteTask(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['plans'] })
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
       setDeleteTargetId(null)
     },
   })
 
   const debouncedUpdate = useDebouncedCallback((id: number, completed: boolean) => {
-    updatePlanMutation({ id, data: { completed } })
+    updateTaskMutation({ id, data: { completed } })
   }, 300)
 
-  const handlePlanClick = (id: number, completed: boolean) => {
-    queryClient.setQueryData(['plans', selectedDate], (old: Plan[]) =>
-      old?.map((p) => (p.id === id ? { ...p, completed } : p))
+  const handleTaskClick = (id: number, completed: boolean) => {
+    queryClient.setQueryData(['tasks', selectedDate], (old: Task[]) =>
+      old?.map((t) => (t.id === id ? { ...t, completed } : t))
     )
     debouncedUpdate(id, completed)
   }
@@ -75,41 +75,41 @@ export function PlanList() {
     <aside className="flex w-80 shrink-0 flex-col gap-2">
       <div className="flex items-center gap-x-2">
         <h2 className="text-lg font-semibold">계획</h2>
-        <PlanFormDialog mode="add">
+        <TaskFormDialog mode="add">
           <Button variant="default" size="icon-xs">
             <PlusIcon />
           </Button>
-        </PlanFormDialog>
+        </TaskFormDialog>
       </div>
 
       {isLoading ? (
         Array.from({ length: 5 }).map((_, index) => <Skeleton key={index} className="h-8 w-full" />)
-      ) : !plans || plans.length === 0 ? (
+      ) : !tasks || tasks.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full">
           <FileIcon className="w-4 h-4 text-muted-foreground" />
           <p className="text-muted-foreground text-sm mt-1">No Data</p>
         </div>
       ) : (
-        plans?.map((plan) => {
-          const dDay = dayjs(plan.endTimestamp)
+        tasks?.map((task) => {
+          const dDay = dayjs(task.endTimestamp)
             .startOf('day')
             .diff(dayjs(selectedDate).startOf('day'), 'day')
 
           return (
-            <div key={`plan-${plan.id}`} className="flex items-center gap-2 rounded-md py-1 px-2">
+            <div key={`task-${task.id}`} className="flex items-center gap-2 rounded-md py-1 px-2">
               <Checkbox
-                id={plan.id.toString()}
-                checked={plan.completed}
-                onCheckedChange={() => handlePlanClick(plan.id, !plan.completed)}
+                id={task.id.toString()}
+                checked={task.completed}
+                onCheckedChange={() => handleTaskClick(task.id, !task.completed)}
               />
               <label
-                htmlFor={plan.id.toString()}
+                htmlFor={task.id.toString()}
                 className={cn('text-sm', {
-                  'text-muted-foreground line-through': plan.completed,
-                  'text-foreground': !plan.completed,
+                  'text-muted-foreground line-through': task.completed,
+                  'text-foreground': !task.completed,
                 })}
               >
-                {plan.title}
+                {task.title}
               </label>
 
               <div className="flex items-center gap-2 ml-auto">
@@ -124,12 +124,12 @@ export function PlanList() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => setEditTargetPlan(plan)}>
+                    <DropdownMenuItem onClick={() => setEditTargetTask(task)}>
                       <PencilIcon /> Edit
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       variant="destructive"
-                      onClick={() => setDeleteTargetId(plan.id)}
+                      onClick={() => setDeleteTargetId(task.id)}
                     >
                       <TrashIcon /> Delete
                     </DropdownMenuItem>
@@ -141,7 +141,7 @@ export function PlanList() {
         })
       )}
 
-      {/* Plan 삭제 AlertDialog */}
+      {/* Task 삭제 AlertDialog */}
       <AlertDialog open={deleteTargetId !== null} onOpenChange={() => setDeleteTargetId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -150,20 +150,20 @@ export function PlanList() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>취소</AlertDialogCancel>
-            <AlertDialogAction onClick={() => deleteTargetId && deletePlanMutation(deleteTargetId)}>
+            <AlertDialogAction onClick={() => deleteTargetId && deleteTaskMutation(deleteTargetId)}>
               삭제
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Plan 수정 Dialog */}
-      <PlanFormDialog
+      {/* Task 수정 Dialog */}
+      <TaskFormDialog
         mode="edit"
-        plan={editTargetPlan ?? undefined}
-        open={editTargetPlan !== null}
+        task={editTargetTask ?? undefined}
+        open={editTargetTask !== null}
         onOpenChange={(open) => {
-          if (!open) setEditTargetPlan(null)
+          if (!open) setEditTargetTask(null)
         }}
       />
     </aside>

@@ -1,6 +1,6 @@
 'use client'
 
-import { createPlan, updatePlan } from '@daily/_api/func'
+import { createTask, updateTask } from '@daily/_api/func'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
@@ -18,15 +18,15 @@ import {
   Input,
 } from '@/components/ui'
 import { useDateStore } from '@/store'
-import type { Plan, UpdatePlanBody } from '@/types/plan'
+import type { Task, UpdateTaskBody } from '@/types/task'
 
 type DialogMode = 'add' | 'edit'
-type PlanFormData = Omit<Plan, 'id' | 'completed'>
+type TaskFormData = Omit<Task, 'id' | 'completed'>
 
-interface PlanFormDialogProps {
+interface TaskFormDialogProps {
   mode: DialogMode
-  /** edit 모드에서 필수 - 수정할 Plan 데이터 */
-  plan?: Plan
+  /** edit 모드에서 필수 - 수정할 Task 데이터 */
+  task?: Task
   /** Dialog open 상태 (controlled mode) */
   open?: boolean
   /** Dialog open 상태 변경 핸들러 (controlled mode) */
@@ -35,7 +35,7 @@ interface PlanFormDialogProps {
   children?: React.ReactNode
 }
 
-export function PlanFormDialog({ mode, plan, open, onOpenChange, children }: PlanFormDialogProps) {
+export function TaskFormDialog({ mode, task, open, onOpenChange, children }: TaskFormDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false)
   const { selectedDate, setSelectedDate } = useDateStore()
   const queryClient = useQueryClient()
@@ -50,15 +50,15 @@ export function PlanFormDialog({ mode, plan, open, onOpenChange, children }: Pla
     setValue,
     reset,
     formState: { isValid, isDirty },
-  } = useForm<PlanFormData>({
+  } = useForm<TaskFormData>({
     mode: 'onChange',
   })
 
   // dialog가 열릴 때 폼 데이터 초기화
   useEffect(() => {
     if (!isOpen) return
-    if (mode === 'edit' && plan) {
-      reset(plan)
+    if (mode === 'edit' && task) {
+      reset(task)
     } else {
       reset({
         title: '',
@@ -67,7 +67,7 @@ export function PlanFormDialog({ mode, plan, open, onOpenChange, children }: Pla
         isAllDay: true,
       })
     }
-  }, [isOpen, mode, plan, reset, selectedDate])
+  }, [isOpen, mode, task, reset, selectedDate])
 
   // 폼 값 watch
   const { startTimestamp, endTimestamp, isAllDay } = watch()
@@ -82,19 +82,19 @@ export function PlanFormDialog({ mode, plan, open, onOpenChange, children }: Pla
     setValue('endTimestamp', date, { shouldDirty: true })
   }
 
-  const { mutate: createPlanMutation, isPending: isCreating } = useMutation({
-    mutationFn: createPlan,
+  const { mutate: createTaskMutation, isPending: isCreating } = useMutation({
+    mutationFn: createTask,
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['plans'] })
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
       handleOpenChange(false)
       setSelectedDate(dayjs(variables.startTimestamp).toDate())
     },
   })
 
-  const { mutate: updatePlanMutation, isPending: isUpdating } = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UpdatePlanBody }) => updatePlan(id, data),
+  const { mutate: updateTaskMutation, isPending: isUpdating } = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: UpdateTaskBody }) => updateTask(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['plans'] })
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
       handleOpenChange(false)
     },
   })
@@ -109,18 +109,18 @@ export function PlanFormDialog({ mode, plan, open, onOpenChange, children }: Pla
     }
   }
 
-  const onSubmit = (data: PlanFormData) => {
-    const planData = {
+  const onSubmit = (data: TaskFormData) => {
+    const taskData = {
       title: data.title.trim(),
       startTimestamp: dayjs(data.startTimestamp).second(0).millisecond(0).toISOString(),
       endTimestamp: dayjs(data.endTimestamp).second(0).millisecond(0).toISOString(),
       isAllDay: data.isAllDay,
     }
 
-    if (mode === 'edit' && plan) {
-      updatePlanMutation({ id: plan.id, data: planData })
+    if (mode === 'edit' && task) {
+      updateTaskMutation({ id: task.id, data: taskData })
     } else {
-      createPlanMutation(planData)
+      createTaskMutation(taskData)
     }
   }
 
@@ -129,17 +129,17 @@ export function PlanFormDialog({ mode, plan, open, onOpenChange, children }: Pla
       {children && <DialogTrigger asChild>{children}</DialogTrigger>}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{mode === 'edit' ? '계획 수정' : '계획 추가'}</DialogTitle>
+          <DialogTitle>{mode === 'edit' ? '할일 수정' : '할일 추가'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* 계획 제목 */}
+          {/* 할일 제목 */}
           <div className="space-y-2">
             <label htmlFor="title" className="text-sm font-medium">
-              계획 제목
+              할일 제목
             </label>
             <Input
               id="title"
-              placeholder="계획을 입력하세요"
+              placeholder="할일을 입력하세요"
               {...register('title', { required: true, validate: (v) => !!v.trim() })}
             />
           </div>

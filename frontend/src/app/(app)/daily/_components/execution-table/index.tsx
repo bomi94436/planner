@@ -1,7 +1,6 @@
 'use client'
 
 import { deleteExecution, getExecutions } from '@daily/_api/func'
-import { TOTAL_HOURS } from '@daily/_constants'
 import { useCurrentTime, useHoveredTime, useSelection } from '@daily/_hooks'
 import {
   formatHour,
@@ -30,6 +29,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui'
+import { TOTAL_HOURS } from '@/constants'
 import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
 import { Execution } from '@/types/execution'

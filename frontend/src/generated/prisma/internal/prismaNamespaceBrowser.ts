@@ -51,9 +51,9 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Plan: 'Plan',
+  Task: 'Task',
   Execution: 'Execution',
-  PlanExecution: 'PlanExecution'
+  TaskExecution: 'TaskExecution'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -72,7 +72,7 @@ export const TransactionIsolationLevel = {
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const PlanScalarFieldEnum = {
+export const TaskScalarFieldEnum = {
   id: 'id',
   title: 'title',
   completed: 'completed',
@@ -83,7 +83,7 @@ export const PlanScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
+export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
 
 
 export const ExecutionScalarFieldEnum = {
@@ -99,12 +99,12 @@ export const ExecutionScalarFieldEnum = {
 export type ExecutionScalarFieldEnum = (typeof ExecutionScalarFieldEnum)[keyof typeof ExecutionScalarFieldEnum]
 
 
-export const PlanExecutionScalarFieldEnum = {
-  planId: 'planId',
+export const TaskExecutionScalarFieldEnum = {
+  taskId: 'taskId',
   executionId: 'executionId'
 } as const
 
-export type PlanExecutionScalarFieldEnum = (typeof PlanExecutionScalarFieldEnum)[keyof typeof PlanExecutionScalarFieldEnum]
+export type TaskExecutionScalarFieldEnum = (typeof TaskExecutionScalarFieldEnum)[keyof typeof TaskExecutionScalarFieldEnum]
 
 
 export const SortOrder = {

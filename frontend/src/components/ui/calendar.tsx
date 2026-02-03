@@ -1,5 +1,6 @@
 'use client'
 
+import dayjs from 'dayjs'
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import * as React from 'react'
 import { type DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker'
@@ -32,7 +33,8 @@ function Calendar({
       )}
       captionLayout={captionLayout}
       formatters={{
-        formatMonthDropdown: (date) => date.toLocaleString('default', { month: 'short' }),
+        // 서버/클라이언트 로케일 차이로 인한 hydration 불일치 방지를 위해 명시적 로케일 사용
+        formatMonthDropdown: (date) => date.toLocaleString('ko-KR', { month: 'short' }),
         ...formatters,
       }}
       classNames={{
@@ -157,7 +159,7 @@ function CalendarDayButton({
       ref={ref}
       variant="ghost"
       size="icon"
-      data-day={day.date.toLocaleDateString()}
+      data-day={dayjs(day.date).format('YYYY-MM-DD')}
       data-selected-single={
         modifiers.selected &&
         !modifiers.range_start &&

@@ -14,11 +14,11 @@ const nextConfig: NextConfig = {
       },
     },
     resolveAlias: {
-      '@daily/*': './src/app/(app)/daily/*',
-      'monthly/*': './src/app/(app)/monthly/*',
-      'weekly/*': './src/app/(app)/weekly/*',
-      'yearly/*': './src/app/(app)/yearly/*',
-      '@api/*': './src/app/_api/*',
+      '~/daily/*': './src/app/(app)/daily/*',
+      '~/monthly/*': './src/app/(app)/monthly/*',
+      '~/weekly/*': './src/app/(app)/weekly/*',
+      '~/yearly/*': './src/app/(app)/yearly/*',
+      '~/api/*': './src/app/api/*',
     },
   },
 }

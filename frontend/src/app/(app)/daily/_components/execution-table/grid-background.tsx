@@ -1,4 +1,4 @@
-import { BLOCKS_PER_HOUR } from '@daily/_constants'
+import { BLOCKS_PER_HOUR } from '~/daily/_constants'
 
 /**
  * 기본 그리드 (항상 표시)

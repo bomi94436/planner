@@ -1,6 +1,5 @@
 'use client'
 
-import { createTask, updateTask } from '@daily/_api/func'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
@@ -19,6 +18,7 @@ import {
 } from '@/components/ui'
 import { useDateStore } from '@/store'
 import type { Task, UpdateTaskBody } from '@/types/task'
+import { createTask, updateTask } from '~/daily/_api/func'
 
 type DialogMode = 'add' | 'edit'
 type TaskFormData = Omit<Task, 'id' | 'completed'>

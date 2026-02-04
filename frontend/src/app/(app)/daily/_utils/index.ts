@@ -1,8 +1,8 @@
-import { ROW_HEIGHT } from '@daily/_constants'
-import type { Minutes } from '@daily/_types'
 import dayjs from 'dayjs'
 
 import { START_HOUR, TOTAL_HOURS } from '@/constants'
+import { ROW_HEIGHT } from '~/daily/_constants'
+import type { Minutes } from '~/daily/_types'
 
 const MINUTES_PER_HOUR = 60
 const HOURS_PER_DAY = 24

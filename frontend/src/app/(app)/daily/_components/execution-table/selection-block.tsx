@@ -1,4 +1,4 @@
-import { BLOCK_PADDING } from '@daily/_constants'
+import { BLOCK_PADDING } from '~/daily/_constants'
 
 interface SelectionBlockProps {
   startPercent: number

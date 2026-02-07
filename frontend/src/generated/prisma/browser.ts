@@ -28,7 +28,7 @@ export type Task = Prisma.TaskModel
  */
 export type Execution = Prisma.ExecutionModel
 /**
- * Model TaskExecution
+ * Model Plan
  * 
  */
-export type TaskExecution = Prisma.TaskExecutionModel
+export type Plan = Prisma.PlanModel

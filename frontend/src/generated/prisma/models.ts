@@ -10,5 +10,5 @@
  */
 export type * from './models/Task'
 export type * from './models/Execution'
-export type * from './models/TaskExecution'
+export type * from './models/Plan'
 export type * from './commonInputTypes'

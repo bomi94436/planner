@@ -14,39 +14,47 @@ datasource db {
 }
 
 model Task {
-  id             Int             @id @default(autoincrement())
-  title          String          @db.VarChar(255)
-  completed      Boolean         @default(false)
-  startTimestamp DateTime        @map("start_timestamp")
-  endTimestamp   DateTime        @map("end_timestamp")
-  isAllDay       Boolean         @default(false) @map("is_all_day")
-  createdAt      DateTime        @default(now()) @map("created_at")
-  updatedAt      DateTime        @updatedAt @map("updated_at")
-  taskExecutions TaskExecution[]
+  id             Int      @id @default(autoincrement())
+  title          String   @db.VarChar(255)
+  completed      Boolean  @default(false)
+  startTimestamp DateTime @map("start_timestamp")
+  endTimestamp   DateTime @map("end_timestamp")
+  isAllDay       Boolean  @default(false) @map("is_all_day")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  planId      Int?       @map("plan_id")
+  plan        Plan?      @relation(fields: [planId], references: [id], onDelete: SetNull)
+  executionId Int?       @map("execution_id")
+  execution   Execution? @relation(fields: [executionId], references: [id], onDelete: SetNull)
 
   @@map("tasks")
 }
 
 model Execution {
-  id             Int             @id @default(autoincrement())
-  startTimestamp DateTime        @map("start_timestamp")
-  endTimestamp   DateTime        @map("end_timestamp")
-  title          String          @db.VarChar(255)
-  color          String          @db.VarChar(255)
-  createdAt      DateTime        @default(now()) @map("created_at")
-  updatedAt      DateTime        @updatedAt @map("updated_at")
-  taskExecutions TaskExecution[]
+  id             Int      @id @default(autoincrement())
+  startTimestamp DateTime @map("start_timestamp")
+  endTimestamp   DateTime @map("end_timestamp")
+  title          String   @db.VarChar(255)
+  color          String   @db.VarChar(255)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  tasks Task[]
 
   @@map("executions")
 }
 
-model TaskExecution {
-  taskId      Int @map("task_id")
-  executionId Int @map("execution_id")
+model Plan {
+  id             Int      @id @default(autoincrement())
+  title          String   @db.VarChar(255)
+  startTimestamp DateTime @map("start_timestamp")
+  endTimestamp   DateTime @map("end_timestamp")
+  color          String   @db.VarChar(7)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
 
-  task      Task      @relation(fields: [taskId], references: [id])
-  execution Execution @relation(fields: [executionId], references: [id])
+  tasks Task[]
 
-  @@id([taskId, executionId]) // 복합 PK
-  @@map("task_execution")
+  @@map("plans")
 }

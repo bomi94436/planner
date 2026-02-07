@@ -53,7 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Task: 'Task',
   Execution: 'Execution',
-  TaskExecution: 'TaskExecution'
+  Plan: 'Plan'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -80,7 +80,9 @@ export const TaskScalarFieldEnum = {
   endTimestamp: 'endTimestamp',
   isAllDay: 'isAllDay',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  planId: 'planId',
+  executionId: 'executionId'
 } as const
 
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
@@ -99,12 +101,17 @@ export const ExecutionScalarFieldEnum = {
 export type ExecutionScalarFieldEnum = (typeof ExecutionScalarFieldEnum)[keyof typeof ExecutionScalarFieldEnum]
 
 
-export const TaskExecutionScalarFieldEnum = {
-  taskId: 'taskId',
-  executionId: 'executionId'
+export const PlanScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  startTimestamp: 'startTimestamp',
+  endTimestamp: 'endTimestamp',
+  color: 'color',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type TaskExecutionScalarFieldEnum = (typeof TaskExecutionScalarFieldEnum)[keyof typeof TaskExecutionScalarFieldEnum]
+export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -121,4 +128,12 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

@@ -386,7 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Task: 'Task',
   Execution: 'Execution',
-  TaskExecution: 'TaskExecution'
+  Plan: 'Plan'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -402,7 +402,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "task" | "execution" | "taskExecution"
+    modelProps: "task" | "execution" | "plan"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -554,77 +554,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    TaskExecution: {
-      payload: Prisma.$TaskExecutionPayload<ExtArgs>
-      fields: Prisma.TaskExecutionFieldRefs
+    Plan: {
+      payload: Prisma.$PlanPayload<ExtArgs>
+      fields: Prisma.PlanFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.TaskExecutionFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskExecutionPayload> | null
+          args: Prisma.PlanFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.TaskExecutionFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskExecutionPayload>
+          args: Prisma.PlanFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
         }
         findFirst: {
-          args: Prisma.TaskExecutionFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskExecutionPayload> | null
+          args: Prisma.PlanFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.TaskExecutionFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskExecutionPayload>
+          args: Prisma.PlanFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
         }
         findMany: {
-          args: Prisma.TaskExecutionFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskExecutionPayload>[]
+          args: Prisma.PlanFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>[]
         }
         create: {
-          args: Prisma.TaskExecutionCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskExecutionPayload>
+          args: Prisma.PlanCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
         }
         createMany: {
-          args: Prisma.TaskExecutionCreateManyArgs<ExtArgs>
+          args: Prisma.PlanCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.TaskExecutionCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskExecutionPayload>[]
+          args: Prisma.PlanCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>[]
         }
         delete: {
-          args: Prisma.TaskExecutionDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskExecutionPayload>
+          args: Prisma.PlanDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
         }
         update: {
-          args: Prisma.TaskExecutionUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskExecutionPayload>
+          args: Prisma.PlanUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
         }
         deleteMany: {
-          args: Prisma.TaskExecutionDeleteManyArgs<ExtArgs>
+          args: Prisma.PlanDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.TaskExecutionUpdateManyArgs<ExtArgs>
+          args: Prisma.PlanUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.TaskExecutionUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskExecutionPayload>[]
+          args: Prisma.PlanUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>[]
         }
         upsert: {
-          args: Prisma.TaskExecutionUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskExecutionPayload>
+          args: Prisma.PlanUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
         }
         aggregate: {
-          args: Prisma.TaskExecutionAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateTaskExecution>
+          args: Prisma.PlanAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlan>
         }
         groupBy: {
-          args: Prisma.TaskExecutionGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TaskExecutionGroupByOutputType>[]
+          args: Prisma.PlanGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlanGroupByOutputType>[]
         }
         count: {
-          args: Prisma.TaskExecutionCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TaskExecutionCountAggregateOutputType> | number
+          args: Prisma.PlanCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlanCountAggregateOutputType> | number
         }
       }
     }
@@ -675,7 +675,9 @@ export const TaskScalarFieldEnum = {
   endTimestamp: 'endTimestamp',
   isAllDay: 'isAllDay',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  planId: 'planId',
+  executionId: 'executionId'
 } as const
 
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
@@ -694,12 +696,17 @@ export const ExecutionScalarFieldEnum = {
 export type ExecutionScalarFieldEnum = (typeof ExecutionScalarFieldEnum)[keyof typeof ExecutionScalarFieldEnum]
 
 
-export const TaskExecutionScalarFieldEnum = {
-  taskId: 'taskId',
-  executionId: 'executionId'
+export const PlanScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  startTimestamp: 'startTimestamp',
+  endTimestamp: 'endTimestamp',
+  color: 'color',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type TaskExecutionScalarFieldEnum = (typeof TaskExecutionScalarFieldEnum)[keyof typeof TaskExecutionScalarFieldEnum]
+export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -716,6 +723,14 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 
@@ -883,7 +898,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   task?: Prisma.TaskOmit
   execution?: Prisma.ExecutionOmit
-  taskExecution?: Prisma.TaskExecutionOmit
+  plan?: Prisma.PlanOmit
 }
 
 /* Types for Logging */

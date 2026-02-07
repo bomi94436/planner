@@ -16,6 +16,8 @@ export const schemas: Schemas = {
       startTimestamp: { type: 'string', format: 'date-time' },
       endTimestamp: { type: 'string', format: 'date-time' },
       isAllDay: { type: 'boolean' },
+      planId: { type: 'integer', nullable: true },
+      executionId: { type: 'integer', nullable: true },
     },
   },
   CreateTaskBody: {
@@ -63,6 +65,7 @@ export const schemas: Schemas = {
       endTimestamp: { type: 'string', format: 'date-time' },
       title: { type: 'string' },
       color: { type: 'string' },
+      taskIds: { type: 'array', items: { type: 'integer' } },
     },
   },
 }

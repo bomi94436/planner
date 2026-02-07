@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 
 import { withErrorHandler } from '@/app/api/_lib'
 import { updateExecutionSchema } from '@/app/api/_validations'
-import type { ExecutionUpdateInput } from '@/generated/prisma/models/Execution'
 import { prisma } from '@/lib/prisma'
 import type { DeleteExecutionResponse, ExecutionResponse } from '@/types/execution'
 
@@ -65,16 +64,17 @@ export const PATCH = withErrorHandler<{ id: string }>(async (request, context) =
   const body = await request.json()
   const validated = updateExecutionSchema.parse(body)
 
-  const updateData: ExecutionUpdateInput = {
-    title: validated.title?.trim(),
-    color: validated.color,
-    startTimestamp: validated.startTimestamp ? new Date(validated.startTimestamp) : undefined,
-    endTimestamp: validated.endTimestamp ? new Date(validated.endTimestamp) : undefined,
-  }
-
   const updated = await prisma.execution.update({
     where: { id },
-    data: updateData,
+    data: {
+      title: validated.title?.trim(),
+      color: validated.color,
+      startTimestamp: validated.startTimestamp ? new Date(validated.startTimestamp) : undefined,
+      endTimestamp: validated.endTimestamp ? new Date(validated.endTimestamp) : undefined,
+      ...(validated.taskIds !== undefined && {
+        tasks: { set: validated.taskIds.map((taskId) => ({ id: taskId })) },
+      }),
+    },
   })
 
   return NextResponse.json<ExecutionResponse>({ data: updated })

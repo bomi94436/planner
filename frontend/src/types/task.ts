@@ -9,7 +9,14 @@ import type { Task as PrismaTask } from '@/generated/prisma/client'
 
 export type Task = Pick<
   PrismaTask,
-  'id' | 'title' | 'completed' | 'startTimestamp' | 'endTimestamp' | 'isAllDay'
+  | 'id'
+  | 'title'
+  | 'completed'
+  | 'startTimestamp'
+  | 'endTimestamp'
+  | 'isAllDay'
+  | 'planId'
+  | 'executionId'
 >
 
 import type { Response } from './index'

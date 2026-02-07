@@ -1,4 +1,3 @@
-import { BLOCK_PADDING } from '@daily/_constants'
 import { PencilIcon, TrashIcon } from 'lucide-react'
 import { useCallback } from 'react'
 
@@ -9,6 +8,7 @@ import {
   ContextMenuTrigger,
 } from '@/components/ui'
 import type { Execution } from '@/types/execution'
+import { BLOCK_PADDING } from '~/daily/_constants'
 
 interface ExecutionBlockProps {
   execution: Execution

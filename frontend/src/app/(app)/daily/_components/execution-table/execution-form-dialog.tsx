@@ -1,5 +1,3 @@
-import { createExecution, updateExecution } from '@daily/_api/func'
-import { EXECUTION_COLOR_LIST } from '@daily/_constants'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { CheckIcon } from 'lucide-react'
@@ -19,6 +17,8 @@ import {
 import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
 import type { Execution, UpdateExecutionBody } from '@/types/execution'
+import { createExecution, updateExecution } from '~/daily/_api/func'
+import { EXECUTION_COLOR_LIST } from '~/daily/_constants'
 
 type DialogMode = 'add' | 'edit'
 type ExecutionFormData = Omit<Execution, 'id'>

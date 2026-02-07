@@ -77,6 +77,8 @@ export const GET = withErrorHandler(async (request) => {
       startTimestamp: true,
       endTimestamp: true,
       isAllDay: true,
+      planId: true,
+      executionId: true,
     },
   })
   return NextResponse.json<TasksResponse>({ data: tasks })
@@ -125,6 +127,8 @@ export const POST = withErrorHandler(async (request) => {
       startTimestamp: true,
       endTimestamp: true,
       isAllDay: true,
+      planId: true,
+      executionId: true,
     },
   })
 

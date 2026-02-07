@@ -74,7 +74,7 @@ export function TaskList() {
   return (
     <aside className="flex w-80 shrink-0 flex-col gap-2">
       <div className="flex items-center gap-x-2">
-        <h2 className="text-lg font-semibold">계획</h2>
+        <h2 className="text-lg font-semibold">할일</h2>
         <TaskFormDialog mode="add">
           <Button variant="default" size="icon-xs">
             <PlusIcon />

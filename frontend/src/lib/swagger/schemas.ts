@@ -68,4 +68,33 @@ export const schemas: Schemas = {
       taskIds: { type: 'array', items: { type: 'integer' } },
     },
   },
+  Plan: {
+    type: 'object',
+    properties: {
+      id: { type: 'integer' },
+      startTimestamp: { type: 'string', format: 'date-time' },
+      endTimestamp: { type: 'string', format: 'date-time' },
+      title: { type: 'string' },
+      color: { type: 'string' },
+    },
+  },
+  CreatePlanBody: {
+    type: 'object',
+    properties: {
+      startTimestamp: { type: 'string', format: 'date-time' },
+      endTimestamp: { type: 'string', format: 'date-time' },
+      title: { type: 'string' },
+      color: { type: 'string' },
+    },
+  },
+  UpdatePlanBody: {
+    type: 'object',
+    properties: {
+      startTimestamp: { type: 'string', format: 'date-time' },
+      endTimestamp: { type: 'string', format: 'date-time' },
+      title: { type: 'string' },
+      color: { type: 'string' },
+      taskIds: { type: 'array', items: { type: 'integer' } },
+    },
+  },
 }

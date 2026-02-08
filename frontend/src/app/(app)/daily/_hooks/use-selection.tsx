@@ -1,8 +1,10 @@
 import { useCallback, useMemo, useState } from 'react'
 
+import { minutesToDayjs } from '@/lib/utils'
 import { useDateStore } from '@/store'
-import type { Minutes, Selection } from '~/daily/_types'
-import { getPositionFromPointerEvent, minutesToDayjs } from '~/daily/_utils'
+import type { Minutes } from '@/types'
+import type { Selection } from '~/daily/_types'
+import { getPositionFromPointerEvent } from '~/daily/_utils'
 
 interface UseSelectionReturn {
   selection: Selection | null

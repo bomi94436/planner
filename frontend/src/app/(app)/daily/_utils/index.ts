@@ -1,21 +1,8 @@
-import dayjs from 'dayjs'
-
-import { START_HOUR, TOTAL_HOURS } from '@/constants'
-import { ROW_HEIGHT } from '~/daily/_constants'
-import type { Minutes } from '~/daily/_types'
-
-const MINUTES_PER_HOUR = 60
-const HOURS_PER_DAY = 24
-
+import { HOURS_PER_DAY, MINUTES_PER_HOUR, START_HOUR } from '@/constants'
+import { dateToMinutes } from '@/lib/utils'
+import type { Minutes } from '@/types'
 import type { Execution } from '@/types/execution'
-
-// Date → Minutes 변환 (START_HOUR 기준, 1분 단위)
-export function dateToMinutes(date: Date): Minutes {
-  const d = new Date(date)
-  let hour = d.getHours()
-  if (hour < START_HOUR) hour += HOURS_PER_DAY
-  return (hour - START_HOUR) * MINUTES_PER_HOUR + d.getMinutes()
-}
+import { ROW_HEIGHT } from '~/daily/_constants'
 
 // 시간 포맷팅
 export function formatHour(hourIndex: number): string {
@@ -54,18 +41,6 @@ export function getExecutionsForRow(processedExecutions: ProcessedExecution[], h
       span: Math.min(endIndex, minutesEnd) - Math.max(startIndex, minutesStart),
       isStart: startIndex >= minutesStart,
     }))
-}
-
-// 분 → hourIndex 변환
-export const toHourIndex = (minutes: Minutes): number => Math.floor(minutes / MINUTES_PER_HOUR)
-
-// 분 → 해당 시간 내 분 (0-59)
-export const toMinuteInHour = (minutes: Minutes): number => minutes % MINUTES_PER_HOUR
-
-// 분 → dayjs 객체 (포맷팅용)
-export const minutesToDayjs = (minutes: Minutes, baseDate: Date): dayjs.Dayjs => {
-  const hour = (START_HOUR + toHourIndex(minutes)) % HOURS_PER_DAY
-  return dayjs(baseDate).hour(hour).minute(toMinuteInHour(minutes))
 }
 
 // 현재 시간 위치 계산
@@ -107,7 +82,7 @@ export function getPositionFromPointerEvent(
   containerRect: DOMRect
 ): { hourIndex: number; minutes: Minutes; rowTop: number } {
   const y = e.clientY - containerRect.top
-  const hourIndex = Math.max(0, Math.min(TOTAL_HOURS - 1, Math.floor(y / ROW_HEIGHT)))
+  const hourIndex = Math.max(0, Math.min(HOURS_PER_DAY - 1, Math.floor(y / ROW_HEIGHT)))
 
   const x = e.clientX - containerRect.left
   const minuteInHour = Math.max(

@@ -149,7 +149,7 @@ import { useDateStore } from '@/store'
 import type { Execution } from '@/types/execution'
 
 // 페이지 전용 (현재 페이지 하위)
-import { TOTAL_HOURS } from '~/daily/_constants'
+import { HOURS_PER_DAY } from '~/daily/_constants'
 import { useCurrentTime } from '~/daily/_hooks'
 import type { Minutes } from '~/daily/_types'
 import { formatHour } from '~/daily/_utils'

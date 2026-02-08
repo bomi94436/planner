@@ -19,10 +19,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui'
-import { TOTAL_HOURS } from '@/constants'
-import { cn } from '@/lib/utils'
+import { HOURS_PER_DAY } from '@/constants'
+import { cn, minutesToDayjs } from '@/lib/utils'
 import { useDateStore } from '@/store'
-import { Execution } from '@/types/execution'
+import type { Execution } from '@/types/execution'
 import { deleteExecution, getExecutions } from '~/daily/_api/func'
 import { useCurrentTime, useHoveredTime, useSelection } from '~/daily/_hooks'
 import {
@@ -30,7 +30,6 @@ import {
   getCurrentTimePosition,
   getExecutionsForRow,
   getSelectionForRow,
-  minutesToDayjs,
   preprocessExecutions,
 } from '~/daily/_utils'
 
@@ -43,7 +42,7 @@ import { TimeTooltip } from './time-tooltip'
 
 export function ExecutionTable() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => i)
+  const hours = Array.from({ length: HOURS_PER_DAY }, (_, i) => i)
   const [addTargetExecution, setAddTargetExecution] = useState<Partial<Execution> | null>(null)
   const [editTargetExecution, setEditTargetExecution] = useState<Execution | null>(null)
   const [deleteTargetExecutionId, setDeleteTargetExecutionId] = useState<number | null>(null)

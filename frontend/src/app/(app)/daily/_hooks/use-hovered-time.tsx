@@ -1,10 +1,11 @@
 import { useCallback, useMemo, useState } from 'react'
 
+import { dateToMinutes, minutesToDayjs } from '@/lib/utils'
 import { useDateStore } from '@/store'
-import { Execution } from '@/types/execution'
+import type { Minutes } from '@/types'
+import type { Execution } from '@/types/execution'
 
-import { Minutes } from '../_types'
-import { dateToMinutes, getPositionFromPointerEvent, minutesToDayjs } from '../_utils'
+import { getPositionFromPointerEvent } from '../_utils'
 
 interface HoveredTime {
   start: Minutes

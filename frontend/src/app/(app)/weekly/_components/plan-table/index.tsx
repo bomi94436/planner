@@ -1,16 +1,29 @@
 'use client'
 import 'dayjs/locale/ko'
 
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { InfoIcon } from 'lucide-react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 
-import { Card, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  Card,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui'
 import { cn, minutesToDayjs } from '@/lib/utils'
 import { useDateStore } from '@/store'
 import type { Plan } from '@/types/plan'
-import { getPlans } from '~/weekly/_api/func'
+import { deletePlan, getPlans } from '~/weekly/_api/func'
 import { days, hours, ROW_HEIGHT } from '~/weekly/_constants'
 import { useHoveredTime, useWeeklySelection } from '~/weekly/_hooks'
 import { preprocessPlans } from '~/weekly/_utils'
@@ -25,6 +38,9 @@ import { TimeTooltip } from './time-tooltip'
 export function PlanTable() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [addTargetPlan, setAddTargetPlan] = useState<Partial<Plan> | null>(null)
+  const [editTargetPlan, setEditTargetPlan] = useState<Plan | null>(null)
+  const [deleteTargetPlanId, setDeleteTargetPlanId] = useState<number | null>(null)
+  const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
 
   const { selectedDate } = useDateStore()
 
@@ -62,6 +78,16 @@ export function PlanTable() {
     select: (data) => preprocessPlans(data ?? [], weekStart),
   })
 
+  const queryClient = useQueryClient()
+
+  const { mutate: deletePlanMutation } = useMutation({
+    mutationFn: (id: number) => deletePlan(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['plans'] })
+      setDeleteTargetPlanId(null)
+    },
+  })
+
   // selection 클릭 → PlanFormDialog 열기
   const handleSelectionClick = useCallback(
     (sel: {
@@ -80,6 +106,20 @@ export function PlanTable() {
     [selectedDate]
   )
 
+  const handleEditPlanClick = useCallback(
+    (plan: Plan) => () => {
+      setEditTargetPlan(plan)
+    },
+    []
+  )
+
+  const handleDeletePlanClick = useCallback(
+    (id: number) => () => {
+      setDeleteTargetPlanId(id)
+    },
+    []
+  )
+
   return (
     <main className="flex min-h-0 flex-1 flex-col gap-2">
       <div className="flex items-center gap-2">
@@ -91,6 +131,9 @@ export function PlanTable() {
           <TooltipContent>
             <p>
               영역을 드래그하여 계획 블럭을 <b>생성</b>할 수 있습니다.
+            </p>
+            <p>
+              계획 블럭을 클릭하여 <b>수정</b> 또는 <b>삭제</b>할 수 있습니다.
             </p>
           </TooltipContent>
         </Tooltip>
@@ -136,6 +179,9 @@ export function PlanTable() {
                 topPx={(startIndex / 60) * ROW_HEIGHT}
                 heightPx={((endIndex - startIndex) / 60) * ROW_HEIGHT}
                 onMouseMove={handleMouseMoveInPlan(plan)}
+                onContextMenuChange={setIsContextMenuOpen}
+                handleEditClick={handleEditPlanClick(plan)}
+                handleDeleteClick={handleDeletePlanClick(plan.id)}
               />
             ))}
 
@@ -153,6 +199,7 @@ export function PlanTable() {
       </Card>
 
       <PlanFormDialog
+        mode="add"
         open={!!addTargetPlan}
         plan={addTargetPlan}
         onOpenChange={(open) => {
@@ -163,15 +210,44 @@ export function PlanTable() {
         }}
       />
 
+      <PlanFormDialog
+        mode="edit"
+        open={!!editTargetPlan}
+        plan={editTargetPlan}
+        onOpenChange={(open) => {
+          if (!open) setEditTargetPlan(null)
+        }}
+      />
+
+      <AlertDialog
+        open={deleteTargetPlanId !== null}
+        onOpenChange={() => setDeleteTargetPlanId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>정말 삭제하시겠습니까?</AlertDialogTitle>
+            <AlertDialogDescription>이 작업은 되돌릴 수 없습니다.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>취소</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => deleteTargetPlanId && deletePlanMutation(deleteTargetPlanId)}
+            >
+              삭제
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {/* 드래그 시간 Tooltip */}
-      {selection && displaySelection && (
+      {!isContextMenuOpen && selection && displaySelection && (
         <TimeTooltip x={selection.tooltipPosition.x} top={selection.tooltipPosition.top}>
           {displaySelection}
         </TimeTooltip>
       )}
 
       {/* hover 시간 Tooltip */}
-      {!selection && hoveredTime && displayHoveredTime && (
+      {!isContextMenuOpen && !selection && hoveredTime && displayHoveredTime && (
         <TimeTooltip x={hoveredTime.tooltipPosition.x} top={hoveredTime.tooltipPosition.top}>
           {displayHoveredTime}
         </TimeTooltip>

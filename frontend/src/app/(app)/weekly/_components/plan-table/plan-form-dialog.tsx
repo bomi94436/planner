@@ -16,19 +16,21 @@ import {
 } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
-import type { Plan } from '@/types/plan'
-import { createPlan } from '~/weekly/_api/func'
+import type { Plan, UpdatePlanBody } from '@/types/plan'
+import { createPlan, updatePlan } from '~/weekly/_api/func'
 import { PLAN_COLOR_LIST } from '~/weekly/_constants'
 
+type DialogMode = 'add' | 'edit'
 type PlanFormData = Omit<Plan, 'id'>
 
 interface PlanFormDialogProps {
+  mode: DialogMode
   open: boolean
   plan?: Partial<Plan> | null
   onOpenChange: (open: boolean) => void
 }
 
-export function PlanFormDialog({ open, plan, onOpenChange }: PlanFormDialogProps) {
+export function PlanFormDialog({ mode, open, plan, onOpenChange }: PlanFormDialogProps) {
   const { selectedDate } = useDateStore()
   const queryClient = useQueryClient()
 
@@ -66,13 +68,23 @@ export function PlanFormDialog({ open, plan, onOpenChange }: PlanFormDialogProps
     setValue('endTimestamp', date, { shouldDirty: true })
   }
 
-  const { mutate: createPlanMutation, isPending } = useMutation({
+  const { mutate: createPlanMutation, isPending: isCreating } = useMutation({
     mutationFn: createPlan,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['plans'] })
       onOpenChange(false)
     },
   })
+
+  const { mutate: updatePlanMutation, isPending: isUpdating } = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: UpdatePlanBody }) => updatePlan(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['plans'] })
+      onOpenChange(false)
+    },
+  })
+
+  const isPending = isCreating || isUpdating
 
   const onSubmit = (data: PlanFormData) => {
     const planData = {
@@ -82,14 +94,18 @@ export function PlanFormDialog({ open, plan, onOpenChange }: PlanFormDialogProps
       color: data.color,
     }
 
-    createPlanMutation(planData)
+    if (mode === 'edit' && plan?.id) {
+      updatePlanMutation({ id: plan.id, data: planData })
+    } else {
+      createPlanMutation(planData)
+    }
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>계획 블럭 추가</DialogTitle>
+          <DialogTitle>{mode === 'edit' ? '계획 블럭 수정' : '계획 블럭 추가'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* 계획 블럭 제목 */}
@@ -143,7 +159,13 @@ export function PlanFormDialog({ open, plan, onOpenChange }: PlanFormDialogProps
 
           <DialogFooter>
             <Button type="submit" disabled={isPending || !isValid}>
-              {isPending ? '추가 중...' : '추가'}
+              {isPending
+                ? mode === 'edit'
+                  ? '수정 중...'
+                  : '추가 중...'
+                : mode === 'edit'
+                  ? '수정'
+                  : '추가'}
             </Button>
           </DialogFooter>
         </form>

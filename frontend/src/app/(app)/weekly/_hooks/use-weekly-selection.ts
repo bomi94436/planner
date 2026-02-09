@@ -89,10 +89,8 @@ export function useWeeklySelection(
 
   // 빈 영역 클릭 시 selection 해제 (드래그가 아닌 단순 클릭)
   const handleClick = useCallback(() => {
-    if (selection?.end !== undefined) {
-      if (Math.abs(selection.end - selection.start) < 2) {
-        setSelection(null)
-      }
+    if (selection?.end && Math.abs(selection.end - selection.start) < 2) {
+      setSelection(null)
     }
   }, [selection])
 

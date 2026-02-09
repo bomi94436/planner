@@ -135,7 +135,7 @@ export function PlanTable() {
                 dayIndex={dayIndex}
                 topPx={(startIndex / 60) * ROW_HEIGHT}
                 heightPx={((endIndex - startIndex) / 60) * ROW_HEIGHT}
-                onMouseMove={handleMouseMoveInPlan(plan, dayIndex)}
+                onMouseMove={handleMouseMoveInPlan(plan)}
               />
             ))}
 

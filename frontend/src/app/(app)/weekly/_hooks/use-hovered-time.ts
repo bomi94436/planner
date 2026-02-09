@@ -38,21 +38,24 @@ export function useHoveredTime(containerRef: React.RefObject<HTMLDivElement | nu
     [containerRef]
   )
 
-  // plan 블럭 hover → 시간 범위 표시
+  // plan 블럭 hover → 시간 범위 표시 (마우스 위치 기반)
   const handleMouseMoveInPlan = useCallback(
-    (plan: Plan, dayIndex: number) => (e: React.MouseEvent<HTMLDivElement>) => {
+    (plan: Plan) => (e: React.MouseEvent<HTMLDivElement>) => {
       e.stopPropagation()
 
       const container = containerRef.current
       if (!container) return
 
       const containerRect = container.getBoundingClientRect()
-      const start = dateToMinutes(plan.startTimestamp)
+      const { dayIndex, minutes } = getPositionFromPointerEvent(
+        e as unknown as React.PointerEvent<HTMLDivElement>,
+        containerRect
+      )
 
       setHoveredTime({
-        start,
+        start: dateToMinutes(plan.startTimestamp),
         end: dateToMinutes(plan.endTimestamp),
-        tooltipPosition: getTooltipPosition(containerRect, dayIndex, start),
+        tooltipPosition: getTooltipPosition(containerRect, dayIndex, minutes),
       })
     },
     [containerRef]

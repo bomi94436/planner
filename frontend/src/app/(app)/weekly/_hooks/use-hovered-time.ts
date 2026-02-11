@@ -3,15 +3,14 @@ import { useCallback, useMemo, useState } from 'react'
 import { dateToMinutes, minutesToDayjs } from '@/lib/utils'
 import { useDateStore } from '@/store'
 import type { Minutes } from '@/types'
-import type { Execution } from '@/types/execution'
-
-import { getPositionFromPointerEvent } from '../_utils'
+import type { Plan } from '@/types/plan'
+import type { TooltipPosition } from '~/weekly/_types'
+import { getPositionFromPointerEvent, getTooltipPosition } from '~/weekly/_utils'
 
 interface HoveredTime {
   start: Minutes
   end?: Minutes
-  x: number
-  rowTop: number
+  tooltipPosition: TooltipPosition
 }
 
 export function useHoveredTime(containerRef: React.RefObject<HTMLDivElement | null>) {
@@ -19,45 +18,44 @@ export function useHoveredTime(containerRef: React.RefObject<HTMLDivElement | nu
 
   const { selectedDate } = useDateStore()
 
-  /**
-   * 타임 테이블 컨테이너 내부 mouse move 시 현재 시간 표시
-   */
+  // 그리드 빈 영역 hover
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       const container = containerRef.current
       if (!container) return
 
       const containerRect = container.getBoundingClientRect()
-      const { hourIndex, minutes, rowTop } = getPositionFromPointerEvent(e, containerRect)
+      const { dayIndex, minutes } = getPositionFromPointerEvent(
+        e as unknown as React.PointerEvent<HTMLDivElement>,
+        containerRect
+      )
 
-      const displayMinutes = Math.min(minutes, hourIndex * 60 + 59)
       setHoveredTime({
-        start: displayMinutes,
-        x: e.clientX,
-        rowTop,
+        start: minutes,
+        tooltipPosition: getTooltipPosition(containerRect, dayIndex, minutes),
       })
     },
     [containerRef]
   )
 
-  /**
-   * 실행 블럭 내부 mouse move 시 실행 블럭 시간 표시
-   */
-  const handleMouseMoveInExecution = useCallback(
-    (execution: Execution) => (e: React.MouseEvent<HTMLDivElement>) => {
+  // plan 블럭 hover → 시간 범위 표시 (마우스 위치 기반)
+  const handleMouseMoveInPlan = useCallback(
+    (plan: Plan) => (e: React.MouseEvent<HTMLDivElement>) => {
       e.stopPropagation()
 
       const container = containerRef.current
       if (!container) return
 
       const containerRect = container.getBoundingClientRect()
-      const { rowTop } = getPositionFromPointerEvent(e, containerRect)
+      const { dayIndex, minutes } = getPositionFromPointerEvent(
+        e as unknown as React.PointerEvent<HTMLDivElement>,
+        containerRect
+      )
 
       setHoveredTime({
-        start: dateToMinutes(execution.startTimestamp),
-        end: dateToMinutes(execution.endTimestamp),
-        x: e.clientX,
-        rowTop,
+        start: dateToMinutes(plan.startTimestamp),
+        end: dateToMinutes(plan.endTimestamp),
+        tooltipPosition: getTooltipPosition(containerRect, dayIndex, minutes),
       })
     },
     [containerRef]
@@ -69,7 +67,7 @@ export function useHoveredTime(containerRef: React.RefObject<HTMLDivElement | nu
 
   const displayHoveredTime = useMemo(() => {
     if (!hoveredTime) return null
-    if (hoveredTime.end) {
+    if (hoveredTime.end !== undefined) {
       return `${minutesToDayjs(hoveredTime.start, selectedDate).format('HH:mm')} - ${minutesToDayjs(hoveredTime.end, selectedDate).format('HH:mm')}`
     }
     return minutesToDayjs(hoveredTime.start, selectedDate).format('HH:mm')
@@ -79,7 +77,7 @@ export function useHoveredTime(containerRef: React.RefObject<HTMLDivElement | nu
     hoveredTime,
     displayHoveredTime,
     handleMouseMove,
-    handleMouseMoveInExecution,
+    handleMouseMoveInPlan,
     handleMouseLeave,
   }
 }

@@ -2,13 +2,12 @@ import { useCallback, useMemo, useState } from 'react'
 
 import { minutesToDayjs } from '@/lib/utils'
 import { useDateStore } from '@/store'
-import type { Minutes } from '@/types'
-import type { Selection } from '~/daily/_types'
-import { getPositionFromPointerEvent } from '~/daily/_utils'
+import type { WeeklySelection } from '~/weekly/_types'
+import { getPositionFromPointerEvent, getTooltipPosition } from '~/weekly/_utils'
 
-interface UseSelectionReturn {
-  selection: Selection | null
-  normalizedSelection: { start: Minutes; end: Minutes } | null
+interface UseWeeklySelectionReturn {
+  selection: WeeklySelection | null
+  normalizedSelection: { dayIndex: number; start: number; end: number } | null
   displaySelection: string | null
   isDragging: boolean
   handlePointerDown: (e: React.PointerEvent<HTMLDivElement>) => void
@@ -18,10 +17,10 @@ interface UseSelectionReturn {
   clearSelection: () => void
 }
 
-export function useSelection(
+export function useWeeklySelection(
   containerRef: React.RefObject<HTMLDivElement | null>
-): UseSelectionReturn {
-  const [selection, setSelection] = useState<Selection | null>(null)
+): UseWeeklySelectionReturn {
+  const [selection, setSelection] = useState<WeeklySelection | null>(null)
   const [isDragging, setIsDragging] = useState(false)
 
   const { selectedDate } = useDateStore()
@@ -32,36 +31,46 @@ export function useSelection(
       const container = containerRef.current
       if (!container) return
 
+      // 이미 selection이 있으면 해제만 하고 새 드래그를 시작하지 않음
+      if (selection) {
+        setSelection(null)
+        return
+      }
+
       const containerRect = container.getBoundingClientRect()
-      const { minutes, rowTop } = getPositionFromPointerEvent(e, containerRect)
+      const { dayIndex, minutes } = getPositionFromPointerEvent(e, containerRect)
 
       container.setPointerCapture(e.pointerId)
 
       setSelection({
+        dayIndex,
         start: minutes,
         end: minutes,
-        x: e.clientX,
-        rowTop,
+        tooltipPosition: getTooltipPosition(containerRect, dayIndex, minutes),
       })
       setIsDragging(true)
     },
-    [containerRef]
+    [containerRef, selection]
   )
 
-  // 드래그 중
+  // 드래그 중 (dayIndex는 고정, minutes만 업데이트)
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       const container = containerRef.current
-      if (!container) return
+      if (!container || !isDragging) return
 
       const containerRect = container.getBoundingClientRect()
       const { minutes } = getPositionFromPointerEvent(e, containerRect)
 
-      // 드래그 중: end 업데이트
-      if (isDragging) {
-        setSelection((prev) => (prev ? { ...prev, end: minutes } : null))
-        return
-      }
+      setSelection((prev) => {
+        if (!prev) return null
+        const topMinutes = Math.min(prev.start, minutes)
+        return {
+          ...prev,
+          end: minutes,
+          tooltipPosition: getTooltipPosition(containerRect, prev.dayIndex, topMinutes),
+        }
+      })
     },
     [isDragging, containerRef]
   )
@@ -80,11 +89,8 @@ export function useSelection(
 
   // 빈 영역 클릭 시 selection 해제 (드래그가 아닌 단순 클릭)
   const handleClick = useCallback(() => {
-    if (selection?.end !== undefined) {
-      // 드래그 거리가 거의 없으면 (단순 클릭) selection 해제
-      if (Math.abs(selection.end - selection.start) < 2) {
-        setSelection(null)
-      }
+    if (selection?.end && Math.abs(selection.end - selection.start) < 2) {
+      setSelection(null)
     }
   }, [selection])
 
@@ -93,11 +99,11 @@ export function useSelection(
     setSelection(null)
   }, [])
 
-  // 정규화된 selection (start < end 보장, selection일 때만)
+  // 정규화된 selection (start < end 보장)
   const normalizedSelection = useMemo(() => {
-    if (!selection?.end) return null
-    const { start, end } = selection
-    return start <= end ? { start, end } : { start: end, end: start }
+    if (!selection?.end && selection?.end !== 0) return null
+    const { dayIndex, start, end } = selection
+    return start <= end ? { dayIndex, start, end } : { dayIndex, start: end, end: start }
   }, [selection])
 
   const displaySelection = useMemo(() => {

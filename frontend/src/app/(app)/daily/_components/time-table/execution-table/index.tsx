@@ -2,7 +2,6 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { InfoIcon } from 'lucide-react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 
 import {
@@ -14,23 +13,18 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  Card,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
 } from '@/components/ui'
-import { HOURS_PER_DAY } from '@/constants'
+import { hours } from '@/constants'
 import { cn, minutesToDayjs } from '@/lib/utils'
 import { useDateStore } from '@/store'
 import type { Execution } from '@/types/execution'
 import { deleteExecution, getExecutions } from '~/daily/_api/func'
 import { useCurrentTime, useHoveredTime, useSelection } from '~/daily/_hooks'
 import {
-  formatHour,
   getCurrentTimePosition,
-  getExecutionsForRow,
   getSelectionForRow,
-  preprocessExecutions,
+  getTimeBlocksForRow,
+  preprocessTimeBlocks,
 } from '~/daily/_utils'
 
 import { CurrentTimeIndicator } from './current-time-indicator'
@@ -42,7 +36,6 @@ import { TimeTooltip } from './time-tooltip'
 
 export function ExecutionTable() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const hours = Array.from({ length: HOURS_PER_DAY }, (_, i) => i)
   const [addTargetExecution, setAddTargetExecution] = useState<Partial<Execution> | null>(null)
   const [editTargetExecution, setEditTargetExecution] = useState<Execution | null>(null)
   const [deleteTargetExecutionId, setDeleteTargetExecutionId] = useState<number | null>(null)
@@ -72,6 +65,7 @@ export function ExecutionTable() {
     handleMouseLeave,
     handleMouseMoveInExecution,
   } = useHoveredTime(containerRef)
+
   const { selectedDate } = useDateStore()
 
   const { data: processedExecutions } = useQuery({
@@ -81,7 +75,7 @@ export function ExecutionTable() {
         startTimestamp: dayjs(selectedDate).startOf('day').toISOString(),
         endTimestamp: dayjs(selectedDate).endOf('day').toISOString(),
       }),
-    select: (data) => preprocessExecutions(data ?? []),
+    select: (data) => preprocessTimeBlocks(data ?? []),
   })
 
   const queryClient = useQueryClient()
@@ -121,100 +115,70 @@ export function ExecutionTable() {
   )
 
   return (
-    <main className="flex min-h-0 flex-1 flex-col gap-2">
-      <div className="flex items-center gap-2">
-        <h2 className="text-lg font-semibold">실행</h2>
-        {/* 정보 tooltip */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <InfoIcon className="w-4 h-4 text-muted-foreground" />
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>
-              영역을 드래그하여 실행 블럭을 <b>생성</b>할 수 있습니다.
-            </p>
-            <p>
-              실행 블럭을 클릭하여 <b>수정</b> 또는 <b>삭제</b>할 수 있습니다.
-            </p>
-          </TooltipContent>
-        </Tooltip>
-      </div>
+    <div
+      ref={containerRef}
+      className={cn('relative flex-1', {
+        'cursor-col-resize select-none': isDragging,
+      })}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onMouseMove={handleMouseMove}
+      onPointerUp={handlePointerUp}
+      onClick={handleClick}
+      onMouseLeave={handleMouseLeave}
+    >
+      {hours.map((hourIndex) => {
+        const rowExecutions = getTimeBlocksForRow(processedExecutions ?? [], hourIndex)
+        const rowSelection = normalizedSelection
+          ? getSelectionForRow(normalizedSelection.start, normalizedSelection.end, hourIndex)
+          : null
 
-      <Card className="gap-0 py-0 rounded">
-        {/* 시간 라벨 컬럼 */}
-        <div className="flex">
-          <div className="w-10 shrink-0">
-            {hours.map((hourIndex) => (
-              <div
-                key={hourIndex}
-                className="flex h-8 items-center justify-end border-b border-r border-zinc-200 px-2 text-right text-sm text-muted-foreground last:border-b-0"
-              >
-                {formatHour(hourIndex)}
-              </div>
+        const isToday = now && dayjs(selectedDate).isSame(dayjs(), 'day')
+        const showCurrentTime = isToday && currentHourIndex === hourIndex
+
+        return (
+          <div key={hourIndex} className="relative h-8 border-b border-zinc-200 last:border-b-0">
+            <GridBackground />
+
+            {rowSelection && normalizedSelection && (
+              <SelectionBlock
+                startPercent={rowSelection.startPercent}
+                endPercent={rowSelection.endPercent}
+                onClick={handleSelectionClick(normalizedSelection)}
+              />
+            )}
+
+            {showCurrentTime && <CurrentTimeIndicator minutePercent={currerntMinutePercent} />}
+
+            {rowExecutions.map(({ item: execution, offsetInRow, span, isStart }) => (
+              <ExecutionBlock
+                key={`${execution.id}-${hourIndex}`}
+                execution={execution}
+                offsetInRow={offsetInRow}
+                span={span}
+                isStart={isStart}
+                onMouseMove={handleMouseMoveInExecution(execution)}
+                onContextMenuChange={setIsContextMenuOpen}
+                handleEditClick={handleEditExecutionClick(execution)}
+                handleDeleteClick={handleDeleteExecutionClick(execution.id)}
+              />
             ))}
           </div>
+        )
+      })}
 
-          {/* 그리드 + 블럭 영역 (부모 container에서 pointer 이벤트 처리) */}
-          <div
-            ref={containerRef}
-            className={cn('relative flex-1', {
-              'cursor-col-resize select-none': isDragging,
-            })}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onMouseMove={handleMouseMove}
-            onPointerUp={handlePointerUp}
-            onClick={handleClick}
-            onMouseLeave={handleMouseLeave}
-          >
-            {hours.map((hourIndex) => {
-              const rowExecutions = getExecutionsForRow(processedExecutions ?? [], hourIndex)
-              const rowSelection = normalizedSelection
-                ? getSelectionForRow(normalizedSelection.start, normalizedSelection.end, hourIndex)
-                : null
-
-              const isToday = now && dayjs(selectedDate).isSame(dayjs(), 'day')
-              const showCurrentTime = isToday && currentHourIndex === hourIndex
-
-              return (
-                <div
-                  key={hourIndex}
-                  className="relative h-8 border-b border-zinc-200 last:border-b-0"
-                >
-                  <GridBackground />
-
-                  {rowSelection && normalizedSelection && (
-                    <SelectionBlock
-                      startPercent={rowSelection.startPercent}
-                      endPercent={rowSelection.endPercent}
-                      onClick={handleSelectionClick(normalizedSelection)}
-                    />
-                  )}
-
-                  {showCurrentTime && (
-                    <CurrentTimeIndicator minutePercent={currerntMinutePercent} />
-                  )}
-
-                  {rowExecutions.map(({ execution, offsetInRow, span, isStart }) => (
-                    <ExecutionBlock
-                      key={`${execution.id}-${hourIndex}`}
-                      execution={execution}
-                      offsetInRow={offsetInRow}
-                      span={span}
-                      isStart={isStart}
-                      onMouseMove={handleMouseMoveInExecution(execution)}
-                      onContextMenuChange={setIsContextMenuOpen}
-                      handleEditClick={handleEditExecutionClick(execution)}
-                      handleDeleteClick={handleDeleteExecutionClick(execution.id)}
-                    />
-                  ))}
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </Card>
-
+      {/* 시간 Tooltip */}
+      {!isContextMenuOpen && selection && displaySelection && (
+        <TimeTooltip x={selection.x} top={selection.rowTop}>
+          {displaySelection}
+        </TimeTooltip>
+      )}
+      {/* hover 시간 Tooltip */}
+      {!isContextMenuOpen && !selection && hoveredTime && displayHoveredTime && (
+        <TimeTooltip x={hoveredTime.x} top={hoveredTime.rowTop}>
+          {displayHoveredTime}
+        </TimeTooltip>
+      )}
       <ExecutionFormDialog
         mode="add"
         open={!!addTargetExecution}
@@ -226,7 +190,6 @@ export function ExecutionTable() {
           }
         }}
       />
-
       <ExecutionFormDialog
         mode="edit"
         open={!!editTargetExecution}
@@ -235,7 +198,6 @@ export function ExecutionTable() {
           if (!open) setEditTargetExecution(null)
         }}
       />
-
       <AlertDialog
         open={deleteTargetExecutionId !== null}
         onOpenChange={() => setDeleteTargetExecutionId(null)}
@@ -257,20 +219,6 @@ export function ExecutionTable() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
-      {/* 시간 Tooltip */}
-      {!isContextMenuOpen && selection && displaySelection && (
-        <TimeTooltip x={selection.x} top={selection.rowTop}>
-          {displaySelection}
-        </TimeTooltip>
-      )}
-
-      {/* hover 시간 Tooltip */}
-      {!isContextMenuOpen && !selection && hoveredTime && displayHoveredTime && (
-        <TimeTooltip x={hoveredTime.x} top={hoveredTime.rowTop}>
-          {displayHoveredTime}
-        </TimeTooltip>
-      )}
-    </main>
+    </div>
   )
 }

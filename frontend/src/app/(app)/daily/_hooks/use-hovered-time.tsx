@@ -43,7 +43,7 @@ export function useHoveredTime(containerRef: React.RefObject<HTMLDivElement | nu
   /**
    * 실행 블럭 내부 mouse move 시 실행 블럭 시간 표시
    */
-  const handleMouseMoveInExecution = useCallback(
+  const handleMouseMoveInTimeBlock = useCallback(
     (execution: Execution) => (e: React.MouseEvent<HTMLDivElement>) => {
       e.stopPropagation()
 
@@ -79,7 +79,7 @@ export function useHoveredTime(containerRef: React.RefObject<HTMLDivElement | nu
     hoveredTime,
     displayHoveredTime,
     handleMouseMove,
-    handleMouseMoveInExecution,
+    handleMouseMoveInTimeBlock,
     handleMouseLeave,
   }
 }

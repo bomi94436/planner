@@ -1,7 +1,6 @@
 import { HOURS_PER_DAY, MINUTES_PER_HOUR, START_HOUR } from '@/constants'
 import { dateToMinutes } from '@/lib/utils'
 import type { Minutes } from '@/types'
-import type { Execution } from '@/types/execution'
 import { ROW_HEIGHT } from '~/daily/_constants'
 
 // 시간 포맷팅
@@ -10,17 +9,24 @@ export function formatHour(hourIndex: number): string {
   return hour.toString().padStart(2, '0')
 }
 
-// 미리 처리된 execution
-type ProcessedExecution = { execution: Execution; startIndex: number; endIndex: number }
+// startTimestamp, endTimestamp를 가진 타입 제약
+type TimeBlock = { startTimestamp: Date; endTimestamp: Date }
 
-// executions를 미리 처리 (Minutes 단위로 변환)
-export function preprocessExecutions(executions: Execution[]): ProcessedExecution[] {
-  return executions.map((execution) => {
-    const startIndex = dateToMinutes(execution.startTimestamp)
-    const endIndex = dateToMinutes(execution.endTimestamp)
+// 미리 처리된 타임블럭
+export type ProcessedTimeBlock<T extends TimeBlock> = {
+  item: T
+  startIndex: number
+  endIndex: number
+}
+
+// 타임블럭을 미리 처리 (Minutes 단위로 변환)
+export function preprocessTimeBlocks<T extends TimeBlock>(blocks: T[]): ProcessedTimeBlock<T>[] {
+  return blocks.map((item) => {
+    const startIndex = dateToMinutes(item.startTimestamp)
+    const endIndex = dateToMinutes(item.endTimestamp)
 
     return {
-      execution,
+      item,
       startIndex,
       // 최소 1블럭 보장 (시작과 끝이 같은 블럭일 경우)
       endIndex: endIndex <= startIndex ? startIndex + 1 : endIndex,
@@ -29,14 +35,17 @@ export function preprocessExecutions(executions: Execution[]): ProcessedExecutio
 }
 
 // 특정 row에서 렌더링할 타임블럭 정보 계산
-export function getExecutionsForRow(processedExecutions: ProcessedExecution[], hourIndex: number) {
+export function getTimeBlocksForRow<T extends TimeBlock>(
+  processedBlocks: ProcessedTimeBlock<T>[],
+  hourIndex: number
+) {
   const minutesStart = hourIndex * MINUTES_PER_HOUR
   const minutesEnd = minutesStart + MINUTES_PER_HOUR
 
-  return processedExecutions
+  return processedBlocks
     .filter(({ startIndex, endIndex }) => startIndex < minutesEnd && endIndex > minutesStart)
-    .map(({ execution, startIndex, endIndex }) => ({
-      execution,
+    .map(({ item, startIndex, endIndex }) => ({
+      item,
       offsetInRow: Math.max(startIndex, minutesStart) - minutesStart,
       span: Math.min(endIndex, minutesEnd) - Math.max(startIndex, minutesStart),
       isStart: startIndex >= minutesStart,

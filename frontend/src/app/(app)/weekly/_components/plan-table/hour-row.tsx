@@ -1,5 +1,6 @@
+import { hours } from '@/constants'
 import { formatHour } from '~/daily/_utils'
-import { hours, ROW_HEIGHT } from '~/weekly/_constants'
+import { ROW_HEIGHT } from '~/weekly/_constants'
 
 export function HourRow() {
   return (

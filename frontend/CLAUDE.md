@@ -40,8 +40,8 @@ frontend/src/
 
 ```
 _components/
-├── execution-table/           # 메인 컴포넌트 폴더
-│   ├── index.tsx              # ExecutionTable (진입점)
+├── time-table/           # 메인 컴포넌트 폴더
+│   ├── index.tsx              # TimeTable (진입점)
 │   ├── execution-block.tsx    # 하위 컴포넌트 (단일 파일)
 │   └── grid-background.tsx
 └── plan-list/

@@ -7,6 +7,7 @@ import { hours } from '@/constants'
 import { formatHour } from '~/daily/_utils'
 
 import { ExecutionTable } from './execution-table'
+import { PlanTable } from './plan-table'
 
 export function TimeTable() {
   return (
@@ -31,6 +32,7 @@ export function TimeTable() {
 
       <Card className="gap-0 py-0 rounded">
         <div className="flex">
+          <PlanTable />
           <div className="w-10 shrink-0">
             {hours.map((hourIndex) => (
               <div

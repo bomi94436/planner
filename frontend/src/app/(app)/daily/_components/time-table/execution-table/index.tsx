@@ -63,7 +63,7 @@ export function ExecutionTable() {
     handleMouseMove,
     displayHoveredTime,
     handleMouseLeave,
-    handleMouseMoveInExecution,
+    handleMouseMoveInTimeBlock,
   } = useHoveredTime(containerRef)
 
   const { selectedDate } = useDateStore()
@@ -115,58 +115,59 @@ export function ExecutionTable() {
   )
 
   return (
-    <div
-      ref={containerRef}
-      className={cn('relative flex-1', {
-        'cursor-col-resize select-none': isDragging,
-      })}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onMouseMove={handleMouseMove}
-      onPointerUp={handlePointerUp}
-      onClick={handleClick}
-      onMouseLeave={handleMouseLeave}
-    >
-      {hours.map((hourIndex) => {
-        const rowExecutions = getTimeBlocksForRow(processedExecutions ?? [], hourIndex)
-        const rowSelection = normalizedSelection
-          ? getSelectionForRow(normalizedSelection.start, normalizedSelection.end, hourIndex)
-          : null
+    <>
+      <div
+        ref={containerRef}
+        className={cn('relative flex-1', {
+          'cursor-col-resize select-none': isDragging,
+        })}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onMouseMove={handleMouseMove}
+        onPointerUp={handlePointerUp}
+        onClick={handleClick}
+        onMouseLeave={handleMouseLeave}
+      >
+        {hours.map((hourIndex) => {
+          const rowExecutions = getTimeBlocksForRow(processedExecutions ?? [], hourIndex)
+          const rowSelection = normalizedSelection
+            ? getSelectionForRow(normalizedSelection.start, normalizedSelection.end, hourIndex)
+            : null
 
-        const isToday = now && dayjs(selectedDate).isSame(dayjs(), 'day')
-        const showCurrentTime = isToday && currentHourIndex === hourIndex
+          const isToday = now && dayjs(selectedDate).isSame(dayjs(), 'day')
+          const showCurrentTime = isToday && currentHourIndex === hourIndex
 
-        return (
-          <div key={hourIndex} className="relative h-8 border-b border-zinc-200 last:border-b-0">
-            <GridBackground />
+          return (
+            <div key={hourIndex} className="relative h-8 border-b border-zinc-200 last:border-b-0">
+              <GridBackground />
 
-            {rowSelection && normalizedSelection && (
-              <SelectionBlock
-                startPercent={rowSelection.startPercent}
-                endPercent={rowSelection.endPercent}
-                onClick={handleSelectionClick(normalizedSelection)}
-              />
-            )}
+              {rowSelection && normalizedSelection && (
+                <SelectionBlock
+                  startPercent={rowSelection.startPercent}
+                  endPercent={rowSelection.endPercent}
+                  onClick={handleSelectionClick(normalizedSelection)}
+                />
+              )}
 
-            {showCurrentTime && <CurrentTimeIndicator minutePercent={currerntMinutePercent} />}
+              {showCurrentTime && <CurrentTimeIndicator minutePercent={currerntMinutePercent} />}
 
-            {rowExecutions.map(({ item: execution, offsetInRow, span, isStart }) => (
-              <ExecutionBlock
-                key={`${execution.id}-${hourIndex}`}
-                execution={execution}
-                offsetInRow={offsetInRow}
-                span={span}
-                isStart={isStart}
-                onMouseMove={handleMouseMoveInExecution(execution)}
-                onContextMenuChange={setIsContextMenuOpen}
-                handleEditClick={handleEditExecutionClick(execution)}
-                handleDeleteClick={handleDeleteExecutionClick(execution.id)}
-              />
-            ))}
-          </div>
-        )
-      })}
-
+              {rowExecutions.map(({ item: execution, offsetInRow, span, isStart }) => (
+                <ExecutionBlock
+                  key={`${execution.id}-${hourIndex}`}
+                  execution={execution}
+                  offsetInRow={offsetInRow}
+                  span={span}
+                  isStart={isStart}
+                  onMouseMove={handleMouseMoveInTimeBlock(execution)}
+                  onContextMenuChange={setIsContextMenuOpen}
+                  handleEditClick={handleEditExecutionClick(execution)}
+                  handleDeleteClick={handleDeleteExecutionClick(execution.id)}
+                />
+              ))}
+            </div>
+          )
+        })}
+      </div>
       {/* 시간 Tooltip */}
       {!isContextMenuOpen && selection && displaySelection && (
         <TimeTooltip x={selection.x} top={selection.rowTop}>
@@ -219,6 +220,6 @@ export function ExecutionTable() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </>
   )
 }

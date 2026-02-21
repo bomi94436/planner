@@ -159,6 +159,7 @@ export function PlanTable() {
             onMouseLeave={handleMouseLeave}
             onClick={handleClick}
           >
+            {/* 셀 */}
             {hours.map((hourIndex) =>
               days.map((day, dayIndex) => (
                 <div

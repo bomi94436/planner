@@ -16,7 +16,7 @@ export function DayColumn() {
           className="flex py-1 items-center justify-center border-b border-r last:border-r-0 border-zinc-200"
         >
           <span
-            className={cn('text-sm px-2 py-1.5 font-semibold', {
+            className={cn('text-sm px-2 py-1.5 font-semibold text-muted-foreground', {
               'rounded-md bg-primary text-white': day.isSame(dayjs(selectedDate), 'day'),
             })}
           >

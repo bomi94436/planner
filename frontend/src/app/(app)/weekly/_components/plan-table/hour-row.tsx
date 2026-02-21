@@ -8,7 +8,7 @@ export function HourRow() {
       {hours.map((hourIndex) => (
         <div
           key={hourIndex}
-          className="flex w-10 items-center justify-center border-b border-r border-zinc-200 text-sm"
+          className="flex w-10 items-center justify-center border-b border-r border-zinc-200 text-sm text-muted-foreground"
           style={{ height: ROW_HEIGHT }}
         >
           {formatHour(hourIndex)}

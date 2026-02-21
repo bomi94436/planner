@@ -125,13 +125,13 @@ export function TaskList() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => setEditTargetTask(task)}>
-                      <PencilIcon /> Edit
+                      <PencilIcon /> 수정
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       variant="destructive"
                       onClick={() => setDeleteTargetId(task.id)}
                     >
-                      <TrashIcon /> Delete
+                      <TrashIcon /> 삭제
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

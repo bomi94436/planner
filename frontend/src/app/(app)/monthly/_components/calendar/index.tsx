@@ -2,11 +2,14 @@
 
 import 'dayjs/locale/ko'
 
+import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 
+import { getTasks } from '@/api/func'
 import { Card } from '@/components/ui'
-import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
+
+import { DayCell } from './day-cell'
 
 const DAY_LABELS = ['일', '월', '화', '수', '목', '금', '토']
 
@@ -22,6 +25,19 @@ export function Calendar() {
   const totalDays = calendarEnd.diff(calendarStart, 'day') + 1
   const dates = Array.from({ length: totalDays }, (_, i) => calendarStart.add(i, 'day'))
   const totalRows = totalDays / 7
+
+  const startTimestamp = calendarStart.toISOString()
+  const endTimestamp = calendarEnd.toISOString()
+
+  // Task를 날짜별로 그룹화하여 조회
+  const { data: tasksByDate } = useQuery({
+    queryKey: ['tasks', startTimestamp, endTimestamp],
+    queryFn: () => getTasks({ startTimestamp, endTimestamp }),
+    select: (tasks) => {
+      if (!tasks) return undefined
+      return Map.groupBy(tasks, (task) => dayjs(task.startTimestamp).format('YYYY-MM-DD'))
+    },
+  })
 
   return (
     <Card className="gap-0 py-0 overflow-hidden">
@@ -40,32 +56,22 @@ export function Calendar() {
       {/* 날짜 셀 */}
       <div className="grid grid-cols-7">
         {dates.map((date, index) => {
+          const dateKey = date.format('YYYY-MM-DD')
           const isCurrentMonth = date.month() === current.month()
           const isToday = date.isSame(current, 'day')
           const dayIndex = index % 7
           const rowIndex = Math.floor(index / 7)
 
           return (
-            <div
-              key={date.format('YYYY-MM-DD')}
-              className={cn('h-40 border-r border-b border-zinc-200 p-1', {
-                'border-r-0': dayIndex === 6,
-                'border-b-0': rowIndex === totalRows - 1,
-                'bg-zinc-100': !isCurrentMonth,
-              })}
-            >
-              <span
-                className={cn(
-                  'text-sm inline-flex py-1 px-1.5 items-center justify-center rounded-md text-muted-foreground',
-                  {
-                    'text-zinc-400': !isCurrentMonth,
-                    'bg-primary text-white font-semibold': isToday,
-                  }
-                )}
-              >
-                {date.date()}
-              </span>
-            </div>
+            <DayCell
+              key={dateKey}
+              date={date}
+              isCurrentMonth={isCurrentMonth}
+              isToday={isToday}
+              isLastColumn={dayIndex === 6}
+              isLastRow={rowIndex === totalRows - 1}
+              tasks={tasksByDate?.get(dateKey) ?? []}
+            />
           )
         })}
       </div>

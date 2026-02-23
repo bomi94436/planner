@@ -7,23 +7,7 @@ import {
   GetExecutionsQuery,
   UpdateExecutionBody,
 } from '@/types/execution'
-import {
-  CreateTaskBody,
-  GetTasksQuery,
-  TaskResponse,
-  TasksResponse,
-  UpdateTaskBody,
-} from '@/types/task'
-
-export const getTasks = async ({ startTimestamp, endTimestamp }: GetTasksQuery) => {
-  const response = await axios.get<TasksResponse>('/api/tasks', {
-    params: {
-      startTimestamp,
-      endTimestamp,
-    },
-  })
-  return response.data?.data
-}
+import { CreateTaskBody, TaskResponse, UpdateTaskBody } from '@/types/task'
 
 export const createTask = async (data: CreateTaskBody) => {
   const response = await axios.post<TaskResponse>('/api/tasks', data)

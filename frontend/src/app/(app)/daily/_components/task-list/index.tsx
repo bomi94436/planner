@@ -3,8 +3,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { EllipsisIcon, FileIcon, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react'
 import { useState } from 'react'
-import { useDebouncedCallback } from 'use-debounce'
 
+import { getTasks } from '@/api/func'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,10 +22,11 @@ import {
   DropdownMenuTrigger,
   Skeleton,
 } from '@/components/ui'
+import { useHandleTaskToggle } from '@/hooks'
 import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
-import type { Task, UpdateTaskBody } from '@/types/task'
-import { deleteTask, getTasks, updateTask } from '~/daily/_api/func'
+import type { Task } from '@/types/task'
+import { deleteTask } from '~/daily/_api/func'
 
 import { TaskFormDialog } from './task-form-dialog'
 
@@ -42,15 +43,9 @@ export function TaskList() {
         endTimestamp: dayjs(selectedDate).endOf('day').toISOString(),
       }),
   })
+  const { handleTaskToggle } = useHandleTaskToggle()
 
   const queryClient = useQueryClient()
-
-  const { mutate: updateTaskMutation } = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UpdateTaskBody }) => updateTask(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] })
-    },
-  })
 
   const { mutate: deleteTaskMutation } = useMutation({
     mutationFn: (id: number) => deleteTask(id),
@@ -59,17 +54,6 @@ export function TaskList() {
       setDeleteTargetId(null)
     },
   })
-
-  const debouncedUpdate = useDebouncedCallback((id: number, completed: boolean) => {
-    updateTaskMutation({ id, data: { completed } })
-  }, 300)
-
-  const handleTaskClick = (id: number, completed: boolean) => {
-    queryClient.setQueryData(['tasks', selectedDate], (old: Task[]) =>
-      old?.map((t) => (t.id === id ? { ...t, completed } : t))
-    )
-    debouncedUpdate(id, completed)
-  }
 
   return (
     <aside className="flex w-80 shrink-0 flex-col gap-2">
@@ -100,7 +84,7 @@ export function TaskList() {
               <Checkbox
                 id={task.id.toString()}
                 checked={task.completed}
-                onCheckedChange={() => handleTaskClick(task.id, !task.completed)}
+                onCheckedChange={handleTaskToggle(task.id, !task.completed)}
               />
               <label
                 htmlFor={task.id.toString()}
@@ -125,13 +109,13 @@ export function TaskList() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => setEditTargetTask(task)}>
-                      <PencilIcon /> Edit
+                      <PencilIcon /> 수정
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       variant="destructive"
                       onClick={() => setDeleteTargetId(task.id)}
                     >
-                      <TrashIcon /> Delete
+                      <TrashIcon /> 삭제
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

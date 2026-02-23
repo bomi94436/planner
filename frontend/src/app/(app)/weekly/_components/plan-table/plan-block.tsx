@@ -71,7 +71,7 @@ export function PlanBlock({
       <ContextMenuContent>
         <ContextMenuItem onPointerDown={(e) => e.stopPropagation()} onClick={handleEditClick}>
           <PencilIcon />
-          <span>Edit</span>
+          <span>수정</span>
         </ContextMenuItem>
         <ContextMenuItem
           variant="destructive"
@@ -79,7 +79,7 @@ export function PlanBlock({
           onClick={handleDeleteClick}
         >
           <TrashIcon />
-          <span>Delete</span>
+          <span>삭제</span>
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

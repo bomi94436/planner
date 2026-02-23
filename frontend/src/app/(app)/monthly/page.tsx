@@ -1,8 +1,10 @@
+import { Calendar } from './_components/calendar'
+
 export default function MonthlyPage() {
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Monthly</h1>
-      <p className="mt-2 text-zinc-600 dark:text-zinc-400">월간 일정을 관리하세요.</p>
-    </div>
+    <main className="flex min-h-0 flex-1 flex-col gap-2">
+      <h2 className="text-lg font-semibold">월간 할일</h2>
+      <Calendar />
+    </main>
   )
 }

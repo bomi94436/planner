@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
       '~/monthly/*': './src/app/(app)/monthly/*',
       '~/weekly/*': './src/app/(app)/weekly/*',
       '~/yearly/*': './src/app/(app)/yearly/*',
+      '~/settings/*': './src/app/(app)/settings/*',
       '~/api/*': './src/app/api/*',
     },
   },

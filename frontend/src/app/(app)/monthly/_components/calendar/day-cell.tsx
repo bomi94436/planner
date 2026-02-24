@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-import { Checkbox } from '@/components/ui'
+import { Checkbox, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui'
 import { useHandleTaskToggle } from '@/hooks'
 import { cn } from '@/lib/utils'
 import type { Task } from '@/types/task'
@@ -45,21 +45,26 @@ export function DayCell({
 
       <div className="flex flex-col gap-0.5 overflow-y-auto">
         {tasks.map((task) => (
-          <label key={task.id} className="flex items-center gap-1 cursor-pointer group">
-            <Checkbox
-              id={task.id.toString()}
-              checked={task.completed}
-              onCheckedChange={handleTaskToggle(task.id, !task.completed)}
-              className="size-3.5"
-            />
-            <span
-              className={cn('text-xs truncate', {
-                'line-through text-muted-foreground': task.completed,
-              })}
-            >
-              {task.title}
-            </span>
-          </label>
+          <Tooltip key={task.id}>
+            <TooltipTrigger asChild>
+              <label className="flex items-center gap-1 cursor-pointer group">
+                <Checkbox
+                  id={task.id.toString()}
+                  checked={task.completed}
+                  onCheckedChange={handleTaskToggle(task.id, !task.completed)}
+                  className="size-3.5"
+                />
+                <span
+                  className={cn('text-xs truncate', {
+                    'line-through text-muted-foreground': task.completed,
+                  })}
+                >
+                  {task.title}
+                </span>
+              </label>
+            </TooltipTrigger>
+            <TooltipContent>{task.title}</TooltipContent>
+          </Tooltip>
         ))}
       </div>
     </div>

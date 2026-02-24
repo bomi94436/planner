@@ -16,7 +16,5 @@ export type UpdatePlanBody = z.infer<typeof updatePlanSchema>
 export type GetPlansQuery = z.infer<typeof getPlansQuerySchema>
 
 export type PlansResponse = Response<Plan[]>
-
 export type PlanResponse = Response<Plan>
-
 export type DeletePlanResponse = Response<{ id: number }>

@@ -1,3 +1,5 @@
+export * from './category'
+export * from './category-group'
 export * from './execution'
 export * from './plan'
 export * from './task'

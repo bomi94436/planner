@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useCallback, useMemo, useRef, useState } from 'react'
+import { useShallow } from 'zustand/react/shallow'
 
 import {
   AlertDialog,
@@ -16,7 +17,7 @@ import {
 } from '@/components/ui'
 import { hours } from '@/constants'
 import { cn, minutesToDayjs } from '@/lib/utils'
-import { useDateStore } from '@/store'
+import { selectDayRange, useDateStore } from '@/store'
 import type { Execution } from '@/types/execution'
 import { deleteExecution, getExecutions } from '~/daily/_api/func'
 import { useCurrentTime, useHoveredTime, useSelection } from '~/daily/_hooks'
@@ -66,14 +67,14 @@ export function ExecutionTable() {
     handleMouseMoveInTimeBlock,
   } = useHoveredTime(containerRef)
 
-  const { selectedDate } = useDateStore()
+  const { selectedDate, dayStart, dayEnd } = useDateStore(useShallow(selectDayRange))
 
   const { data: processedExecutions } = useQuery({
-    queryKey: ['executions', selectedDate],
+    queryKey: ['executions', dayStart.toISOString(), dayEnd.toISOString()],
     queryFn: () =>
       getExecutions({
-        startTimestamp: dayjs(selectedDate).startOf('day').toISOString(),
-        endTimestamp: dayjs(selectedDate).endOf('day').toISOString(),
+        startTimestamp: dayStart.toISOString(),
+        endTimestamp: dayEnd.toISOString(),
       }),
     select: (data) => preprocessTimeBlocks(data ?? []),
   })

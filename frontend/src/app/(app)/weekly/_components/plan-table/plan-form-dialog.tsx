@@ -31,7 +31,7 @@ interface PlanFormDialogProps {
 }
 
 export function PlanFormDialog({ mode, open, plan, onOpenChange }: PlanFormDialogProps) {
-  const { selectedDate } = useDateStore()
+  const selectedDate = useDateStore((state) => state.selectedDate)
   const queryClient = useQueryClient()
 
   const {

@@ -4,7 +4,8 @@ import 'dayjs/locale/ko'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { InfoIcon } from 'lucide-react'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
+import { useShallow } from 'zustand/react/shallow'
 
 import {
   AlertDialog,
@@ -22,7 +23,7 @@ import {
 } from '@/components/ui'
 import { hours } from '@/constants'
 import { cn, minutesToDayjs } from '@/lib/utils'
-import { useDateStore } from '@/store'
+import { selectWeekRange, useDateStore } from '@/store'
 import type { Plan } from '@/types/plan'
 import { deletePlan, getPlans } from '~/weekly/_api/func'
 import { days, ROW_HEIGHT } from '~/weekly/_constants'
@@ -43,7 +44,8 @@ export function PlanTable() {
   const [deleteTargetPlanId, setDeleteTargetPlanId] = useState<number | null>(null)
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
 
-  const { selectedDate } = useDateStore()
+  // 주의 시작 (일요일 START_HOUR)과 끝 (다음 일요일 START_HOUR)
+  const { selectedDate, weekStart, weekEnd } = useDateStore(useShallow(selectWeekRange))
 
   const {
     selection,
@@ -64,10 +66,6 @@ export function PlanTable() {
     handleMouseMoveInPlan,
     handleMouseLeave,
   } = useHoveredTime(containerRef)
-
-  // 주의 시작일 (일요일)과 끝일 (토요일)
-  const weekStart = useMemo(() => dayjs(selectedDate).day(0).startOf('day'), [selectedDate])
-  const weekEnd = useMemo(() => dayjs(selectedDate).day(6).endOf('day'), [selectedDate])
 
   const { data: processedPlans } = useQuery({
     queryKey: ['plans', weekStart.toISOString(), weekEnd.toISOString()],

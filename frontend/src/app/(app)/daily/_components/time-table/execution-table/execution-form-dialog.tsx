@@ -36,7 +36,7 @@ export function ExecutionFormDialog({
   execution,
   onOpenChange,
 }: ExecutionFormDialogProps) {
-  const { selectedDate } = useDateStore()
+  const selectedDate = useDateStore((state) => state.selectedDate)
   const queryClient = useQueryClient()
 
   const {

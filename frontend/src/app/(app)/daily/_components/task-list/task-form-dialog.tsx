@@ -37,7 +37,8 @@ interface TaskFormDialogProps {
 
 export function TaskFormDialog({ mode, task, open, onOpenChange, children }: TaskFormDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false)
-  const { selectedDate, setSelectedDate } = useDateStore()
+  const selectedDate = useDateStore((state) => state.selectedDate)
+  const setSelectedDate = useDateStore((state) => state.setSelectedDate)
   const queryClient = useQueryClient()
 
   // controlled vs uncontrolled

@@ -16,7 +16,7 @@ interface HoveredTime {
 export function useHoveredTime(containerRef: React.RefObject<HTMLDivElement | null>) {
   const [hoveredTime, setHoveredTime] = useState<HoveredTime | null>(null)
 
-  const { selectedDate } = useDateStore()
+  const selectedDate = useDateStore((state) => state.selectedDate)
 
   // 그리드 빈 영역 hover
   const handleMouseMove = useCallback(

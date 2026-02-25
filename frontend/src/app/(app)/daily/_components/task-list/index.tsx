@@ -31,7 +31,7 @@ import { deleteTask } from '~/daily/_api/func'
 import { TaskFormDialog } from './task-form-dialog'
 
 export function TaskList() {
-  const { selectedDate } = useDateStore()
+  const selectedDate = useDateStore((state) => state.selectedDate)
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null)
   const [editTargetTask, setEditTargetTask] = useState<Task | null>(null)
 

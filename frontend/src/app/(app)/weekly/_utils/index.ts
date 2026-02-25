@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-import { HOURS_PER_DAY, MINUTES_PER_HOUR, START_HOUR } from '@/constants'
+import { HOURS_PER_DAY, MINUTES_PER_HOUR } from '@/constants'
 import { dateToMinutes } from '@/lib/utils'
 import type { Minutes } from '@/types'
 import type { Plan } from '@/types/plan'
@@ -56,8 +56,8 @@ const MAX_MINUTES = HOURS_PER_DAY * MINUTES_PER_HOUR
 
 // plan을 그리드 일 단위로 분할하여 처리
 // weekStart: 주의 시작일 (일요일 00:00)
-export function preprocessPlans(plans: Plan[], weekStart: dayjs.Dayjs): ProcessedPlan[] {
-  const gridOrigin = weekStart.hour(START_HOUR).minute(0).second(0).millisecond(0)
+export function preprocessPlans(plans: Plan[], weekStartISO: string): ProcessedPlan[] {
+  const gridOrigin = dayjs(weekStartISO)
 
   return plans.flatMap((plan) => {
     const start = dayjs(plan.startTimestamp)

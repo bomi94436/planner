@@ -24,7 +24,7 @@ export function useSelection(
   const [selection, setSelection] = useState<Selection | null>(null)
   const [isDragging, setIsDragging] = useState(false)
 
-  const { selectedDate } = useDateStore()
+  const selectedDate = useDateStore((state) => state.selectedDate)
 
   // 드래그 시작
   const handlePointerDown = useCallback(

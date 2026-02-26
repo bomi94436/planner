@@ -1,6 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+'use client'
+
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { CheckIcon } from 'lucide-react'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -13,15 +14,24 @@ import {
   DialogHeader,
   DialogTitle,
   Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui'
-import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
 import type { Execution, UpdateExecutionBody } from '@/types/execution'
-import { createExecution, updateExecution } from '~/daily/_api/func'
-import { EXECUTION_COLOR_LIST } from '~/daily/_constants'
+import { createExecution, getCategories, updateExecution } from '~/daily/_api/func'
 
 type DialogMode = 'add' | 'edit'
-type ExecutionFormData = Omit<Execution, 'id'>
+
+type ExecutionFormData = {
+  title: string
+  startTimestamp: Date
+  endTimestamp: Date
+  categoryId: number | null
+}
 
 interface ExecutionFormDialogProps {
   mode: DialogMode
@@ -39,6 +49,12 @@ export function ExecutionFormDialog({
   const selectedDate = useDateStore((state) => state.selectedDate)
   const queryClient = useQueryClient()
 
+  const { data: categories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories,
+    select: (data) => data ?? [],
+  })
+
   const {
     register,
     handleSubmit,
@@ -50,7 +66,7 @@ export function ExecutionFormDialog({
     mode: 'onChange',
   })
 
-  const { startTimestamp, endTimestamp, color } = watch()
+  const { startTimestamp, endTimestamp, categoryId } = watch()
 
   useEffect(() => {
     if (!open) return
@@ -58,7 +74,7 @@ export function ExecutionFormDialog({
       title: '',
       startTimestamp: selectedDate,
       endTimestamp: selectedDate,
-      color: '#000000',
+      categoryId: null,
       ...(execution ?? {}),
     })
   }, [open, execution, reset, selectedDate])
@@ -97,7 +113,7 @@ export function ExecutionFormDialog({
       title: data.title.trim(),
       startTimestamp: dayjs(data.startTimestamp).second(0).millisecond(0).toISOString(),
       endTimestamp: dayjs(data.endTimestamp).second(0).millisecond(0).toISOString(),
-      color: data.color,
+      categoryId: data.categoryId ?? null,
     }
 
     if (mode === 'edit' && execution?.id) {
@@ -134,33 +150,28 @@ export function ExecutionFormDialog({
             onEndTimestampChange={handleEndChange}
           />
 
+          {/* 카테고리 선택 */}
           <div className="space-y-2">
-            <label htmlFor="color" className="text-sm font-medium">
-              색상
-            </label>
-            <div className="flex flex-wrap items-center gap-2 rounded-md border border-border p-2">
-              {EXECUTION_COLOR_LIST.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  className="size-8 rounded-full flex items-center justify-center hover:shadow-md transition-all duration-300"
-                  style={
-                    {
-                      backgroundColor: c,
-                      '--tw-shadow-color': `${c}50`,
-                    } as React.CSSProperties
-                  }
-                  onClick={() => setValue('color', c)}
-                >
-                  <CheckIcon
-                    className={cn('size-6 text-white', {
-                      'opacity-100 fade-in-0 duration-300': c === color,
-                      'opacity-0 fade-out-0 duration-300': c !== color,
-                    })}
-                  />
-                </button>
-              ))}
-            </div>
+            <label className="text-sm font-medium">카테고리</label>
+            <Select
+              value={String(categoryId ?? '')}
+              onValueChange={(v) => setValue('categoryId', v ? Number(v) : null)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="카테고리 없음" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={String(cat.id)}>
+                    <span
+                      className="size-2.5 rounded-full inline-block mr-1.5"
+                      style={{ backgroundColor: cat.color }}
+                    />
+                    {cat.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <DialogFooter>

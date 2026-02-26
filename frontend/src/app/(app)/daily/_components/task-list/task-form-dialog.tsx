@@ -1,6 +1,6 @@
 'use client'
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -15,13 +15,25 @@ import {
   DialogTitle,
   DialogTrigger,
   Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui'
 import { useDateStore } from '@/store'
 import type { Task, UpdateTaskBody } from '@/types/task'
-import { createTask, updateTask } from '~/daily/_api/func'
+import { createTask, getCategories, updateTask } from '~/daily/_api/func'
 
 type DialogMode = 'add' | 'edit'
-type TaskFormData = Omit<Task, 'id' | 'completed'>
+
+type TaskFormData = {
+  title: string
+  startTimestamp: Date
+  endTimestamp: Date
+  isAllDay: boolean
+  categoryId: number | null
+}
 
 interface TaskFormDialogProps {
   mode: DialogMode
@@ -43,6 +55,12 @@ export function TaskFormDialog({ mode, task, open, onOpenChange, children }: Tas
 
   // controlled vs uncontrolled
   const isOpen = open ?? internalOpen
+
+  const { data: categories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories,
+    select: (data) => data ?? [],
+  })
 
   const {
     register,
@@ -66,12 +84,13 @@ export function TaskFormDialog({ mode, task, open, onOpenChange, children }: Tas
         startTimestamp: selectedDate,
         endTimestamp: selectedDate,
         isAllDay: true,
+        categoryId: null,
       })
     }
   }, [isOpen, mode, task, reset, selectedDate])
 
   // 폼 값 watch
-  const { startTimestamp, endTimestamp, isAllDay } = watch()
+  const { startTimestamp, endTimestamp, isAllDay, categoryId } = watch()
 
   // 시작 시간 변경 핸들러
   const handleStartChange = (date: Date) => {
@@ -116,6 +135,7 @@ export function TaskFormDialog({ mode, task, open, onOpenChange, children }: Tas
       startTimestamp: dayjs(data.startTimestamp).second(0).millisecond(0).toISOString(),
       endTimestamp: dayjs(data.endTimestamp).second(0).millisecond(0).toISOString(),
       isAllDay: data.isAllDay,
+      categoryId: data.categoryId ?? null,
     }
 
     if (mode === 'edit' && task) {
@@ -153,6 +173,32 @@ export function TaskFormDialog({ mode, task, open, onOpenChange, children }: Tas
             onEndTimestampChange={handleEndChange}
             onIsAllDayChange={() => setValue('isAllDay', !isAllDay, { shouldDirty: true })}
           />
+
+          {/* 카테고리 선택 */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">카테고리</label>
+            <Select
+              value={String(categoryId ?? '')}
+              onValueChange={(v) =>
+                setValue('categoryId', v ? Number(v) : null, { shouldDirty: true })
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="카테고리 없음" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={String(cat.id)}>
+                    <span
+                      className="size-2.5 rounded-full inline-block mr-1.5"
+                      style={{ backgroundColor: cat.color }}
+                    />
+                    {cat.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
           <DialogFooter>
             <Button type="submit" disabled={isPending || !isValid || !isDirty}>

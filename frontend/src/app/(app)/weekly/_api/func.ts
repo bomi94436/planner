@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+import type { CategoriesResponse } from '@/types/category'
 import {
   CreatePlanBody,
   DeletePlanResponse,
@@ -8,6 +9,11 @@ import {
   PlansResponse,
   UpdatePlanBody,
 } from '@/types/plan'
+
+export const getCategories = async () => {
+  const response = await axios.get<CategoriesResponse>('/api/categories')
+  return response.data?.data
+}
 
 export const getPlans = async ({ startTimestamp, endTimestamp }: GetPlansQuery) => {
   const response = await axios.get<PlansResponse>('/api/plans', {

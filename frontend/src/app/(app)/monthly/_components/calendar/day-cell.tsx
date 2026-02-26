@@ -53,6 +53,11 @@ export function DayCell({
                   checked={task.completed}
                   onCheckedChange={handleTaskToggle(task.id, !task.completed)}
                   className="size-3.5"
+                  style={
+                    task.category?.color && task.completed
+                      ? { backgroundColor: task.category.color, borderColor: task.category.color }
+                      : undefined
+                  }
                 />
                 <span
                   className={cn('text-xs truncate', {

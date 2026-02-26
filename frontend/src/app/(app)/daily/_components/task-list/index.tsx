@@ -85,6 +85,11 @@ export function TaskList() {
                 id={task.id.toString()}
                 checked={task.completed}
                 onCheckedChange={handleTaskToggle(task.id, !task.completed)}
+                style={
+                  task.category?.color && task.completed
+                    ? { backgroundColor: task.category.color, borderColor: task.category.color }
+                    : undefined
+                }
               />
               <label
                 htmlFor={task.id.toString()}
@@ -93,7 +98,18 @@ export function TaskList() {
                   'text-foreground': !task.completed,
                 })}
               >
-                {task.title}
+                <div className="flex flex-col">
+                  <span>{task.title}</span>
+                  {task.category && (
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-2 py-0.5 text-xs w-fit mt-0.5">
+                      <span
+                        className="size-2.5 rounded-full shrink-0"
+                        style={{ backgroundColor: task.category.color }}
+                      />
+                      {task.category.name}
+                    </span>
+                  )}
+                </div>
               </label>
 
               <div className="flex items-center gap-2 ml-auto">

@@ -9,8 +9,10 @@ import type { Execution as PrismaExecution } from '@/generated/prisma/client'
 
 export type Execution = Pick<
   PrismaExecution,
-  'id' | 'startTimestamp' | 'endTimestamp' | 'title' | 'color'
->
+  'id' | 'startTimestamp' | 'endTimestamp' | 'title' | 'categoryId'
+> & {
+  category?: { id: number; name: string; color: string } | null
+}
 
 import type { Response } from './index'
 

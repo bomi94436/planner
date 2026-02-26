@@ -68,12 +68,20 @@ export const PATCH = withErrorHandler<{ id: string }>(async (request, context) =
     where: { id },
     data: {
       title: validated.title?.trim(),
-      color: validated.color,
+      categoryId: validated.categoryId,
       startTimestamp: validated.startTimestamp ? new Date(validated.startTimestamp) : undefined,
       endTimestamp: validated.endTimestamp ? new Date(validated.endTimestamp) : undefined,
       ...(validated.taskIds !== undefined && {
         tasks: { set: validated.taskIds.map((taskId) => ({ id: taskId })) },
       }),
+    },
+    select: {
+      id: true,
+      startTimestamp: true,
+      endTimestamp: true,
+      title: true,
+      categoryId: true,
+      category: { select: { id: true, name: true, color: true } },
     },
   })
 

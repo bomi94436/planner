@@ -17,7 +17,10 @@ export type Task = Pick<
   | 'isAllDay'
   | 'planId'
   | 'executionId'
->
+  | 'categoryId'
+> & {
+  category?: { id: number; name: string; color: string } | null
+}
 
 import type { Response } from './index'
 

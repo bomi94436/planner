@@ -6,6 +6,7 @@ export const createTaskSchema = z.object({
   startTimestamp: z.string().datetime({ message: 'startTimestamp 형식이 올바르지 않습니다.' }),
   endTimestamp: z.string().datetime({ message: 'endTimestamp 형식이 올바르지 않습니다.' }),
   isAllDay: z.boolean().default(false).optional(),
+  categoryId: z.number().int().positive().optional().nullable(),
 })
 
 // Task 수정 스키마
@@ -22,6 +23,7 @@ export const updateTaskSchema = z
       .datetime({ message: 'endTimestamp 형식이 올바르지 않습니다.' })
       .optional(),
     isAllDay: z.boolean().optional(),
+    categoryId: z.number().int().positive().optional().nullable(),
   })
   .refine((data) => Object.keys(data).length > 0, { message: '수정할 내용이 없습니다.' })
 

@@ -7,7 +7,12 @@ import type {
 } from '@/app/api/_validations'
 import type { Plan as PrismaPlan } from '@/generated/prisma/client'
 
-export type Plan = Pick<PrismaPlan, 'id' | 'startTimestamp' | 'endTimestamp' | 'title' | 'color'>
+export type Plan = Pick<
+  PrismaPlan,
+  'id' | 'startTimestamp' | 'endTimestamp' | 'title' | 'categoryId'
+> & {
+  category?: { id: number; name: string; color: string } | null
+}
 
 import type { Response } from './index'
 

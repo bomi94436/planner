@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { withErrorHandler } from '@/app/api/_lib'
 import { updateTaskSchema } from '@/app/api/_validations'
-import type { TaskUpdateInput } from '@/generated/prisma/models/Task'
+import type { TaskUncheckedUpdateInput } from '@/generated/prisma/models/Task'
 import { prisma } from '@/lib/prisma'
 import type { DeleteTaskResponse, TaskResponse } from '@/types/task'
 
@@ -65,17 +65,30 @@ export const PATCH = withErrorHandler<{ id: string }>(async (request, context) =
   const body = await request.json()
   const validated = updateTaskSchema.parse(body)
 
-  const updateData: TaskUpdateInput = {
+  const updateData: TaskUncheckedUpdateInput = {
     title: validated.title?.trim(),
     completed: validated.completed,
     startTimestamp: validated.startTimestamp ? new Date(validated.startTimestamp) : undefined,
     endTimestamp: validated.endTimestamp ? new Date(validated.endTimestamp) : undefined,
     isAllDay: validated.isAllDay,
+    categoryId: validated.categoryId,
   }
 
   const updated = await prisma.task.update({
     where: { id },
     data: updateData,
+    select: {
+      id: true,
+      title: true,
+      completed: true,
+      startTimestamp: true,
+      endTimestamp: true,
+      isAllDay: true,
+      planId: true,
+      executionId: true,
+      categoryId: true,
+      category: { select: { id: true, name: true, color: true } },
+    },
   })
 
   return NextResponse.json<TaskResponse>({ data: updated })

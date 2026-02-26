@@ -28,10 +28,12 @@ export type AggregatePlan = {
 
 export type PlanAvgAggregateOutputType = {
   id: number | null
+  categoryId: number | null
 }
 
 export type PlanSumAggregateOutputType = {
   id: number | null
+  categoryId: number | null
 }
 
 export type PlanMinAggregateOutputType = {
@@ -39,9 +41,9 @@ export type PlanMinAggregateOutputType = {
   title: string | null
   startTimestamp: Date | null
   endTimestamp: Date | null
-  color: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  categoryId: number | null
 }
 
 export type PlanMaxAggregateOutputType = {
@@ -49,9 +51,9 @@ export type PlanMaxAggregateOutputType = {
   title: string | null
   startTimestamp: Date | null
   endTimestamp: Date | null
-  color: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  categoryId: number | null
 }
 
 export type PlanCountAggregateOutputType = {
@@ -59,19 +61,21 @@ export type PlanCountAggregateOutputType = {
   title: number
   startTimestamp: number
   endTimestamp: number
-  color: number
   createdAt: number
   updatedAt: number
+  categoryId: number
   _all: number
 }
 
 
 export type PlanAvgAggregateInputType = {
   id?: true
+  categoryId?: true
 }
 
 export type PlanSumAggregateInputType = {
   id?: true
+  categoryId?: true
 }
 
 export type PlanMinAggregateInputType = {
@@ -79,9 +83,9 @@ export type PlanMinAggregateInputType = {
   title?: true
   startTimestamp?: true
   endTimestamp?: true
-  color?: true
   createdAt?: true
   updatedAt?: true
+  categoryId?: true
 }
 
 export type PlanMaxAggregateInputType = {
@@ -89,9 +93,9 @@ export type PlanMaxAggregateInputType = {
   title?: true
   startTimestamp?: true
   endTimestamp?: true
-  color?: true
   createdAt?: true
   updatedAt?: true
+  categoryId?: true
 }
 
 export type PlanCountAggregateInputType = {
@@ -99,9 +103,9 @@ export type PlanCountAggregateInputType = {
   title?: true
   startTimestamp?: true
   endTimestamp?: true
-  color?: true
   createdAt?: true
   updatedAt?: true
+  categoryId?: true
   _all?: true
 }
 
@@ -196,9 +200,9 @@ export type PlanGroupByOutputType = {
   title: string
   startTimestamp: Date
   endTimestamp: Date
-  color: string
   createdAt: Date
   updatedAt: Date
+  categoryId: number | null
   _count: PlanCountAggregateOutputType | null
   _avg: PlanAvgAggregateOutputType | null
   _sum: PlanSumAggregateOutputType | null
@@ -229,10 +233,11 @@ export type PlanWhereInput = {
   title?: Prisma.StringFilter<"Plan"> | string
   startTimestamp?: Prisma.DateTimeFilter<"Plan"> | Date | string
   endTimestamp?: Prisma.DateTimeFilter<"Plan"> | Date | string
-  color?: Prisma.StringFilter<"Plan"> | string
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
+  categoryId?: Prisma.IntNullableFilter<"Plan"> | number | null
   tasks?: Prisma.TaskListRelationFilter
+  category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
 }
 
 export type PlanOrderByWithRelationInput = {
@@ -240,10 +245,11 @@ export type PlanOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   startTimestamp?: Prisma.SortOrder
   endTimestamp?: Prisma.SortOrder
-  color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   tasks?: Prisma.TaskOrderByRelationAggregateInput
+  category?: Prisma.CategoryOrderByWithRelationInput
 }
 
 export type PlanWhereUniqueInput = Prisma.AtLeast<{
@@ -254,10 +260,11 @@ export type PlanWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Plan"> | string
   startTimestamp?: Prisma.DateTimeFilter<"Plan"> | Date | string
   endTimestamp?: Prisma.DateTimeFilter<"Plan"> | Date | string
-  color?: Prisma.StringFilter<"Plan"> | string
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
+  categoryId?: Prisma.IntNullableFilter<"Plan"> | number | null
   tasks?: Prisma.TaskListRelationFilter
+  category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
 }, "id">
 
 export type PlanOrderByWithAggregationInput = {
@@ -265,9 +272,9 @@ export type PlanOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   startTimestamp?: Prisma.SortOrder
   endTimestamp?: Prisma.SortOrder
-  color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PlanCountOrderByAggregateInput
   _avg?: Prisma.PlanAvgOrderByAggregateInput
   _max?: Prisma.PlanMaxOrderByAggregateInput
@@ -283,19 +290,19 @@ export type PlanScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"Plan"> | string
   startTimestamp?: Prisma.DateTimeWithAggregatesFilter<"Plan"> | Date | string
   endTimestamp?: Prisma.DateTimeWithAggregatesFilter<"Plan"> | Date | string
-  color?: Prisma.StringWithAggregatesFilter<"Plan"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Plan"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Plan"> | Date | string
+  categoryId?: Prisma.IntNullableWithAggregatesFilter<"Plan"> | number | null
 }
 
 export type PlanCreateInput = {
   title: string
   startTimestamp: Date | string
   endTimestamp: Date | string
-  color: string
   createdAt?: Date | string
   updatedAt?: Date | string
   tasks?: Prisma.TaskCreateNestedManyWithoutPlanInput
+  category?: Prisma.CategoryCreateNestedOneWithoutPlansInput
 }
 
 export type PlanUncheckedCreateInput = {
@@ -303,9 +310,9 @@ export type PlanUncheckedCreateInput = {
   title: string
   startTimestamp: Date | string
   endTimestamp: Date | string
-  color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  categoryId?: number | null
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutPlanInput
 }
 
@@ -313,10 +320,10 @@ export type PlanUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tasks?: Prisma.TaskUpdateManyWithoutPlanNestedInput
+  category?: Prisma.CategoryUpdateOneWithoutPlansNestedInput
 }
 
 export type PlanUncheckedUpdateInput = {
@@ -324,9 +331,9 @@ export type PlanUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutPlanNestedInput
 }
 
@@ -335,16 +342,15 @@ export type PlanCreateManyInput = {
   title: string
   startTimestamp: Date | string
   endTimestamp: Date | string
-  color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  categoryId?: number | null
 }
 
 export type PlanUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -354,9 +360,9 @@ export type PlanUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type PlanNullableScalarRelationFilter = {
@@ -369,13 +375,14 @@ export type PlanCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   startTimestamp?: Prisma.SortOrder
   endTimestamp?: Prisma.SortOrder
-  color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
 }
 
 export type PlanAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
 }
 
 export type PlanMaxOrderByAggregateInput = {
@@ -383,9 +390,9 @@ export type PlanMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   startTimestamp?: Prisma.SortOrder
   endTimestamp?: Prisma.SortOrder
-  color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
 }
 
 export type PlanMinOrderByAggregateInput = {
@@ -393,13 +400,24 @@ export type PlanMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   startTimestamp?: Prisma.SortOrder
   endTimestamp?: Prisma.SortOrder
-  color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
 }
 
 export type PlanSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
+}
+
+export type PlanListRelationFilter = {
+  every?: Prisma.PlanWhereInput
+  some?: Prisma.PlanWhereInput
+  none?: Prisma.PlanWhereInput
+}
+
+export type PlanOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type PlanCreateNestedOneWithoutTasksInput = {
@@ -418,13 +436,55 @@ export type PlanUpdateOneWithoutTasksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PlanUpdateToOneWithWhereWithoutTasksInput, Prisma.PlanUpdateWithoutTasksInput>, Prisma.PlanUncheckedUpdateWithoutTasksInput>
 }
 
+export type PlanCreateNestedManyWithoutCategoryInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutCategoryInput, Prisma.PlanUncheckedCreateWithoutCategoryInput> | Prisma.PlanCreateWithoutCategoryInput[] | Prisma.PlanUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutCategoryInput | Prisma.PlanCreateOrConnectWithoutCategoryInput[]
+  createMany?: Prisma.PlanCreateManyCategoryInputEnvelope
+  connect?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+}
+
+export type PlanUncheckedCreateNestedManyWithoutCategoryInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutCategoryInput, Prisma.PlanUncheckedCreateWithoutCategoryInput> | Prisma.PlanCreateWithoutCategoryInput[] | Prisma.PlanUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutCategoryInput | Prisma.PlanCreateOrConnectWithoutCategoryInput[]
+  createMany?: Prisma.PlanCreateManyCategoryInputEnvelope
+  connect?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+}
+
+export type PlanUpdateManyWithoutCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutCategoryInput, Prisma.PlanUncheckedCreateWithoutCategoryInput> | Prisma.PlanCreateWithoutCategoryInput[] | Prisma.PlanUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutCategoryInput | Prisma.PlanCreateOrConnectWithoutCategoryInput[]
+  upsert?: Prisma.PlanUpsertWithWhereUniqueWithoutCategoryInput | Prisma.PlanUpsertWithWhereUniqueWithoutCategoryInput[]
+  createMany?: Prisma.PlanCreateManyCategoryInputEnvelope
+  set?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  disconnect?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  delete?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  connect?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  update?: Prisma.PlanUpdateWithWhereUniqueWithoutCategoryInput | Prisma.PlanUpdateWithWhereUniqueWithoutCategoryInput[]
+  updateMany?: Prisma.PlanUpdateManyWithWhereWithoutCategoryInput | Prisma.PlanUpdateManyWithWhereWithoutCategoryInput[]
+  deleteMany?: Prisma.PlanScalarWhereInput | Prisma.PlanScalarWhereInput[]
+}
+
+export type PlanUncheckedUpdateManyWithoutCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutCategoryInput, Prisma.PlanUncheckedCreateWithoutCategoryInput> | Prisma.PlanCreateWithoutCategoryInput[] | Prisma.PlanUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutCategoryInput | Prisma.PlanCreateOrConnectWithoutCategoryInput[]
+  upsert?: Prisma.PlanUpsertWithWhereUniqueWithoutCategoryInput | Prisma.PlanUpsertWithWhereUniqueWithoutCategoryInput[]
+  createMany?: Prisma.PlanCreateManyCategoryInputEnvelope
+  set?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  disconnect?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  delete?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  connect?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  update?: Prisma.PlanUpdateWithWhereUniqueWithoutCategoryInput | Prisma.PlanUpdateWithWhereUniqueWithoutCategoryInput[]
+  updateMany?: Prisma.PlanUpdateManyWithWhereWithoutCategoryInput | Prisma.PlanUpdateManyWithWhereWithoutCategoryInput[]
+  deleteMany?: Prisma.PlanScalarWhereInput | Prisma.PlanScalarWhereInput[]
+}
+
 export type PlanCreateWithoutTasksInput = {
   title: string
   startTimestamp: Date | string
   endTimestamp: Date | string
-  color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  category?: Prisma.CategoryCreateNestedOneWithoutPlansInput
 }
 
 export type PlanUncheckedCreateWithoutTasksInput = {
@@ -432,9 +492,9 @@ export type PlanUncheckedCreateWithoutTasksInput = {
   title: string
   startTimestamp: Date | string
   endTimestamp: Date | string
-  color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  categoryId?: number | null
 }
 
 export type PlanCreateOrConnectWithoutTasksInput = {
@@ -457,9 +517,9 @@ export type PlanUpdateWithoutTasksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.CategoryUpdateOneWithoutPlansNestedInput
 }
 
 export type PlanUncheckedUpdateWithoutTasksInput = {
@@ -467,7 +527,102 @@ export type PlanUncheckedUpdateWithoutTasksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  color?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type PlanCreateWithoutCategoryInput = {
+  title: string
+  startTimestamp: Date | string
+  endTimestamp: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tasks?: Prisma.TaskCreateNestedManyWithoutPlanInput
+}
+
+export type PlanUncheckedCreateWithoutCategoryInput = {
+  id?: number
+  title: string
+  startTimestamp: Date | string
+  endTimestamp: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutPlanInput
+}
+
+export type PlanCreateOrConnectWithoutCategoryInput = {
+  where: Prisma.PlanWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlanCreateWithoutCategoryInput, Prisma.PlanUncheckedCreateWithoutCategoryInput>
+}
+
+export type PlanCreateManyCategoryInputEnvelope = {
+  data: Prisma.PlanCreateManyCategoryInput | Prisma.PlanCreateManyCategoryInput[]
+  skipDuplicates?: boolean
+}
+
+export type PlanUpsertWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.PlanWhereUniqueInput
+  update: Prisma.XOR<Prisma.PlanUpdateWithoutCategoryInput, Prisma.PlanUncheckedUpdateWithoutCategoryInput>
+  create: Prisma.XOR<Prisma.PlanCreateWithoutCategoryInput, Prisma.PlanUncheckedCreateWithoutCategoryInput>
+}
+
+export type PlanUpdateWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.PlanWhereUniqueInput
+  data: Prisma.XOR<Prisma.PlanUpdateWithoutCategoryInput, Prisma.PlanUncheckedUpdateWithoutCategoryInput>
+}
+
+export type PlanUpdateManyWithWhereWithoutCategoryInput = {
+  where: Prisma.PlanScalarWhereInput
+  data: Prisma.XOR<Prisma.PlanUpdateManyMutationInput, Prisma.PlanUncheckedUpdateManyWithoutCategoryInput>
+}
+
+export type PlanScalarWhereInput = {
+  AND?: Prisma.PlanScalarWhereInput | Prisma.PlanScalarWhereInput[]
+  OR?: Prisma.PlanScalarWhereInput[]
+  NOT?: Prisma.PlanScalarWhereInput | Prisma.PlanScalarWhereInput[]
+  id?: Prisma.IntFilter<"Plan"> | number
+  title?: Prisma.StringFilter<"Plan"> | string
+  startTimestamp?: Prisma.DateTimeFilter<"Plan"> | Date | string
+  endTimestamp?: Prisma.DateTimeFilter<"Plan"> | Date | string
+  createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
+  categoryId?: Prisma.IntNullableFilter<"Plan"> | number | null
+}
+
+export type PlanCreateManyCategoryInput = {
+  id?: number
+  title: string
+  startTimestamp: Date | string
+  endTimestamp: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PlanUpdateWithoutCategoryInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tasks?: Prisma.TaskUpdateManyWithoutPlanNestedInput
+}
+
+export type PlanUncheckedUpdateWithoutCategoryInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutPlanNestedInput
+}
+
+export type PlanUncheckedUpdateManyWithoutCategoryInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -508,10 +663,11 @@ export type PlanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   title?: boolean
   startTimestamp?: boolean
   endTimestamp?: boolean
-  color?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  categoryId?: boolean
   tasks?: boolean | Prisma.Plan$tasksArgs<ExtArgs>
+  category?: boolean | Prisma.Plan$categoryArgs<ExtArgs>
   _count?: boolean | Prisma.PlanCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["plan"]>
 
@@ -520,9 +676,10 @@ export type PlanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   title?: boolean
   startTimestamp?: boolean
   endTimestamp?: boolean
-  color?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  categoryId?: boolean
+  category?: boolean | Prisma.Plan$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["plan"]>
 
 export type PlanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -530,9 +687,10 @@ export type PlanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   title?: boolean
   startTimestamp?: boolean
   endTimestamp?: boolean
-  color?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  categoryId?: boolean
+  category?: boolean | Prisma.Plan$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["plan"]>
 
 export type PlanSelectScalar = {
@@ -540,32 +698,38 @@ export type PlanSelectScalar = {
   title?: boolean
   startTimestamp?: boolean
   endTimestamp?: boolean
-  color?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  categoryId?: boolean
 }
 
-export type PlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "startTimestamp" | "endTimestamp" | "color" | "createdAt" | "updatedAt", ExtArgs["result"]["plan"]>
+export type PlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "startTimestamp" | "endTimestamp" | "createdAt" | "updatedAt" | "categoryId", ExtArgs["result"]["plan"]>
 export type PlanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tasks?: boolean | Prisma.Plan$tasksArgs<ExtArgs>
+  category?: boolean | Prisma.Plan$categoryArgs<ExtArgs>
   _count?: boolean | Prisma.PlanCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type PlanIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type PlanIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type PlanIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  category?: boolean | Prisma.Plan$categoryArgs<ExtArgs>
+}
+export type PlanIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  category?: boolean | Prisma.Plan$categoryArgs<ExtArgs>
+}
 
 export type $PlanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Plan"
   objects: {
     tasks: Prisma.$TaskPayload<ExtArgs>[]
+    category: Prisma.$CategoryPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     title: string
     startTimestamp: Date
     endTimestamp: Date
-    color: string
     createdAt: Date
     updatedAt: Date
+    categoryId: number | null
   }, ExtArgs["result"]["plan"]>
   composites: {}
 }
@@ -961,6 +1125,7 @@ readonly fields: PlanFieldRefs;
 export interface Prisma__PlanClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tasks<T extends Prisma.Plan$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plan$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  category<T extends Prisma.Plan$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plan$categoryArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -994,9 +1159,9 @@ export interface PlanFieldRefs {
   readonly title: Prisma.FieldRef<"Plan", 'String'>
   readonly startTimestamp: Prisma.FieldRef<"Plan", 'DateTime'>
   readonly endTimestamp: Prisma.FieldRef<"Plan", 'DateTime'>
-  readonly color: Prisma.FieldRef<"Plan", 'String'>
   readonly createdAt: Prisma.FieldRef<"Plan", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Plan", 'DateTime'>
+  readonly categoryId: Prisma.FieldRef<"Plan", 'Int'>
 }
     
 
@@ -1246,6 +1411,10 @@ export type PlanCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.PlanCreateManyInput | Prisma.PlanCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1316,6 +1485,10 @@ export type PlanUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Plans to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1406,6 +1579,25 @@ export type Plan$tasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   distinct?: Prisma.TaskScalarFieldEnum | Prisma.TaskScalarFieldEnum[]
+}
+
+/**
+ * Plan.category
+ */
+export type Plan$categoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Category
+   */
+  select?: Prisma.CategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Category
+   */
+  omit?: Prisma.CategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
+  where?: Prisma.CategoryWhereInput
 }
 
 /**

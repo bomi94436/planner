@@ -27,6 +27,8 @@ model Task {
   plan        Plan?      @relation(fields: [planId], references: [id], onDelete: SetNull)
   executionId Int?       @map("execution_id")
   execution   Execution? @relation(fields: [executionId], references: [id], onDelete: SetNull)
+  categoryId  Int?       @map("category_id")
+  category    Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   @@map("tasks")
 }
@@ -36,11 +38,12 @@ model Execution {
   startTimestamp DateTime @map("start_timestamp")
   endTimestamp   DateTime @map("end_timestamp")
   title          String   @db.VarChar(255)
-  color          String   @db.VarChar(255)
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
-  tasks Task[]
+  tasks      Task[]
+  categoryId Int?      @map("category_id")
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   @@map("executions")
 }
@@ -50,11 +53,12 @@ model Plan {
   title          String   @db.VarChar(255)
   startTimestamp DateTime @map("start_timestamp")
   endTimestamp   DateTime @map("end_timestamp")
-  color          String   @db.VarChar(7)
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
-  tasks Task[]
+  tasks      Task[]
+  categoryId Int?      @map("category_id")
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   @@map("plans")
 }
@@ -80,6 +84,9 @@ model Category {
 
   categoryGroupId Int?           @map("category_group_id")
   categoryGroup   CategoryGroup? @relation(fields: [categoryGroupId], references: [id], onDelete: SetNull)
+  tasks           Task[]
+  executions      Execution[]
+  plans           Plan[]
 
   @@map("categories")
 }

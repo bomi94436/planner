@@ -84,7 +84,8 @@ export const TaskScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   planId: 'planId',
-  executionId: 'executionId'
+  executionId: 'executionId',
+  categoryId: 'categoryId'
 } as const
 
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
@@ -95,9 +96,9 @@ export const ExecutionScalarFieldEnum = {
   startTimestamp: 'startTimestamp',
   endTimestamp: 'endTimestamp',
   title: 'title',
-  color: 'color',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  categoryId: 'categoryId'
 } as const
 
 export type ExecutionScalarFieldEnum = (typeof ExecutionScalarFieldEnum)[keyof typeof ExecutionScalarFieldEnum]
@@ -108,9 +109,9 @@ export const PlanScalarFieldEnum = {
   title: 'title',
   startTimestamp: 'startTimestamp',
   endTimestamp: 'endTimestamp',
-  color: 'color',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  categoryId: 'categoryId'
 } as const
 
 export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]

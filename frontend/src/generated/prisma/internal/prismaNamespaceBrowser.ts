@@ -53,7 +53,9 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Task: 'Task',
   Execution: 'Execution',
-  Plan: 'Plan'
+  Plan: 'Plan',
+  CategoryGroup: 'CategoryGroup',
+  Category: 'Category'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -82,7 +84,8 @@ export const TaskScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   planId: 'planId',
-  executionId: 'executionId'
+  executionId: 'executionId',
+  categoryId: 'categoryId'
 } as const
 
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
@@ -93,9 +96,9 @@ export const ExecutionScalarFieldEnum = {
   startTimestamp: 'startTimestamp',
   endTimestamp: 'endTimestamp',
   title: 'title',
-  color: 'color',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  categoryId: 'categoryId'
 } as const
 
 export type ExecutionScalarFieldEnum = (typeof ExecutionScalarFieldEnum)[keyof typeof ExecutionScalarFieldEnum]
@@ -106,12 +109,35 @@ export const PlanScalarFieldEnum = {
   title: 'title',
   startTimestamp: 'startTimestamp',
   endTimestamp: 'endTimestamp',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  categoryId: 'categoryId'
+} as const
+
+export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
+
+
+export const CategoryGroupScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
   color: 'color',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
+export type CategoryGroupScalarFieldEnum = (typeof CategoryGroupScalarFieldEnum)[keyof typeof CategoryGroupScalarFieldEnum]
+
+
+export const CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  color: 'color',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  categoryGroupId: 'categoryGroupId'
+} as const
+
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
 
 
 export const SortOrder = {

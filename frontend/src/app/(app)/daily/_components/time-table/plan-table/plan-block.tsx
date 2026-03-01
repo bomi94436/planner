@@ -24,7 +24,7 @@ export function PlanBlock({ plan, offsetInRow, span, isStart, onMouseMove }: Pla
         top: `${BLOCK_PADDING}px`,
         left: `calc(${leftPercent}% + ${BLOCK_PADDING}px)`,
         width: `calc(${widthPercent}% - ${BLOCK_PADDING * 2}px)`,
-        backgroundColor: plan.color || '#3b82f6',
+        backgroundColor: plan.category?.color ?? '#a1a1aa',
       }}
       onMouseMove={onMouseMove}
     >

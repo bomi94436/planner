@@ -59,7 +59,7 @@ export function ExecutionBlock({
             top: `${BLOCK_PADDING}px`,
             left: `calc(${leftPercent}% + ${BLOCK_PADDING}px)`,
             width: `calc(${widthPercent}% - ${BLOCK_PADDING * 2}px)`,
-            backgroundColor: execution.color || '#3b82f6',
+            backgroundColor: execution.category?.color ?? '#a1a1aa',
           }}
           onPointerDown={(e) => e.stopPropagation()}
           onClick={handleClick}

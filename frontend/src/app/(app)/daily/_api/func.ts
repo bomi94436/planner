@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+import type { CategoriesResponse } from '@/types/category'
 import {
   CreateExecutionBody,
   ExecutionResponse,
@@ -8,6 +9,11 @@ import {
   UpdateExecutionBody,
 } from '@/types/execution'
 import { CreateTaskBody, TaskResponse, UpdateTaskBody } from '@/types/task'
+
+export const getCategories = async () => {
+  const response = await axios.get<CategoriesResponse>('/api/categories')
+  return response.data?.data
+}
 
 export const createTask = async (data: CreateTaskBody) => {
   const response = await axios.post<TaskResponse>('/api/tasks', data)

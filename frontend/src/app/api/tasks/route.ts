@@ -79,6 +79,8 @@ export const GET = withErrorHandler(async (request) => {
       isAllDay: true,
       planId: true,
       executionId: true,
+      categoryId: true,
+      category: { select: { id: true, name: true, color: true } },
     },
   })
   return NextResponse.json<TasksResponse>({ data: tasks })
@@ -119,6 +121,7 @@ export const POST = withErrorHandler(async (request) => {
       startTimestamp: new Date(validated.startTimestamp),
       endTimestamp: new Date(validated.endTimestamp),
       isAllDay: validated.isAllDay,
+      categoryId: validated.categoryId ?? null,
     },
     select: {
       id: true,
@@ -129,6 +132,8 @@ export const POST = withErrorHandler(async (request) => {
       isAllDay: true,
       planId: true,
       executionId: true,
+      categoryId: true,
+      category: { select: { id: true, name: true, color: true } },
     },
   })
 

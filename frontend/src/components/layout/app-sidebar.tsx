@@ -63,7 +63,8 @@ const SIDEBAR_MENUS: MenuGroup[] = [
 
 export function AppSidebar() {
   const pathname = usePathname()
-  const { selectedDate, setSelectedDate } = useDateStore()
+  const selectedDate = useDateStore((state) => state.selectedDate)
+  const setSelectedDate = useDateStore((state) => state.setSelectedDate)
 
   return (
     <Sidebar>

@@ -9,8 +9,10 @@ import type { Execution as PrismaExecution } from '@/generated/prisma/client'
 
 export type Execution = Pick<
   PrismaExecution,
-  'id' | 'startTimestamp' | 'endTimestamp' | 'title' | 'color'
->
+  'id' | 'startTimestamp' | 'endTimestamp' | 'title' | 'categoryId'
+> & {
+  category?: { id: number; name: string; color: string } | null
+}
 
 import type { Response } from './index'
 
@@ -19,7 +21,5 @@ export type UpdateExecutionBody = z.infer<typeof updateExecutionSchema>
 export type GetExecutionsQuery = z.infer<typeof getExecutionsQuerySchema>
 
 export type ExecutionsResponse = Response<Execution[]>
-
 export type ExecutionResponse = Response<Execution>
-
 export type DeleteExecutionResponse = Response<{ id: number }>

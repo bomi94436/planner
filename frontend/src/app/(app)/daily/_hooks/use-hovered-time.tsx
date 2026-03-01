@@ -17,7 +17,7 @@ interface HoveredTime {
 export function useHoveredTime(containerRef: React.RefObject<HTMLDivElement | null>) {
   const [hoveredTime, setHoveredTime] = useState<HoveredTime | null>(null)
 
-  const { selectedDate } = useDateStore()
+  const selectedDate = useDateStore((state) => state.selectedDate)
 
   /**
    * 타임 테이블 컨테이너 내부 mouse move 시 현재 시간 표시

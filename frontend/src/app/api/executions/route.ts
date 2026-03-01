@@ -59,7 +59,8 @@ export const GET = withErrorHandler(async (request) => {
       startTimestamp: true,
       endTimestamp: true,
       title: true,
-      color: true,
+      categoryId: true,
+      category: { select: { id: true, name: true, color: true } },
     },
   })
   return NextResponse.json<ExecutionsResponse>({ data: executions })
@@ -99,14 +100,15 @@ export const POST = withErrorHandler(async (request) => {
       startTimestamp: new Date(validated.startTimestamp),
       endTimestamp: new Date(validated.endTimestamp),
       title: validated.title.trim(),
-      color: validated.color,
+      categoryId: validated.categoryId ?? null,
     },
     select: {
       id: true,
       startTimestamp: true,
       endTimestamp: true,
       title: true,
-      color: true,
+      categoryId: true,
+      category: { select: { id: true, name: true, color: true } },
     },
   })
   return NextResponse.json<ExecutionResponse>({ data: newExecution }, { status: 201 })

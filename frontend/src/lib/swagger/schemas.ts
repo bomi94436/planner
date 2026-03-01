@@ -97,4 +97,52 @@ export const schemas: Schemas = {
       taskIds: { type: 'array', items: { type: 'integer' } },
     },
   },
+  CategoryGroup: {
+    type: 'object',
+    properties: {
+      id: { type: 'integer' },
+      name: { type: 'string' },
+      color: { type: 'string' },
+    },
+  },
+  CreateCategoryGroupBody: {
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      color: { type: 'string' },
+    },
+  },
+  UpdateCategoryGroupBody: {
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      color: { type: 'string' },
+    },
+  },
+  Category: {
+    type: 'object',
+    properties: {
+      id: { type: 'integer' },
+      name: { type: 'string' },
+      color: { type: 'string' },
+      categoryGroupId: { type: 'integer', nullable: true },
+      categoryGroup: { $ref: '#/components/schemas/CategoryGroup', nullable: true },
+    },
+  },
+  CreateCategoryBody: {
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      color: { type: 'string' },
+      categoryGroupId: { type: 'integer', nullable: true },
+    },
+  },
+  UpdateCategoryBody: {
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      color: { type: 'string' },
+      categoryGroupId: { type: 'integer', nullable: true },
+    },
+  },
 }

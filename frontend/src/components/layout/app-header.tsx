@@ -9,7 +9,8 @@ import { useDateStore } from '@/store'
 import { Button, SidebarTrigger } from '../ui'
 
 export const AppHeader: React.FC = () => {
-  const { selectedDate, setSelectedDate } = useDateStore()
+  const selectedDate = useDateStore((state) => state.selectedDate)
+  const setSelectedDate = useDateStore((state) => state.setSelectedDate)
   const isToday = dayjs(selectedDate).isSame(dayjs(), 'day')
 
   return (

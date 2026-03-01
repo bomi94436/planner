@@ -32,3 +32,13 @@ export type Execution = Prisma.ExecutionModel
  * 
  */
 export type Plan = Prisma.PlanModel
+/**
+ * Model CategoryGroup
+ * 
+ */
+export type CategoryGroup = Prisma.CategoryGroupModel
+/**
+ * Model Category
+ * 
+ */
+export type Category = Prisma.CategoryModel

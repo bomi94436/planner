@@ -1,11 +1,11 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import dayjs from 'dayjs'
 import { useRef } from 'react'
+import { useShallow } from 'zustand/react/shallow'
 
 import { hours } from '@/constants'
-import { useDateStore } from '@/store'
+import { selectDayRange, useDateStore } from '@/store'
 import { useHoveredTime } from '~/daily/_hooks'
 import { getTimeBlocksForRow, preprocessTimeBlocks } from '~/daily/_utils'
 import { getPlans } from '~/weekly/_api/func'
@@ -24,14 +24,14 @@ export function PlanTable() {
     handleMouseMoveInTimeBlock,
   } = useHoveredTime(containerRef)
 
-  const { selectedDate } = useDateStore()
+  const { dayStartISO, dayEndISO } = useDateStore(useShallow(selectDayRange))
 
   const { data: processedPlans } = useQuery({
-    queryKey: ['plans', selectedDate],
+    queryKey: ['plans', dayStartISO, dayEndISO],
     queryFn: () =>
       getPlans({
-        startTimestamp: dayjs(selectedDate).startOf('day').toISOString(),
-        endTimestamp: dayjs(selectedDate).endOf('day').toISOString(),
+        startTimestamp: dayStartISO,
+        endTimestamp: dayEndISO,
       }),
     select: (data) => preprocessTimeBlocks(data ?? []),
   })

@@ -59,7 +59,7 @@ export function PlanBlock({
             width: `calc(${columnWidthPercent}% - ${BLOCK_PADDING * 2}px)`,
             top: topPx + BLOCK_PADDING,
             height: heightPx - BLOCK_PADDING * 2,
-            backgroundColor: plan.color || '#3b82f6',
+            backgroundColor: plan.category?.color ?? '#a1a1aa',
           }}
           onPointerDown={(e) => e.stopPropagation()}
           onClick={handleClick}

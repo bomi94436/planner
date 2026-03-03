@@ -5,15 +5,15 @@ import { dateToMinutes, toHourIndex, toMinuteInHour } from './utils'
 // START_HOUR = 4 기준
 describe('dateToMinutes', () => {
   it('04:00은 0분을 반환한다', () => {
-    expect(dateToMinutes(new Date('2024-01-01T04:00:00'))).toBe(0)
+    expect(dateToMinutes(new Date(2024, 0, 1, 4, 0, 0))).toBe(0)
   })
 
   it('04:30은 30분을 반환한다', () => {
-    expect(dateToMinutes(new Date('2024-01-01T04:30:00'))).toBe(30)
+    expect(dateToMinutes(new Date(2024, 0, 1, 4, 30, 0))).toBe(30)
   })
 
   it('05:00은 60분을 반환한다', () => {
-    expect(dateToMinutes(new Date('2024-01-01T05:00:00'))).toBe(60)
+    expect(dateToMinutes(new Date(2024, 0, 1, 5, 0, 0))).toBe(60)
   })
 })
 

@@ -9,13 +9,14 @@ import { DAYS_COUNT, ROW_HEIGHT } from '~/weekly/_constants'
 /** 드래그 스냅 단위 (분) */
 const SNAP_MINUTES = 10
 
-// 포인터 이벤트에서 dayIndex와 minutes 계산
-export function getPositionFromPointerEvent(
-  e: React.PointerEvent<HTMLDivElement>,
-  containerRect: DOMRect
+// 좌표에서 dayIndex와 minutes 계산
+export function getPositionFromCoordinates(
+  clientX: number,
+  clientY: number,
+  containerRect: Pick<DOMRect, 'top' | 'left' | 'width'>
 ): { dayIndex: number; minutes: Minutes } {
   // Y축 → minutes
-  const y = e.clientY - containerRect.top
+  const y = clientY - containerRect.top
   const hourIndex = Math.max(0, Math.min(HOURS_PER_DAY - 1, Math.floor(y / ROW_HEIGHT)))
   const rawMinuteInHour = ((y - hourIndex * ROW_HEIGHT) / ROW_HEIGHT) * MINUTES_PER_HOUR
   // 10분 단위로 스냅
@@ -25,7 +26,7 @@ export function getPositionFromPointerEvent(
   )
 
   // X축 → dayIndex
-  const x = e.clientX - containerRect.left
+  const x = clientX - containerRect.left
   const columnWidth = containerRect.width / DAYS_COUNT
   const dayIndex = Math.max(0, Math.min(DAYS_COUNT - 1, Math.floor(x / columnWidth)))
 

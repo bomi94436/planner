@@ -4,7 +4,7 @@ import { minutesToDayjs } from '@/lib/utils'
 import { useDateStore } from '@/store'
 import type { Minutes } from '@/types'
 import type { Selection } from '~/daily/_types'
-import { getPositionFromPointerEvent } from '~/daily/_utils'
+import { getPositionFromCoordinates } from '~/daily/_utils'
 
 interface UseSelectionReturn {
   selection: Selection | null
@@ -33,7 +33,7 @@ export function useSelection(
       if (!container) return
 
       const containerRect = container.getBoundingClientRect()
-      const { minutes, rowTop } = getPositionFromPointerEvent(e, containerRect)
+      const { minutes, rowTop } = getPositionFromCoordinates(e.clientX, e.clientY, containerRect)
 
       container.setPointerCapture(e.pointerId)
 
@@ -55,7 +55,7 @@ export function useSelection(
       if (!container) return
 
       const containerRect = container.getBoundingClientRect()
-      const { minutes } = getPositionFromPointerEvent(e, containerRect)
+      const { minutes } = getPositionFromCoordinates(e.clientX, e.clientY, containerRect)
 
       // 드래그 중: end 업데이트
       if (isDragging) {

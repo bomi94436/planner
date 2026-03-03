@@ -85,15 +85,16 @@ export function getSelectionForRow(
   }
 }
 
-// 포인터 위치에서 hourIndex와 minutes 계산
-export function getPositionFromPointerEvent(
-  e: React.PointerEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement>,
-  containerRect: DOMRect
+// 좌표에서 hourIndex와 minutes 계산
+export function getPositionFromCoordinates(
+  clientX: number,
+  clientY: number,
+  containerRect: Pick<DOMRect, 'top' | 'left' | 'width'>
 ): { hourIndex: number; minutes: Minutes; rowTop: number } {
-  const y = e.clientY - containerRect.top
+  const y = clientY - containerRect.top
   const hourIndex = Math.max(0, Math.min(HOURS_PER_DAY - 1, Math.floor(y / ROW_HEIGHT)))
 
-  const x = e.clientX - containerRect.left
+  const x = clientX - containerRect.left
   const minuteInHour = Math.max(
     0,
     Math.min(MINUTES_PER_HOUR, Math.round((x / containerRect.width) * MINUTES_PER_HOUR))

@@ -17,7 +17,9 @@ import {
   Input,
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui'
@@ -56,10 +58,13 @@ export function TaskFormDialog({ mode, task, open, onOpenChange, children }: Tas
   // controlled vs uncontrolled
   const isOpen = open ?? internalOpen
 
-  const { data: categories = [] } = useQuery({
+  const { data: categoriesByGroup } = useQuery({
     queryKey: ['categories'],
     queryFn: getCategories,
-    select: (data) => data ?? [],
+    select: (data) => {
+      if (!data) return undefined
+      return Map.groupBy(data, (category) => category.categoryGroup?.name ?? '미분류')
+    },
   })
 
   const {
@@ -187,14 +192,19 @@ export function TaskFormDialog({ mode, task, open, onOpenChange, children }: Tas
                 <SelectValue placeholder="카테고리 없음" />
               </SelectTrigger>
               <SelectContent>
-                {categories.map((cat) => (
-                  <SelectItem key={cat.id} value={String(cat.id)}>
-                    <span
-                      className="size-2.5 rounded-full inline-block mr-1.5"
-                      style={{ backgroundColor: cat.color }}
-                    />
-                    {cat.name}
-                  </SelectItem>
+                {Array.from(categoriesByGroup?.entries() ?? []).map(([groupName, categories]) => (
+                  <SelectGroup key={groupName}>
+                    <SelectLabel>{groupName}</SelectLabel>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={String(category.id)}>
+                        <span
+                          className="size-2.5 rounded-full inline-block mr-1.5"
+                          style={{ backgroundColor: category.color }}
+                        />
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
                 ))}
               </SelectContent>
             </Select>

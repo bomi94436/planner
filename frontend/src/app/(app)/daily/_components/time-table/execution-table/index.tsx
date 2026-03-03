@@ -55,10 +55,7 @@ export function ExecutionTable() {
   } = useSelection(containerRef)
 
   const now = useCurrentTime()
-  const { currentHourIndex, currerntMinutePercent } = useMemo(
-    () => getCurrentTimePosition(now),
-    [now]
-  )
+  const currentTimePosition = useMemo(() => getCurrentTimePosition(now), [now])
   const {
     hoveredTime,
     handleMouseMove,
@@ -136,7 +133,7 @@ export function ExecutionTable() {
             : null
 
           const isToday = now && dayjs(selectedDate).isSame(dayjs(), 'day')
-          const showCurrentTime = isToday && currentHourIndex === hourIndex
+          const showCurrentTime = isToday && currentTimePosition.hourIndex === hourIndex
 
           return (
             <div key={hourIndex} className="relative h-8 border-b border-zinc-200 last:border-b-0">
@@ -150,7 +147,9 @@ export function ExecutionTable() {
                 />
               )}
 
-              {showCurrentTime && <CurrentTimeIndicator minutePercent={currerntMinutePercent} />}
+              {showCurrentTime && (
+                <CurrentTimeIndicator minutePercent={currentTimePosition.minutePercent} />
+              )}
 
               {rowExecutions.map(({ item: execution, offsetInRow, span, isStart }) => (
                 <ExecutionBlock

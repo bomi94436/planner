@@ -53,13 +53,16 @@ export function getTimeBlocksForRow<T extends TimeBlock>(
 }
 
 // 현재 시간 위치 계산
-export function getCurrentTimePosition(now: Date | null) {
+export function getCurrentTimePosition(now: Date | null): {
+  hourIndex: number
+  minutePercent: number
+} {
   if (!now) return { hourIndex: 0, minutePercent: 0 }
   let hour = now.getHours()
   if (hour < START_HOUR) hour += 24
-  const currentHourIndex = hour - START_HOUR
-  const currerntMinutePercent = (now.getMinutes() / 60) * 100
-  return { currentHourIndex, currerntMinutePercent }
+  const hourIndex = hour - START_HOUR
+  const minutePercent = (now.getMinutes() / 60) * 100
+  return { hourIndex, minutePercent }
 }
 
 // 특정 row에서 selection 영역 계산 (퍼센트 반환)

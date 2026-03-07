@@ -5,7 +5,7 @@ import { useDateStore } from '@/store'
 import type { Minutes } from '@/types'
 import type { Execution } from '@/types/execution'
 
-import { getPositionFromPointerEvent } from '../_utils'
+import { getPositionFromCoordinates } from '../_utils'
 
 interface HoveredTime {
   start: Minutes
@@ -28,7 +28,11 @@ export function useHoveredTime(containerRef: React.RefObject<HTMLDivElement | nu
       if (!container) return
 
       const containerRect = container.getBoundingClientRect()
-      const { hourIndex, minutes, rowTop } = getPositionFromPointerEvent(e, containerRect)
+      const { hourIndex, minutes, rowTop } = getPositionFromCoordinates(
+        e.clientX,
+        e.clientY,
+        containerRect
+      )
 
       const displayMinutes = Math.min(minutes, hourIndex * 60 + 59)
       setHoveredTime({
@@ -51,7 +55,7 @@ export function useHoveredTime(containerRef: React.RefObject<HTMLDivElement | nu
       if (!container) return
 
       const containerRect = container.getBoundingClientRect()
-      const { rowTop } = getPositionFromPointerEvent(e, containerRect)
+      const { rowTop } = getPositionFromCoordinates(e.clientX, e.clientY, containerRect)
 
       setHoveredTime({
         start: dateToMinutes(execution.startTimestamp),

@@ -70,8 +70,9 @@ refactor: 타임 트래커 컴포넌트 분리
 
 ```bash
 cd frontend
-npm run lint     # 1. 린트 오류 없음
-npm run build    # 2. 빌드 성공 확인
+npm run test     # 1. 테스트 통과 확인
+npm run lint     # 2. 린트 오류 없음
+npm run build    # 3. 빌드 성공 확인
 ```
 
 모든 항목이 통과해야 커밋을 진행한다.
@@ -142,6 +143,88 @@ main (프로덕션)
 
 - [ ] 린트 오류 없음
 - [ ] 빌드 성공 확인
+```
+
+## 테스트 코드 작성 규칙
+
+### 환경
+
+- 테스트 프레임워크: Vitest (`globals: false` → 모든 API를 명시적으로 import)
+- 테스트 파일명: `*.test.ts` (테스트 대상 파일과 같은 폴더)
+
+```typescript
+import { describe, expect, it } from 'vitest'
+```
+
+### 파일 구조
+
+- 테스트 파일은 대상 파일과 같은 폴더에 위치한다
+- 파일명: `<대상파일명>.test.ts` (예: `index.ts` → `index.test.ts`)
+
+### 테스트 케이스 작성
+
+- `describe`로 함수 단위 그룹핑
+- `it` 설명은 **한글**로 작성하며, 입력 → 기대값을 명시한다
+
+```typescript
+// 좋은 예
+it('hourIndex=0 → "04"', () => { ... })
+it('시작과 끝이 동일한 블럭은 endIndex를 startIndex+1로 보정한다', () => { ... })
+```
+
+### 기준 상수 주석
+
+`describe` 블록 위에 테스트 케이스 계산의 기준이 되는 상수를 주석으로 명시한다.
+하드코딩된 기대값이 어떻게 도출되었는지 이해할 수 있도록 한다.
+
+```typescript
+// hourIndex=1 기준: minutesStart=60, minutesEnd=120
+describe('getTimeBlocksForRow', () => { ... })
+
+// START_HOUR=4, HOURS_PER_DAY=24, MINUTES_PER_HOUR=60, ROW_HEIGHT=32
+describe('getPositionFromCoordinates', () => { ... })
+```
+
+파일 전체에 걸쳐 공통으로 적용되는 상수는 파일 상단에 한 번만 작성한다.
+
+### Date 생성 방식
+
+`Date` 객체를 생성할 때는 문자열 방식 대신 **생성자 방식**을 사용한다.
+
+- 문자열 방식(`'2024-01-01T04:00:00'`)은 ECMAScript 스펙상 파싱 기준이 구현체에 따라 달라질 수 있어 UTC 환경(CI 서버 등)에서 테스트가 깨질 수 있다
+- 생성자 방식은 항상 로컬 시간으로 처리되도록 스펙에 명확히 정의되어 있다
+
+```typescript
+// ❌ 문자열 방식 (CI 환경에서 깨질 수 있음)
+new Date('2024-01-01T04:00:00')
+
+// ✅ 생성자 방식 (항상 로컬 시간 보장)
+new Date(2024, 0, 1, 4, 0, 0)
+```
+
+### 픽스처 및 헬퍼
+
+반복되는 테스트 데이터는 `describe` 블록 내부에 헬퍼 함수나 상수로 정의한다.
+
+```typescript
+describe('getTimeBlocksForRow', () => {
+  const makeBlock = (startIndex: number, endIndex: number): ProcessedTimeBlock<SimpleBlock> => ({
+    item: { startTimestamp: new Date(), endTimestamp: new Date() },
+    startIndex,
+    endIndex,
+  })
+  // ...
+})
+```
+
+### 실행 명령어
+
+```bash
+cd frontend
+npm run test          # 전체 테스트 실행 (watch 모드)
+npm run test:ui       # Vitest UI로 실행
+npx vitest run        # watch 없이 1회 실행
+npx vitest run <파일> # 특정 파일만 1회 실행
 ```
 
 ## 개발 명령어

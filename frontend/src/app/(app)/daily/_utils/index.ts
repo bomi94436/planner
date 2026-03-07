@@ -53,13 +53,16 @@ export function getTimeBlocksForRow<T extends TimeBlock>(
 }
 
 // 현재 시간 위치 계산
-export function getCurrentTimePosition(now: Date | null) {
+export function getCurrentTimePosition(now: Date | null): {
+  hourIndex: number
+  minutePercent: number
+} {
   if (!now) return { hourIndex: 0, minutePercent: 0 }
   let hour = now.getHours()
   if (hour < START_HOUR) hour += 24
-  const currentHourIndex = hour - START_HOUR
-  const currerntMinutePercent = (now.getMinutes() / 60) * 100
-  return { currentHourIndex, currerntMinutePercent }
+  const hourIndex = hour - START_HOUR
+  const minutePercent = (now.getMinutes() / 60) * 100
+  return { hourIndex, minutePercent }
 }
 
 // 특정 row에서 selection 영역 계산 (퍼센트 반환)
@@ -85,15 +88,16 @@ export function getSelectionForRow(
   }
 }
 
-// 포인터 위치에서 hourIndex와 minutes 계산
-export function getPositionFromPointerEvent(
-  e: React.PointerEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement>,
-  containerRect: DOMRect
+// 좌표에서 hourIndex와 minutes 계산
+export function getPositionFromCoordinates(
+  clientX: number,
+  clientY: number,
+  containerRect: Pick<DOMRect, 'top' | 'left' | 'width'>
 ): { hourIndex: number; minutes: Minutes; rowTop: number } {
-  const y = e.clientY - containerRect.top
+  const y = clientY - containerRect.top
   const hourIndex = Math.max(0, Math.min(HOURS_PER_DAY - 1, Math.floor(y / ROW_HEIGHT)))
 
-  const x = e.clientX - containerRect.left
+  const x = clientX - containerRect.left
   const minuteInHour = Math.max(
     0,
     Math.min(MINUTES_PER_HOUR, Math.round((x / containerRect.width) * MINUTES_PER_HOUR))

@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { minutesToDayjs } from '@/lib/utils'
 import { useDateStore } from '@/store'
 import type { WeeklySelection } from '~/weekly/_types'
-import { getPositionFromPointerEvent, getTooltipPosition } from '~/weekly/_utils'
+import { getPositionFromCoordinates, getTooltipPosition } from '~/weekly/_utils'
 
 interface UseWeeklySelectionReturn {
   selection: WeeklySelection | null
@@ -38,7 +38,7 @@ export function useWeeklySelection(
       }
 
       const containerRect = container.getBoundingClientRect()
-      const { dayIndex, minutes } = getPositionFromPointerEvent(e, containerRect)
+      const { dayIndex, minutes } = getPositionFromCoordinates(e.clientX, e.clientY, containerRect)
 
       container.setPointerCapture(e.pointerId)
 
@@ -60,7 +60,7 @@ export function useWeeklySelection(
       if (!container || !isDragging) return
 
       const containerRect = container.getBoundingClientRect()
-      const { minutes } = getPositionFromPointerEvent(e, containerRect)
+      const { minutes } = getPositionFromCoordinates(e.clientX, e.clientY, containerRect)
 
       setSelection((prev) => {
         if (!prev) return null

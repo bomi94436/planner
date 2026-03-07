@@ -5,7 +5,7 @@ import { useDateStore } from '@/store'
 import type { Minutes } from '@/types'
 import type { Plan } from '@/types/plan'
 import type { TooltipPosition } from '~/weekly/_types'
-import { getPositionFromPointerEvent, getTooltipPosition } from '~/weekly/_utils'
+import { getPositionFromCoordinates, getTooltipPosition } from '~/weekly/_utils'
 
 interface HoveredTime {
   start: Minutes
@@ -25,10 +25,7 @@ export function useHoveredTime(containerRef: React.RefObject<HTMLDivElement | nu
       if (!container) return
 
       const containerRect = container.getBoundingClientRect()
-      const { dayIndex, minutes } = getPositionFromPointerEvent(
-        e as unknown as React.PointerEvent<HTMLDivElement>,
-        containerRect
-      )
+      const { dayIndex, minutes } = getPositionFromCoordinates(e.clientX, e.clientY, containerRect)
 
       setHoveredTime({
         start: minutes,
@@ -47,10 +44,7 @@ export function useHoveredTime(containerRef: React.RefObject<HTMLDivElement | nu
       if (!container) return
 
       const containerRect = container.getBoundingClientRect()
-      const { dayIndex, minutes } = getPositionFromPointerEvent(
-        e as unknown as React.PointerEvent<HTMLDivElement>,
-        containerRect
-      )
+      const { dayIndex, minutes } = getPositionFromCoordinates(e.clientX, e.clientY, containerRect)
 
       setHoveredTime({
         start: dateToMinutes(plan.startTimestamp),

@@ -5,9 +5,9 @@ import { TagIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import { ColorPicker } from '@/components/color-picker'
 import {
   Button,
+  ColorPicker,
   Dialog,
   DialogContent,
   DialogFooter,

@@ -42,6 +42,7 @@ export type CategoryMinAggregateOutputType = {
   color: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  userId: string | null
   categoryGroupId: number | null
 }
 
@@ -51,6 +52,7 @@ export type CategoryMaxAggregateOutputType = {
   color: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  userId: string | null
   categoryGroupId: number | null
 }
 
@@ -60,6 +62,7 @@ export type CategoryCountAggregateOutputType = {
   color: number
   createdAt: number
   updatedAt: number
+  userId: number
   categoryGroupId: number
   _all: number
 }
@@ -81,6 +84,7 @@ export type CategoryMinAggregateInputType = {
   color?: true
   createdAt?: true
   updatedAt?: true
+  userId?: true
   categoryGroupId?: true
 }
 
@@ -90,6 +94,7 @@ export type CategoryMaxAggregateInputType = {
   color?: true
   createdAt?: true
   updatedAt?: true
+  userId?: true
   categoryGroupId?: true
 }
 
@@ -99,6 +104,7 @@ export type CategoryCountAggregateInputType = {
   color?: true
   createdAt?: true
   updatedAt?: true
+  userId?: true
   categoryGroupId?: true
   _all?: true
 }
@@ -195,6 +201,7 @@ export type CategoryGroupByOutputType = {
   color: string
   createdAt: Date
   updatedAt: Date
+  userId: string
   categoryGroupId: number | null
   _count: CategoryCountAggregateOutputType | null
   _avg: CategoryAvgAggregateOutputType | null
@@ -227,7 +234,9 @@ export type CategoryWhereInput = {
   color?: Prisma.StringFilter<"Category"> | string
   createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
+  userId?: Prisma.StringFilter<"Category"> | string
   categoryGroupId?: Prisma.IntNullableFilter<"Category"> | number | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   categoryGroup?: Prisma.XOR<Prisma.CategoryGroupNullableScalarRelationFilter, Prisma.CategoryGroupWhereInput> | null
   tasks?: Prisma.TaskListRelationFilter
   executions?: Prisma.ExecutionListRelationFilter
@@ -240,7 +249,9 @@ export type CategoryOrderByWithRelationInput = {
   color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   categoryGroupId?: Prisma.SortOrderInput | Prisma.SortOrder
+  user?: Prisma.UserOrderByWithRelationInput
   categoryGroup?: Prisma.CategoryGroupOrderByWithRelationInput
   tasks?: Prisma.TaskOrderByRelationAggregateInput
   executions?: Prisma.ExecutionOrderByRelationAggregateInput
@@ -256,7 +267,9 @@ export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   color?: Prisma.StringFilter<"Category"> | string
   createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
+  userId?: Prisma.StringFilter<"Category"> | string
   categoryGroupId?: Prisma.IntNullableFilter<"Category"> | number | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   categoryGroup?: Prisma.XOR<Prisma.CategoryGroupNullableScalarRelationFilter, Prisma.CategoryGroupWhereInput> | null
   tasks?: Prisma.TaskListRelationFilter
   executions?: Prisma.ExecutionListRelationFilter
@@ -269,6 +282,7 @@ export type CategoryOrderByWithAggregationInput = {
   color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   categoryGroupId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.CategoryCountOrderByAggregateInput
   _avg?: Prisma.CategoryAvgOrderByAggregateInput
@@ -286,6 +300,7 @@ export type CategoryScalarWhereWithAggregatesInput = {
   color?: Prisma.StringWithAggregatesFilter<"Category"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Category"> | Date | string
+  userId?: Prisma.StringWithAggregatesFilter<"Category"> | string
   categoryGroupId?: Prisma.IntNullableWithAggregatesFilter<"Category"> | number | null
 }
 
@@ -294,6 +309,7 @@ export type CategoryCreateInput = {
   color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutCategoriesInput
   categoryGroup?: Prisma.CategoryGroupCreateNestedOneWithoutCategoriesInput
   tasks?: Prisma.TaskCreateNestedManyWithoutCategoryInput
   executions?: Prisma.ExecutionCreateNestedManyWithoutCategoryInput
@@ -306,6 +322,7 @@ export type CategoryUncheckedCreateInput = {
   color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   categoryGroupId?: number | null
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCategoryInput
   executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutCategoryInput
@@ -317,6 +334,7 @@ export type CategoryUpdateInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutCategoriesNestedInput
   categoryGroup?: Prisma.CategoryGroupUpdateOneWithoutCategoriesNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutCategoryNestedInput
   executions?: Prisma.ExecutionUpdateManyWithoutCategoryNestedInput
@@ -329,6 +347,7 @@ export type CategoryUncheckedUpdateInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryGroupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutCategoryNestedInput
   executions?: Prisma.ExecutionUncheckedUpdateManyWithoutCategoryNestedInput
@@ -341,6 +360,7 @@ export type CategoryCreateManyInput = {
   color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   categoryGroupId?: number | null
 }
 
@@ -357,12 +377,8 @@ export type CategoryUncheckedUpdateManyInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryGroupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-}
-
-export type CategoryNullableScalarRelationFilter = {
-  is?: Prisma.CategoryWhereInput | null
-  isNot?: Prisma.CategoryWhereInput | null
 }
 
 export type CategoryListRelationFilter = {
@@ -375,12 +391,18 @@ export type CategoryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type CategoryNullableScalarRelationFilter = {
+  is?: Prisma.CategoryWhereInput | null
+  isNot?: Prisma.CategoryWhereInput | null
+}
+
 export type CategoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   categoryGroupId?: Prisma.SortOrder
 }
 
@@ -395,6 +417,7 @@ export type CategoryMaxOrderByAggregateInput = {
   color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   categoryGroupId?: Prisma.SortOrder
 }
 
@@ -404,12 +427,55 @@ export type CategoryMinOrderByAggregateInput = {
   color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   categoryGroupId?: Prisma.SortOrder
 }
 
 export type CategorySumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   categoryGroupId?: Prisma.SortOrder
+}
+
+export type CategoryCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutUserInput, Prisma.CategoryUncheckedCreateWithoutUserInput> | Prisma.CategoryCreateWithoutUserInput[] | Prisma.CategoryUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutUserInput | Prisma.CategoryCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.CategoryCreateManyUserInputEnvelope
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+}
+
+export type CategoryUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutUserInput, Prisma.CategoryUncheckedCreateWithoutUserInput> | Prisma.CategoryCreateWithoutUserInput[] | Prisma.CategoryUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutUserInput | Prisma.CategoryCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.CategoryCreateManyUserInputEnvelope
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+}
+
+export type CategoryUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutUserInput, Prisma.CategoryUncheckedCreateWithoutUserInput> | Prisma.CategoryCreateWithoutUserInput[] | Prisma.CategoryUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutUserInput | Prisma.CategoryCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.CategoryUpsertWithWhereUniqueWithoutUserInput | Prisma.CategoryUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.CategoryCreateManyUserInputEnvelope
+  set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  disconnect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  update?: Prisma.CategoryUpdateWithWhereUniqueWithoutUserInput | Prisma.CategoryUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutUserInput | Prisma.CategoryUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
+}
+
+export type CategoryUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutUserInput, Prisma.CategoryUncheckedCreateWithoutUserInput> | Prisma.CategoryCreateWithoutUserInput[] | Prisma.CategoryUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutUserInput | Prisma.CategoryCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.CategoryUpsertWithWhereUniqueWithoutUserInput | Prisma.CategoryUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.CategoryCreateManyUserInputEnvelope
+  set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  disconnect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  update?: Prisma.CategoryUpdateWithWhereUniqueWithoutUserInput | Prisma.CategoryUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutUserInput | Prisma.CategoryUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
 }
 
 export type CategoryCreateNestedOneWithoutTasksInput = {
@@ -502,11 +568,74 @@ export type CategoryUncheckedUpdateManyWithoutCategoryGroupNestedInput = {
   deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
 }
 
+export type CategoryCreateWithoutUserInput = {
+  name: string
+  color: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categoryGroup?: Prisma.CategoryGroupCreateNestedOneWithoutCategoriesInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCategoryInput
+  executions?: Prisma.ExecutionCreateNestedManyWithoutCategoryInput
+  plans?: Prisma.PlanCreateNestedManyWithoutCategoryInput
+}
+
+export type CategoryUncheckedCreateWithoutUserInput = {
+  id?: number
+  name: string
+  color: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categoryGroupId?: number | null
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCategoryInput
+  executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutCategoryInput
+  plans?: Prisma.PlanUncheckedCreateNestedManyWithoutCategoryInput
+}
+
+export type CategoryCreateOrConnectWithoutUserInput = {
+  where: Prisma.CategoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.CategoryCreateWithoutUserInput, Prisma.CategoryUncheckedCreateWithoutUserInput>
+}
+
+export type CategoryCreateManyUserInputEnvelope = {
+  data: Prisma.CategoryCreateManyUserInput | Prisma.CategoryCreateManyUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type CategoryUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.CategoryWhereUniqueInput
+  update: Prisma.XOR<Prisma.CategoryUpdateWithoutUserInput, Prisma.CategoryUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.CategoryCreateWithoutUserInput, Prisma.CategoryUncheckedCreateWithoutUserInput>
+}
+
+export type CategoryUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.CategoryWhereUniqueInput
+  data: Prisma.XOR<Prisma.CategoryUpdateWithoutUserInput, Prisma.CategoryUncheckedUpdateWithoutUserInput>
+}
+
+export type CategoryUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.CategoryScalarWhereInput
+  data: Prisma.XOR<Prisma.CategoryUpdateManyMutationInput, Prisma.CategoryUncheckedUpdateManyWithoutUserInput>
+}
+
+export type CategoryScalarWhereInput = {
+  AND?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
+  OR?: Prisma.CategoryScalarWhereInput[]
+  NOT?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
+  id?: Prisma.IntFilter<"Category"> | number
+  name?: Prisma.StringFilter<"Category"> | string
+  color?: Prisma.StringFilter<"Category"> | string
+  createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
+  userId?: Prisma.StringFilter<"Category"> | string
+  categoryGroupId?: Prisma.IntNullableFilter<"Category"> | number | null
+}
+
 export type CategoryCreateWithoutTasksInput = {
   name: string
   color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutCategoriesInput
   categoryGroup?: Prisma.CategoryGroupCreateNestedOneWithoutCategoriesInput
   executions?: Prisma.ExecutionCreateNestedManyWithoutCategoryInput
   plans?: Prisma.PlanCreateNestedManyWithoutCategoryInput
@@ -518,6 +647,7 @@ export type CategoryUncheckedCreateWithoutTasksInput = {
   color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   categoryGroupId?: number | null
   executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutCategoryInput
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutCategoryInput
@@ -544,6 +674,7 @@ export type CategoryUpdateWithoutTasksInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutCategoriesNestedInput
   categoryGroup?: Prisma.CategoryGroupUpdateOneWithoutCategoriesNestedInput
   executions?: Prisma.ExecutionUpdateManyWithoutCategoryNestedInput
   plans?: Prisma.PlanUpdateManyWithoutCategoryNestedInput
@@ -555,6 +686,7 @@ export type CategoryUncheckedUpdateWithoutTasksInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryGroupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   executions?: Prisma.ExecutionUncheckedUpdateManyWithoutCategoryNestedInput
   plans?: Prisma.PlanUncheckedUpdateManyWithoutCategoryNestedInput
@@ -565,6 +697,7 @@ export type CategoryCreateWithoutExecutionsInput = {
   color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutCategoriesInput
   categoryGroup?: Prisma.CategoryGroupCreateNestedOneWithoutCategoriesInput
   tasks?: Prisma.TaskCreateNestedManyWithoutCategoryInput
   plans?: Prisma.PlanCreateNestedManyWithoutCategoryInput
@@ -576,6 +709,7 @@ export type CategoryUncheckedCreateWithoutExecutionsInput = {
   color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   categoryGroupId?: number | null
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCategoryInput
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutCategoryInput
@@ -602,6 +736,7 @@ export type CategoryUpdateWithoutExecutionsInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutCategoriesNestedInput
   categoryGroup?: Prisma.CategoryGroupUpdateOneWithoutCategoriesNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutCategoryNestedInput
   plans?: Prisma.PlanUpdateManyWithoutCategoryNestedInput
@@ -613,6 +748,7 @@ export type CategoryUncheckedUpdateWithoutExecutionsInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryGroupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutCategoryNestedInput
   plans?: Prisma.PlanUncheckedUpdateManyWithoutCategoryNestedInput
@@ -623,6 +759,7 @@ export type CategoryCreateWithoutPlansInput = {
   color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutCategoriesInput
   categoryGroup?: Prisma.CategoryGroupCreateNestedOneWithoutCategoriesInput
   tasks?: Prisma.TaskCreateNestedManyWithoutCategoryInput
   executions?: Prisma.ExecutionCreateNestedManyWithoutCategoryInput
@@ -634,6 +771,7 @@ export type CategoryUncheckedCreateWithoutPlansInput = {
   color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   categoryGroupId?: number | null
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCategoryInput
   executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutCategoryInput
@@ -660,6 +798,7 @@ export type CategoryUpdateWithoutPlansInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutCategoriesNestedInput
   categoryGroup?: Prisma.CategoryGroupUpdateOneWithoutCategoriesNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutCategoryNestedInput
   executions?: Prisma.ExecutionUpdateManyWithoutCategoryNestedInput
@@ -671,6 +810,7 @@ export type CategoryUncheckedUpdateWithoutPlansInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryGroupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutCategoryNestedInput
   executions?: Prisma.ExecutionUncheckedUpdateManyWithoutCategoryNestedInput
@@ -681,6 +821,7 @@ export type CategoryCreateWithoutCategoryGroupInput = {
   color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutCategoriesInput
   tasks?: Prisma.TaskCreateNestedManyWithoutCategoryInput
   executions?: Prisma.ExecutionCreateNestedManyWithoutCategoryInput
   plans?: Prisma.PlanCreateNestedManyWithoutCategoryInput
@@ -692,6 +833,7 @@ export type CategoryUncheckedCreateWithoutCategoryGroupInput = {
   color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCategoryInput
   executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutCategoryInput
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutCategoryInput
@@ -723,16 +865,45 @@ export type CategoryUpdateManyWithWhereWithoutCategoryGroupInput = {
   data: Prisma.XOR<Prisma.CategoryUpdateManyMutationInput, Prisma.CategoryUncheckedUpdateManyWithoutCategoryGroupInput>
 }
 
-export type CategoryScalarWhereInput = {
-  AND?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
-  OR?: Prisma.CategoryScalarWhereInput[]
-  NOT?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
-  id?: Prisma.IntFilter<"Category"> | number
-  name?: Prisma.StringFilter<"Category"> | string
-  color?: Prisma.StringFilter<"Category"> | string
-  createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
-  categoryGroupId?: Prisma.IntNullableFilter<"Category"> | number | null
+export type CategoryCreateManyUserInput = {
+  id?: number
+  name: string
+  color: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categoryGroupId?: number | null
+}
+
+export type CategoryUpdateWithoutUserInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categoryGroup?: Prisma.CategoryGroupUpdateOneWithoutCategoriesNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCategoryNestedInput
+  executions?: Prisma.ExecutionUpdateManyWithoutCategoryNestedInput
+  plans?: Prisma.PlanUpdateManyWithoutCategoryNestedInput
+}
+
+export type CategoryUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categoryGroupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCategoryNestedInput
+  executions?: Prisma.ExecutionUncheckedUpdateManyWithoutCategoryNestedInput
+  plans?: Prisma.PlanUncheckedUpdateManyWithoutCategoryNestedInput
+}
+
+export type CategoryUncheckedUpdateManyWithoutUserInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categoryGroupId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type CategoryCreateManyCategoryGroupInput = {
@@ -741,6 +912,7 @@ export type CategoryCreateManyCategoryGroupInput = {
   color: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
 }
 
 export type CategoryUpdateWithoutCategoryGroupInput = {
@@ -748,6 +920,7 @@ export type CategoryUpdateWithoutCategoryGroupInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutCategoriesNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutCategoryNestedInput
   executions?: Prisma.ExecutionUpdateManyWithoutCategoryNestedInput
   plans?: Prisma.PlanUpdateManyWithoutCategoryNestedInput
@@ -759,6 +932,7 @@ export type CategoryUncheckedUpdateWithoutCategoryGroupInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutCategoryNestedInput
   executions?: Prisma.ExecutionUncheckedUpdateManyWithoutCategoryNestedInput
   plans?: Prisma.PlanUncheckedUpdateManyWithoutCategoryNestedInput
@@ -770,6 +944,7 @@ export type CategoryUncheckedUpdateManyWithoutCategoryGroupInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -827,7 +1002,9 @@ export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   color?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  userId?: boolean
   categoryGroupId?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   categoryGroup?: boolean | Prisma.Category$categoryGroupArgs<ExtArgs>
   tasks?: boolean | Prisma.Category$tasksArgs<ExtArgs>
   executions?: boolean | Prisma.Category$executionsArgs<ExtArgs>
@@ -841,7 +1018,9 @@ export type CategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   color?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  userId?: boolean
   categoryGroupId?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   categoryGroup?: boolean | Prisma.Category$categoryGroupArgs<ExtArgs>
 }, ExtArgs["result"]["category"]>
 
@@ -851,7 +1030,9 @@ export type CategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   color?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  userId?: boolean
   categoryGroupId?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   categoryGroup?: boolean | Prisma.Category$categoryGroupArgs<ExtArgs>
 }, ExtArgs["result"]["category"]>
 
@@ -861,11 +1042,13 @@ export type CategorySelectScalar = {
   color?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  userId?: boolean
   categoryGroupId?: boolean
 }
 
-export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "color" | "createdAt" | "updatedAt" | "categoryGroupId", ExtArgs["result"]["category"]>
+export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "color" | "createdAt" | "updatedAt" | "userId" | "categoryGroupId", ExtArgs["result"]["category"]>
 export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   categoryGroup?: boolean | Prisma.Category$categoryGroupArgs<ExtArgs>
   tasks?: boolean | Prisma.Category$tasksArgs<ExtArgs>
   executions?: boolean | Prisma.Category$executionsArgs<ExtArgs>
@@ -873,15 +1056,18 @@ export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   _count?: boolean | Prisma.CategoryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CategoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   categoryGroup?: boolean | Prisma.Category$categoryGroupArgs<ExtArgs>
 }
 export type CategoryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   categoryGroup?: boolean | Prisma.Category$categoryGroupArgs<ExtArgs>
 }
 
 export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Category"
   objects: {
+    user: Prisma.$UserPayload<ExtArgs>
     categoryGroup: Prisma.$CategoryGroupPayload<ExtArgs> | null
     tasks: Prisma.$TaskPayload<ExtArgs>[]
     executions: Prisma.$ExecutionPayload<ExtArgs>[]
@@ -893,6 +1079,7 @@ export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     color: string
     createdAt: Date
     updatedAt: Date
+    userId: string
     categoryGroupId: number | null
   }, ExtArgs["result"]["category"]>
   composites: {}
@@ -1288,6 +1475,7 @@ readonly fields: CategoryFieldRefs;
  */
 export interface Prisma__CategoryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   categoryGroup<T extends Prisma.Category$categoryGroupArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$categoryGroupArgs<ExtArgs>>): Prisma.Prisma__CategoryGroupClient<runtime.Types.Result.GetResult<Prisma.$CategoryGroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   tasks<T extends Prisma.Category$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   executions<T extends Prisma.Category$executionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$executionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1326,6 +1514,7 @@ export interface CategoryFieldRefs {
   readonly color: Prisma.FieldRef<"Category", 'String'>
   readonly createdAt: Prisma.FieldRef<"Category", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Category", 'DateTime'>
+  readonly userId: Prisma.FieldRef<"Category", 'String'>
   readonly categoryGroupId: Prisma.FieldRef<"Category", 'Int'>
 }
     

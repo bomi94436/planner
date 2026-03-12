@@ -43,6 +43,7 @@ export type ExecutionMinAggregateOutputType = {
   title: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  userId: string | null
   categoryId: number | null
 }
 
@@ -53,6 +54,7 @@ export type ExecutionMaxAggregateOutputType = {
   title: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  userId: string | null
   categoryId: number | null
 }
 
@@ -63,6 +65,7 @@ export type ExecutionCountAggregateOutputType = {
   title: number
   createdAt: number
   updatedAt: number
+  userId: number
   categoryId: number
   _all: number
 }
@@ -85,6 +88,7 @@ export type ExecutionMinAggregateInputType = {
   title?: true
   createdAt?: true
   updatedAt?: true
+  userId?: true
   categoryId?: true
 }
 
@@ -95,6 +99,7 @@ export type ExecutionMaxAggregateInputType = {
   title?: true
   createdAt?: true
   updatedAt?: true
+  userId?: true
   categoryId?: true
 }
 
@@ -105,6 +110,7 @@ export type ExecutionCountAggregateInputType = {
   title?: true
   createdAt?: true
   updatedAt?: true
+  userId?: true
   categoryId?: true
   _all?: true
 }
@@ -202,6 +208,7 @@ export type ExecutionGroupByOutputType = {
   title: string
   createdAt: Date
   updatedAt: Date
+  userId: string
   categoryId: number | null
   _count: ExecutionCountAggregateOutputType | null
   _avg: ExecutionAvgAggregateOutputType | null
@@ -235,7 +242,9 @@ export type ExecutionWhereInput = {
   title?: Prisma.StringFilter<"Execution"> | string
   createdAt?: Prisma.DateTimeFilter<"Execution"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Execution"> | Date | string
+  userId?: Prisma.StringFilter<"Execution"> | string
   categoryId?: Prisma.IntNullableFilter<"Execution"> | number | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   tasks?: Prisma.TaskListRelationFilter
   category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
 }
@@ -247,7 +256,9 @@ export type ExecutionOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  user?: Prisma.UserOrderByWithRelationInput
   tasks?: Prisma.TaskOrderByRelationAggregateInput
   category?: Prisma.CategoryOrderByWithRelationInput
 }
@@ -262,7 +273,9 @@ export type ExecutionWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Execution"> | string
   createdAt?: Prisma.DateTimeFilter<"Execution"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Execution"> | Date | string
+  userId?: Prisma.StringFilter<"Execution"> | string
   categoryId?: Prisma.IntNullableFilter<"Execution"> | number | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   tasks?: Prisma.TaskListRelationFilter
   category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
 }, "id">
@@ -274,6 +287,7 @@ export type ExecutionOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ExecutionCountOrderByAggregateInput
   _avg?: Prisma.ExecutionAvgOrderByAggregateInput
@@ -292,6 +306,7 @@ export type ExecutionScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"Execution"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Execution"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Execution"> | Date | string
+  userId?: Prisma.StringWithAggregatesFilter<"Execution"> | string
   categoryId?: Prisma.IntNullableWithAggregatesFilter<"Execution"> | number | null
 }
 
@@ -301,6 +316,7 @@ export type ExecutionCreateInput = {
   title: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutExecutionsInput
   tasks?: Prisma.TaskCreateNestedManyWithoutExecutionInput
   category?: Prisma.CategoryCreateNestedOneWithoutExecutionsInput
 }
@@ -312,6 +328,7 @@ export type ExecutionUncheckedCreateInput = {
   title: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   categoryId?: number | null
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutExecutionInput
 }
@@ -322,6 +339,7 @@ export type ExecutionUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutExecutionsNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutExecutionNestedInput
   category?: Prisma.CategoryUpdateOneWithoutExecutionsNestedInput
 }
@@ -333,6 +351,7 @@ export type ExecutionUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutExecutionNestedInput
 }
@@ -344,6 +363,7 @@ export type ExecutionCreateManyInput = {
   title: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   categoryId?: number | null
 }
 
@@ -362,7 +382,18 @@ export type ExecutionUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type ExecutionListRelationFilter = {
+  every?: Prisma.ExecutionWhereInput
+  some?: Prisma.ExecutionWhereInput
+  none?: Prisma.ExecutionWhereInput
+}
+
+export type ExecutionOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type ExecutionNullableScalarRelationFilter = {
@@ -377,6 +408,7 @@ export type ExecutionCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
 }
 
@@ -392,6 +424,7 @@ export type ExecutionMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
 }
 
@@ -402,6 +435,7 @@ export type ExecutionMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
 }
 
@@ -410,14 +444,46 @@ export type ExecutionSumOrderByAggregateInput = {
   categoryId?: Prisma.SortOrder
 }
 
-export type ExecutionListRelationFilter = {
-  every?: Prisma.ExecutionWhereInput
-  some?: Prisma.ExecutionWhereInput
-  none?: Prisma.ExecutionWhereInput
+export type ExecutionCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.ExecutionCreateWithoutUserInput, Prisma.ExecutionUncheckedCreateWithoutUserInput> | Prisma.ExecutionCreateWithoutUserInput[] | Prisma.ExecutionUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ExecutionCreateOrConnectWithoutUserInput | Prisma.ExecutionCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.ExecutionCreateManyUserInputEnvelope
+  connect?: Prisma.ExecutionWhereUniqueInput | Prisma.ExecutionWhereUniqueInput[]
 }
 
-export type ExecutionOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type ExecutionUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.ExecutionCreateWithoutUserInput, Prisma.ExecutionUncheckedCreateWithoutUserInput> | Prisma.ExecutionCreateWithoutUserInput[] | Prisma.ExecutionUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ExecutionCreateOrConnectWithoutUserInput | Prisma.ExecutionCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.ExecutionCreateManyUserInputEnvelope
+  connect?: Prisma.ExecutionWhereUniqueInput | Prisma.ExecutionWhereUniqueInput[]
+}
+
+export type ExecutionUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.ExecutionCreateWithoutUserInput, Prisma.ExecutionUncheckedCreateWithoutUserInput> | Prisma.ExecutionCreateWithoutUserInput[] | Prisma.ExecutionUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ExecutionCreateOrConnectWithoutUserInput | Prisma.ExecutionCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.ExecutionUpsertWithWhereUniqueWithoutUserInput | Prisma.ExecutionUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.ExecutionCreateManyUserInputEnvelope
+  set?: Prisma.ExecutionWhereUniqueInput | Prisma.ExecutionWhereUniqueInput[]
+  disconnect?: Prisma.ExecutionWhereUniqueInput | Prisma.ExecutionWhereUniqueInput[]
+  delete?: Prisma.ExecutionWhereUniqueInput | Prisma.ExecutionWhereUniqueInput[]
+  connect?: Prisma.ExecutionWhereUniqueInput | Prisma.ExecutionWhereUniqueInput[]
+  update?: Prisma.ExecutionUpdateWithWhereUniqueWithoutUserInput | Prisma.ExecutionUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.ExecutionUpdateManyWithWhereWithoutUserInput | Prisma.ExecutionUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.ExecutionScalarWhereInput | Prisma.ExecutionScalarWhereInput[]
+}
+
+export type ExecutionUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.ExecutionCreateWithoutUserInput, Prisma.ExecutionUncheckedCreateWithoutUserInput> | Prisma.ExecutionCreateWithoutUserInput[] | Prisma.ExecutionUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ExecutionCreateOrConnectWithoutUserInput | Prisma.ExecutionCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.ExecutionUpsertWithWhereUniqueWithoutUserInput | Prisma.ExecutionUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.ExecutionCreateManyUserInputEnvelope
+  set?: Prisma.ExecutionWhereUniqueInput | Prisma.ExecutionWhereUniqueInput[]
+  disconnect?: Prisma.ExecutionWhereUniqueInput | Prisma.ExecutionWhereUniqueInput[]
+  delete?: Prisma.ExecutionWhereUniqueInput | Prisma.ExecutionWhereUniqueInput[]
+  connect?: Prisma.ExecutionWhereUniqueInput | Prisma.ExecutionWhereUniqueInput[]
+  update?: Prisma.ExecutionUpdateWithWhereUniqueWithoutUserInput | Prisma.ExecutionUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.ExecutionUpdateManyWithWhereWithoutUserInput | Prisma.ExecutionUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.ExecutionScalarWhereInput | Prisma.ExecutionScalarWhereInput[]
 }
 
 export type ExecutionCreateNestedOneWithoutTasksInput = {
@@ -478,12 +544,74 @@ export type ExecutionUncheckedUpdateManyWithoutCategoryNestedInput = {
   deleteMany?: Prisma.ExecutionScalarWhereInput | Prisma.ExecutionScalarWhereInput[]
 }
 
+export type ExecutionCreateWithoutUserInput = {
+  startTimestamp: Date | string
+  endTimestamp: Date | string
+  title: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tasks?: Prisma.TaskCreateNestedManyWithoutExecutionInput
+  category?: Prisma.CategoryCreateNestedOneWithoutExecutionsInput
+}
+
+export type ExecutionUncheckedCreateWithoutUserInput = {
+  id?: number
+  startTimestamp: Date | string
+  endTimestamp: Date | string
+  title: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categoryId?: number | null
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutExecutionInput
+}
+
+export type ExecutionCreateOrConnectWithoutUserInput = {
+  where: Prisma.ExecutionWhereUniqueInput
+  create: Prisma.XOR<Prisma.ExecutionCreateWithoutUserInput, Prisma.ExecutionUncheckedCreateWithoutUserInput>
+}
+
+export type ExecutionCreateManyUserInputEnvelope = {
+  data: Prisma.ExecutionCreateManyUserInput | Prisma.ExecutionCreateManyUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type ExecutionUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.ExecutionWhereUniqueInput
+  update: Prisma.XOR<Prisma.ExecutionUpdateWithoutUserInput, Prisma.ExecutionUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.ExecutionCreateWithoutUserInput, Prisma.ExecutionUncheckedCreateWithoutUserInput>
+}
+
+export type ExecutionUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.ExecutionWhereUniqueInput
+  data: Prisma.XOR<Prisma.ExecutionUpdateWithoutUserInput, Prisma.ExecutionUncheckedUpdateWithoutUserInput>
+}
+
+export type ExecutionUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.ExecutionScalarWhereInput
+  data: Prisma.XOR<Prisma.ExecutionUpdateManyMutationInput, Prisma.ExecutionUncheckedUpdateManyWithoutUserInput>
+}
+
+export type ExecutionScalarWhereInput = {
+  AND?: Prisma.ExecutionScalarWhereInput | Prisma.ExecutionScalarWhereInput[]
+  OR?: Prisma.ExecutionScalarWhereInput[]
+  NOT?: Prisma.ExecutionScalarWhereInput | Prisma.ExecutionScalarWhereInput[]
+  id?: Prisma.IntFilter<"Execution"> | number
+  startTimestamp?: Prisma.DateTimeFilter<"Execution"> | Date | string
+  endTimestamp?: Prisma.DateTimeFilter<"Execution"> | Date | string
+  title?: Prisma.StringFilter<"Execution"> | string
+  createdAt?: Prisma.DateTimeFilter<"Execution"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Execution"> | Date | string
+  userId?: Prisma.StringFilter<"Execution"> | string
+  categoryId?: Prisma.IntNullableFilter<"Execution"> | number | null
+}
+
 export type ExecutionCreateWithoutTasksInput = {
   startTimestamp: Date | string
   endTimestamp: Date | string
   title: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutExecutionsInput
   category?: Prisma.CategoryCreateNestedOneWithoutExecutionsInput
 }
 
@@ -494,6 +622,7 @@ export type ExecutionUncheckedCreateWithoutTasksInput = {
   title: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   categoryId?: number | null
 }
 
@@ -519,6 +648,7 @@ export type ExecutionUpdateWithoutTasksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutExecutionsNestedInput
   category?: Prisma.CategoryUpdateOneWithoutExecutionsNestedInput
 }
 
@@ -529,6 +659,7 @@ export type ExecutionUncheckedUpdateWithoutTasksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
@@ -538,6 +669,7 @@ export type ExecutionCreateWithoutCategoryInput = {
   title: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutExecutionsInput
   tasks?: Prisma.TaskCreateNestedManyWithoutExecutionInput
 }
 
@@ -548,6 +680,7 @@ export type ExecutionUncheckedCreateWithoutCategoryInput = {
   title: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutExecutionInput
 }
 
@@ -577,17 +710,45 @@ export type ExecutionUpdateManyWithWhereWithoutCategoryInput = {
   data: Prisma.XOR<Prisma.ExecutionUpdateManyMutationInput, Prisma.ExecutionUncheckedUpdateManyWithoutCategoryInput>
 }
 
-export type ExecutionScalarWhereInput = {
-  AND?: Prisma.ExecutionScalarWhereInput | Prisma.ExecutionScalarWhereInput[]
-  OR?: Prisma.ExecutionScalarWhereInput[]
-  NOT?: Prisma.ExecutionScalarWhereInput | Prisma.ExecutionScalarWhereInput[]
-  id?: Prisma.IntFilter<"Execution"> | number
-  startTimestamp?: Prisma.DateTimeFilter<"Execution"> | Date | string
-  endTimestamp?: Prisma.DateTimeFilter<"Execution"> | Date | string
-  title?: Prisma.StringFilter<"Execution"> | string
-  createdAt?: Prisma.DateTimeFilter<"Execution"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Execution"> | Date | string
-  categoryId?: Prisma.IntNullableFilter<"Execution"> | number | null
+export type ExecutionCreateManyUserInput = {
+  id?: number
+  startTimestamp: Date | string
+  endTimestamp: Date | string
+  title: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categoryId?: number | null
+}
+
+export type ExecutionUpdateWithoutUserInput = {
+  startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tasks?: Prisma.TaskUpdateManyWithoutExecutionNestedInput
+  category?: Prisma.CategoryUpdateOneWithoutExecutionsNestedInput
+}
+
+export type ExecutionUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutExecutionNestedInput
+}
+
+export type ExecutionUncheckedUpdateManyWithoutUserInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type ExecutionCreateManyCategoryInput = {
@@ -597,6 +758,7 @@ export type ExecutionCreateManyCategoryInput = {
   title: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
 }
 
 export type ExecutionUpdateWithoutCategoryInput = {
@@ -605,6 +767,7 @@ export type ExecutionUpdateWithoutCategoryInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutExecutionsNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutExecutionNestedInput
 }
 
@@ -615,6 +778,7 @@ export type ExecutionUncheckedUpdateWithoutCategoryInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutExecutionNestedInput
 }
 
@@ -625,6 +789,7 @@ export type ExecutionUncheckedUpdateManyWithoutCategoryInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -665,7 +830,9 @@ export type ExecutionSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   title?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  userId?: boolean
   categoryId?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   tasks?: boolean | Prisma.Execution$tasksArgs<ExtArgs>
   category?: boolean | Prisma.Execution$categoryArgs<ExtArgs>
   _count?: boolean | Prisma.ExecutionCountOutputTypeDefaultArgs<ExtArgs>
@@ -678,7 +845,9 @@ export type ExecutionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   title?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  userId?: boolean
   categoryId?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Execution$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["execution"]>
 
@@ -689,7 +858,9 @@ export type ExecutionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   title?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  userId?: boolean
   categoryId?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Execution$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["execution"]>
 
@@ -700,25 +871,30 @@ export type ExecutionSelectScalar = {
   title?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  userId?: boolean
   categoryId?: boolean
 }
 
-export type ExecutionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "startTimestamp" | "endTimestamp" | "title" | "createdAt" | "updatedAt" | "categoryId", ExtArgs["result"]["execution"]>
+export type ExecutionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "startTimestamp" | "endTimestamp" | "title" | "createdAt" | "updatedAt" | "userId" | "categoryId", ExtArgs["result"]["execution"]>
 export type ExecutionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   tasks?: boolean | Prisma.Execution$tasksArgs<ExtArgs>
   category?: boolean | Prisma.Execution$categoryArgs<ExtArgs>
   _count?: boolean | Prisma.ExecutionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ExecutionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Execution$categoryArgs<ExtArgs>
 }
 export type ExecutionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Execution$categoryArgs<ExtArgs>
 }
 
 export type $ExecutionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Execution"
   objects: {
+    user: Prisma.$UserPayload<ExtArgs>
     tasks: Prisma.$TaskPayload<ExtArgs>[]
     category: Prisma.$CategoryPayload<ExtArgs> | null
   }
@@ -729,6 +905,7 @@ export type $ExecutionPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     title: string
     createdAt: Date
     updatedAt: Date
+    userId: string
     categoryId: number | null
   }, ExtArgs["result"]["execution"]>
   composites: {}
@@ -1124,6 +1301,7 @@ readonly fields: ExecutionFieldRefs;
  */
 export interface Prisma__ExecutionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   tasks<T extends Prisma.Execution$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Execution$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   category<T extends Prisma.Execution$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Execution$categoryArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1161,6 +1339,7 @@ export interface ExecutionFieldRefs {
   readonly title: Prisma.FieldRef<"Execution", 'String'>
   readonly createdAt: Prisma.FieldRef<"Execution", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Execution", 'DateTime'>
+  readonly userId: Prisma.FieldRef<"Execution", 'String'>
   readonly categoryId: Prisma.FieldRef<"Execution", 'Int'>
 }
     

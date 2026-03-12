@@ -49,6 +49,7 @@ export type TaskMinAggregateOutputType = {
   isAllDay: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  userId: string | null
   planId: number | null
   executionId: number | null
   categoryId: number | null
@@ -63,6 +64,7 @@ export type TaskMaxAggregateOutputType = {
   isAllDay: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  userId: string | null
   planId: number | null
   executionId: number | null
   categoryId: number | null
@@ -77,6 +79,7 @@ export type TaskCountAggregateOutputType = {
   isAllDay: number
   createdAt: number
   updatedAt: number
+  userId: number
   planId: number
   executionId: number
   categoryId: number
@@ -107,6 +110,7 @@ export type TaskMinAggregateInputType = {
   isAllDay?: true
   createdAt?: true
   updatedAt?: true
+  userId?: true
   planId?: true
   executionId?: true
   categoryId?: true
@@ -121,6 +125,7 @@ export type TaskMaxAggregateInputType = {
   isAllDay?: true
   createdAt?: true
   updatedAt?: true
+  userId?: true
   planId?: true
   executionId?: true
   categoryId?: true
@@ -135,6 +140,7 @@ export type TaskCountAggregateInputType = {
   isAllDay?: true
   createdAt?: true
   updatedAt?: true
+  userId?: true
   planId?: true
   executionId?: true
   categoryId?: true
@@ -236,6 +242,7 @@ export type TaskGroupByOutputType = {
   isAllDay: boolean
   createdAt: Date
   updatedAt: Date
+  userId: string
   planId: number | null
   executionId: number | null
   categoryId: number | null
@@ -273,9 +280,11 @@ export type TaskWhereInput = {
   isAllDay?: Prisma.BoolFilter<"Task"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Task"> | Date | string
+  userId?: Prisma.StringFilter<"Task"> | string
   planId?: Prisma.IntNullableFilter<"Task"> | number | null
   executionId?: Prisma.IntNullableFilter<"Task"> | number | null
   categoryId?: Prisma.IntNullableFilter<"Task"> | number | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   plan?: Prisma.XOR<Prisma.PlanNullableScalarRelationFilter, Prisma.PlanWhereInput> | null
   execution?: Prisma.XOR<Prisma.ExecutionNullableScalarRelationFilter, Prisma.ExecutionWhereInput> | null
   category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
@@ -290,9 +299,11 @@ export type TaskOrderByWithRelationInput = {
   isAllDay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   planId?: Prisma.SortOrderInput | Prisma.SortOrder
   executionId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  user?: Prisma.UserOrderByWithRelationInput
   plan?: Prisma.PlanOrderByWithRelationInput
   execution?: Prisma.ExecutionOrderByWithRelationInput
   category?: Prisma.CategoryOrderByWithRelationInput
@@ -310,9 +321,11 @@ export type TaskWhereUniqueInput = Prisma.AtLeast<{
   isAllDay?: Prisma.BoolFilter<"Task"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Task"> | Date | string
+  userId?: Prisma.StringFilter<"Task"> | string
   planId?: Prisma.IntNullableFilter<"Task"> | number | null
   executionId?: Prisma.IntNullableFilter<"Task"> | number | null
   categoryId?: Prisma.IntNullableFilter<"Task"> | number | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   plan?: Prisma.XOR<Prisma.PlanNullableScalarRelationFilter, Prisma.PlanWhereInput> | null
   execution?: Prisma.XOR<Prisma.ExecutionNullableScalarRelationFilter, Prisma.ExecutionWhereInput> | null
   category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
@@ -327,6 +340,7 @@ export type TaskOrderByWithAggregationInput = {
   isAllDay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   planId?: Prisma.SortOrderInput | Prisma.SortOrder
   executionId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -349,6 +363,7 @@ export type TaskScalarWhereWithAggregatesInput = {
   isAllDay?: Prisma.BoolWithAggregatesFilter<"Task"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Task"> | Date | string
+  userId?: Prisma.StringWithAggregatesFilter<"Task"> | string
   planId?: Prisma.IntNullableWithAggregatesFilter<"Task"> | number | null
   executionId?: Prisma.IntNullableWithAggregatesFilter<"Task"> | number | null
   categoryId?: Prisma.IntNullableWithAggregatesFilter<"Task"> | number | null
@@ -362,6 +377,7 @@ export type TaskCreateInput = {
   isAllDay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutTasksInput
   plan?: Prisma.PlanCreateNestedOneWithoutTasksInput
   execution?: Prisma.ExecutionCreateNestedOneWithoutTasksInput
   category?: Prisma.CategoryCreateNestedOneWithoutTasksInput
@@ -376,6 +392,7 @@ export type TaskUncheckedCreateInput = {
   isAllDay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   planId?: number | null
   executionId?: number | null
   categoryId?: number | null
@@ -389,6 +406,7 @@ export type TaskUpdateInput = {
   isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutTasksNestedInput
   plan?: Prisma.PlanUpdateOneWithoutTasksNestedInput
   execution?: Prisma.ExecutionUpdateOneWithoutTasksNestedInput
   category?: Prisma.CategoryUpdateOneWithoutTasksNestedInput
@@ -403,6 +421,7 @@ export type TaskUncheckedUpdateInput = {
   isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   planId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   executionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -417,6 +436,7 @@ export type TaskCreateManyInput = {
   isAllDay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   planId?: number | null
   executionId?: number | null
   categoryId?: number | null
@@ -441,9 +461,20 @@ export type TaskUncheckedUpdateManyInput = {
   isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   planId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   executionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type TaskListRelationFilter = {
+  every?: Prisma.TaskWhereInput
+  some?: Prisma.TaskWhereInput
+  none?: Prisma.TaskWhereInput
+}
+
+export type TaskOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type TaskCountOrderByAggregateInput = {
@@ -455,6 +486,7 @@ export type TaskCountOrderByAggregateInput = {
   isAllDay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   executionId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
@@ -476,6 +508,7 @@ export type TaskMaxOrderByAggregateInput = {
   isAllDay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   executionId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
@@ -490,6 +523,7 @@ export type TaskMinOrderByAggregateInput = {
   isAllDay?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   executionId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
@@ -502,26 +536,50 @@ export type TaskSumOrderByAggregateInput = {
   categoryId?: Prisma.SortOrder
 }
 
-export type TaskListRelationFilter = {
-  every?: Prisma.TaskWhereInput
-  some?: Prisma.TaskWhereInput
-  none?: Prisma.TaskWhereInput
+export type TaskCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutUserInput, Prisma.TaskUncheckedCreateWithoutUserInput> | Prisma.TaskCreateWithoutUserInput[] | Prisma.TaskUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutUserInput | Prisma.TaskCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.TaskCreateManyUserInputEnvelope
+  connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
 }
 
-export type TaskOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type TaskUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutUserInput, Prisma.TaskUncheckedCreateWithoutUserInput> | Prisma.TaskCreateWithoutUserInput[] | Prisma.TaskUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutUserInput | Prisma.TaskCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.TaskCreateManyUserInputEnvelope
+  connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
+export type TaskUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutUserInput, Prisma.TaskUncheckedCreateWithoutUserInput> | Prisma.TaskCreateWithoutUserInput[] | Prisma.TaskUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutUserInput | Prisma.TaskCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.TaskUpsertWithWhereUniqueWithoutUserInput | Prisma.TaskUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.TaskCreateManyUserInputEnvelope
+  set?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  disconnect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  delete?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  update?: Prisma.TaskUpdateWithWhereUniqueWithoutUserInput | Prisma.TaskUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.TaskUpdateManyWithWhereWithoutUserInput | Prisma.TaskUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
+}
+
+export type TaskUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutUserInput, Prisma.TaskUncheckedCreateWithoutUserInput> | Prisma.TaskCreateWithoutUserInput[] | Prisma.TaskUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutUserInput | Prisma.TaskCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.TaskUpsertWithWhereUniqueWithoutUserInput | Prisma.TaskUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.TaskCreateManyUserInputEnvelope
+  set?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  disconnect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  delete?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  update?: Prisma.TaskUpdateWithWhereUniqueWithoutUserInput | Prisma.TaskUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.TaskUpdateManyWithWhereWithoutUserInput | Prisma.TaskUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
 }
 
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
-}
-
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -666,6 +724,77 @@ export type TaskUncheckedUpdateManyWithoutCategoryNestedInput = {
   deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
 }
 
+export type TaskCreateWithoutUserInput = {
+  title: string
+  completed?: boolean
+  startTimestamp: Date | string
+  endTimestamp: Date | string
+  isAllDay?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  plan?: Prisma.PlanCreateNestedOneWithoutTasksInput
+  execution?: Prisma.ExecutionCreateNestedOneWithoutTasksInput
+  category?: Prisma.CategoryCreateNestedOneWithoutTasksInput
+}
+
+export type TaskUncheckedCreateWithoutUserInput = {
+  id?: number
+  title: string
+  completed?: boolean
+  startTimestamp: Date | string
+  endTimestamp: Date | string
+  isAllDay?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  planId?: number | null
+  executionId?: number | null
+  categoryId?: number | null
+}
+
+export type TaskCreateOrConnectWithoutUserInput = {
+  where: Prisma.TaskWhereUniqueInput
+  create: Prisma.XOR<Prisma.TaskCreateWithoutUserInput, Prisma.TaskUncheckedCreateWithoutUserInput>
+}
+
+export type TaskCreateManyUserInputEnvelope = {
+  data: Prisma.TaskCreateManyUserInput | Prisma.TaskCreateManyUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type TaskUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.TaskWhereUniqueInput
+  update: Prisma.XOR<Prisma.TaskUpdateWithoutUserInput, Prisma.TaskUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.TaskCreateWithoutUserInput, Prisma.TaskUncheckedCreateWithoutUserInput>
+}
+
+export type TaskUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.TaskWhereUniqueInput
+  data: Prisma.XOR<Prisma.TaskUpdateWithoutUserInput, Prisma.TaskUncheckedUpdateWithoutUserInput>
+}
+
+export type TaskUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.TaskScalarWhereInput
+  data: Prisma.XOR<Prisma.TaskUpdateManyMutationInput, Prisma.TaskUncheckedUpdateManyWithoutUserInput>
+}
+
+export type TaskScalarWhereInput = {
+  AND?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
+  OR?: Prisma.TaskScalarWhereInput[]
+  NOT?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
+  id?: Prisma.IntFilter<"Task"> | number
+  title?: Prisma.StringFilter<"Task"> | string
+  completed?: Prisma.BoolFilter<"Task"> | boolean
+  startTimestamp?: Prisma.DateTimeFilter<"Task"> | Date | string
+  endTimestamp?: Prisma.DateTimeFilter<"Task"> | Date | string
+  isAllDay?: Prisma.BoolFilter<"Task"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Task"> | Date | string
+  userId?: Prisma.StringFilter<"Task"> | string
+  planId?: Prisma.IntNullableFilter<"Task"> | number | null
+  executionId?: Prisma.IntNullableFilter<"Task"> | number | null
+  categoryId?: Prisma.IntNullableFilter<"Task"> | number | null
+}
+
 export type TaskCreateWithoutExecutionInput = {
   title: string
   completed?: boolean
@@ -674,6 +803,7 @@ export type TaskCreateWithoutExecutionInput = {
   isAllDay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutTasksInput
   plan?: Prisma.PlanCreateNestedOneWithoutTasksInput
   category?: Prisma.CategoryCreateNestedOneWithoutTasksInput
 }
@@ -687,6 +817,7 @@ export type TaskUncheckedCreateWithoutExecutionInput = {
   isAllDay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   planId?: number | null
   categoryId?: number | null
 }
@@ -717,23 +848,6 @@ export type TaskUpdateManyWithWhereWithoutExecutionInput = {
   data: Prisma.XOR<Prisma.TaskUpdateManyMutationInput, Prisma.TaskUncheckedUpdateManyWithoutExecutionInput>
 }
 
-export type TaskScalarWhereInput = {
-  AND?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
-  OR?: Prisma.TaskScalarWhereInput[]
-  NOT?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
-  id?: Prisma.IntFilter<"Task"> | number
-  title?: Prisma.StringFilter<"Task"> | string
-  completed?: Prisma.BoolFilter<"Task"> | boolean
-  startTimestamp?: Prisma.DateTimeFilter<"Task"> | Date | string
-  endTimestamp?: Prisma.DateTimeFilter<"Task"> | Date | string
-  isAllDay?: Prisma.BoolFilter<"Task"> | boolean
-  createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Task"> | Date | string
-  planId?: Prisma.IntNullableFilter<"Task"> | number | null
-  executionId?: Prisma.IntNullableFilter<"Task"> | number | null
-  categoryId?: Prisma.IntNullableFilter<"Task"> | number | null
-}
-
 export type TaskCreateWithoutPlanInput = {
   title: string
   completed?: boolean
@@ -742,6 +856,7 @@ export type TaskCreateWithoutPlanInput = {
   isAllDay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutTasksInput
   execution?: Prisma.ExecutionCreateNestedOneWithoutTasksInput
   category?: Prisma.CategoryCreateNestedOneWithoutTasksInput
 }
@@ -755,6 +870,7 @@ export type TaskUncheckedCreateWithoutPlanInput = {
   isAllDay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   executionId?: number | null
   categoryId?: number | null
 }
@@ -793,6 +909,7 @@ export type TaskCreateWithoutCategoryInput = {
   isAllDay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutTasksInput
   plan?: Prisma.PlanCreateNestedOneWithoutTasksInput
   execution?: Prisma.ExecutionCreateNestedOneWithoutTasksInput
 }
@@ -806,6 +923,7 @@ export type TaskUncheckedCreateWithoutCategoryInput = {
   isAllDay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   planId?: number | null
   executionId?: number | null
 }
@@ -836,6 +954,61 @@ export type TaskUpdateManyWithWhereWithoutCategoryInput = {
   data: Prisma.XOR<Prisma.TaskUpdateManyMutationInput, Prisma.TaskUncheckedUpdateManyWithoutCategoryInput>
 }
 
+export type TaskCreateManyUserInput = {
+  id?: number
+  title: string
+  completed?: boolean
+  startTimestamp: Date | string
+  endTimestamp: Date | string
+  isAllDay?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  planId?: number | null
+  executionId?: number | null
+  categoryId?: number | null
+}
+
+export type TaskUpdateWithoutUserInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  plan?: Prisma.PlanUpdateOneWithoutTasksNestedInput
+  execution?: Prisma.ExecutionUpdateOneWithoutTasksNestedInput
+  category?: Prisma.CategoryUpdateOneWithoutTasksNestedInput
+}
+
+export type TaskUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  planId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type TaskUncheckedUpdateManyWithoutUserInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  startTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTimestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  planId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  executionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
 export type TaskCreateManyExecutionInput = {
   id?: number
   title: string
@@ -845,6 +1018,7 @@ export type TaskCreateManyExecutionInput = {
   isAllDay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   planId?: number | null
   categoryId?: number | null
 }
@@ -857,6 +1031,7 @@ export type TaskUpdateWithoutExecutionInput = {
   isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutTasksNestedInput
   plan?: Prisma.PlanUpdateOneWithoutTasksNestedInput
   category?: Prisma.CategoryUpdateOneWithoutTasksNestedInput
 }
@@ -870,6 +1045,7 @@ export type TaskUncheckedUpdateWithoutExecutionInput = {
   isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   planId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -883,6 +1059,7 @@ export type TaskUncheckedUpdateManyWithoutExecutionInput = {
   isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   planId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -896,6 +1073,7 @@ export type TaskCreateManyPlanInput = {
   isAllDay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   executionId?: number | null
   categoryId?: number | null
 }
@@ -908,6 +1086,7 @@ export type TaskUpdateWithoutPlanInput = {
   isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutTasksNestedInput
   execution?: Prisma.ExecutionUpdateOneWithoutTasksNestedInput
   category?: Prisma.CategoryUpdateOneWithoutTasksNestedInput
 }
@@ -921,6 +1100,7 @@ export type TaskUncheckedUpdateWithoutPlanInput = {
   isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   executionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -934,6 +1114,7 @@ export type TaskUncheckedUpdateManyWithoutPlanInput = {
   isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   executionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -947,6 +1128,7 @@ export type TaskCreateManyCategoryInput = {
   isAllDay?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  userId: string
   planId?: number | null
   executionId?: number | null
 }
@@ -959,6 +1141,7 @@ export type TaskUpdateWithoutCategoryInput = {
   isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutTasksNestedInput
   plan?: Prisma.PlanUpdateOneWithoutTasksNestedInput
   execution?: Prisma.ExecutionUpdateOneWithoutTasksNestedInput
 }
@@ -972,6 +1155,7 @@ export type TaskUncheckedUpdateWithoutCategoryInput = {
   isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   planId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   executionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -985,6 +1169,7 @@ export type TaskUncheckedUpdateManyWithoutCategoryInput = {
   isAllDay?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   planId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   executionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -1000,9 +1185,11 @@ export type TaskSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   isAllDay?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  userId?: boolean
   planId?: boolean
   executionId?: boolean
   categoryId?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.Task$planArgs<ExtArgs>
   execution?: boolean | Prisma.Task$executionArgs<ExtArgs>
   category?: boolean | Prisma.Task$categoryArgs<ExtArgs>
@@ -1017,9 +1204,11 @@ export type TaskSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isAllDay?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  userId?: boolean
   planId?: boolean
   executionId?: boolean
   categoryId?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.Task$planArgs<ExtArgs>
   execution?: boolean | Prisma.Task$executionArgs<ExtArgs>
   category?: boolean | Prisma.Task$categoryArgs<ExtArgs>
@@ -1034,9 +1223,11 @@ export type TaskSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isAllDay?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  userId?: boolean
   planId?: boolean
   executionId?: boolean
   categoryId?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.Task$planArgs<ExtArgs>
   execution?: boolean | Prisma.Task$executionArgs<ExtArgs>
   category?: boolean | Prisma.Task$categoryArgs<ExtArgs>
@@ -1051,23 +1242,27 @@ export type TaskSelectScalar = {
   isAllDay?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  userId?: boolean
   planId?: boolean
   executionId?: boolean
   categoryId?: boolean
 }
 
-export type TaskOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "completed" | "startTimestamp" | "endTimestamp" | "isAllDay" | "createdAt" | "updatedAt" | "planId" | "executionId" | "categoryId", ExtArgs["result"]["task"]>
+export type TaskOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "completed" | "startTimestamp" | "endTimestamp" | "isAllDay" | "createdAt" | "updatedAt" | "userId" | "planId" | "executionId" | "categoryId", ExtArgs["result"]["task"]>
 export type TaskInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.Task$planArgs<ExtArgs>
   execution?: boolean | Prisma.Task$executionArgs<ExtArgs>
   category?: boolean | Prisma.Task$categoryArgs<ExtArgs>
 }
 export type TaskIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.Task$planArgs<ExtArgs>
   execution?: boolean | Prisma.Task$executionArgs<ExtArgs>
   category?: boolean | Prisma.Task$categoryArgs<ExtArgs>
 }
 export type TaskIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.Task$planArgs<ExtArgs>
   execution?: boolean | Prisma.Task$executionArgs<ExtArgs>
   category?: boolean | Prisma.Task$categoryArgs<ExtArgs>
@@ -1076,6 +1271,7 @@ export type TaskIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $TaskPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Task"
   objects: {
+    user: Prisma.$UserPayload<ExtArgs>
     plan: Prisma.$PlanPayload<ExtArgs> | null
     execution: Prisma.$ExecutionPayload<ExtArgs> | null
     category: Prisma.$CategoryPayload<ExtArgs> | null
@@ -1089,6 +1285,7 @@ export type $TaskPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     isAllDay: boolean
     createdAt: Date
     updatedAt: Date
+    userId: string
     planId: number | null
     executionId: number | null
     categoryId: number | null
@@ -1486,6 +1683,7 @@ readonly fields: TaskFieldRefs;
  */
 export interface Prisma__TaskClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   plan<T extends Prisma.Task$planArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Task$planArgs<ExtArgs>>): Prisma.Prisma__PlanClient<runtime.Types.Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   execution<T extends Prisma.Task$executionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Task$executionArgs<ExtArgs>>): Prisma.Prisma__ExecutionClient<runtime.Types.Result.GetResult<Prisma.$ExecutionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   category<T extends Prisma.Task$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Task$categoryArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -1526,6 +1724,7 @@ export interface TaskFieldRefs {
   readonly isAllDay: Prisma.FieldRef<"Task", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Task", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Task", 'DateTime'>
+  readonly userId: Prisma.FieldRef<"Task", 'String'>
   readonly planId: Prisma.FieldRef<"Task", 'Int'>
   readonly executionId: Prisma.FieldRef<"Task", 'Int'>
   readonly categoryId: Prisma.FieldRef<"Task", 'Int'>

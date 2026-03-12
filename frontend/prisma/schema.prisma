@@ -13,6 +13,35 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id        String   @id @default(cuid(2))
+  email     String?  @unique
+  name      String?
+  password  String? // 크리덴셜 로그인용 (현재 null, 향후 사용)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  accounts       Account[]
+  tasks          Task[]
+  executions     Execution[]
+  plans          Plan[]
+  categories     Category[]
+  categoryGroups CategoryGroup[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String @id @default(cuid(2))
+  userId            String @map("user_id")
+  provider          String // "google", "github"
+  providerAccountId String @map("provider_account_id") // OAuth sub
+  user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
 model Task {
   id             Int      @id @default(autoincrement())
   title          String   @db.VarChar(255)
@@ -23,12 +52,14 @@ model Task {
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
-  planId      Int?       @map("plan_id")
-  plan        Plan?      @relation(fields: [planId], references: [id], onDelete: SetNull)
-  executionId Int?       @map("execution_id")
+  userId      String    @map("user_id")
+  user        User      @relation(fields: [userId], references: [id])
+  planId      Int?      @map("plan_id")
+  plan        Plan?     @relation(fields: [planId], references: [id], onDelete: SetNull)
+  executionId Int?      @map("execution_id")
   execution   Execution? @relation(fields: [executionId], references: [id], onDelete: SetNull)
-  categoryId  Int?       @map("category_id")
-  category    Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId  Int?      @map("category_id")
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   @@map("tasks")
 }
@@ -41,6 +72,8 @@ model Execution {
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
+  userId     String    @map("user_id")
+  user       User      @relation(fields: [userId], references: [id])
   tasks      Task[]
   categoryId Int?      @map("category_id")
   category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
@@ -56,6 +89,8 @@ model Plan {
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
+  userId     String    @map("user_id")
+  user       User      @relation(fields: [userId], references: [id])
   tasks      Task[]
   categoryId Int?      @map("category_id")
   category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
@@ -70,6 +105,8 @@ model CategoryGroup {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  userId     String     @map("user_id")
+  user       User       @relation(fields: [userId], references: [id])
   categories Category[]
 
   @@map("category_groups")
@@ -82,6 +119,8 @@ model Category {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  userId          String         @map("user_id")
+  user            User           @relation(fields: [userId], references: [id])
   categoryGroupId Int?           @map("category_group_id")
   categoryGroup   CategoryGroup? @relation(fields: [categoryGroupId], references: [id], onDelete: SetNull)
   tasks           Task[]

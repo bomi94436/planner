@@ -30,7 +30,8 @@ planner/
 │   ├── src/
 │   │   ├── app/           # 페이지 및 API 라우트
 │   │   ├── components/    # UI 컴포넌트
-│   │   ├── lib/           # 유틸리티 함수
+│   │   ├── config/        # 외부 라이브러리 설정 (auth, prisma, swagger)
+│   │   ├── utils/         # 순수 유틸리티 함수
 │   │   └── types/         # 타입 정의
 │   └── public/            # 정적 파일
 └── CLAUDE.md

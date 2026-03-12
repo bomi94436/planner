@@ -20,10 +20,11 @@ frontend/src/
 ├── components/             # 공통 컴포넌트
 │   ├── ui/                 # shadcn/ui 컴포넌트
 │   └── layout/             # 레이아웃 컴포넌트
+├── config/                 # 외부 라이브러리 설정 (auth, prisma, swagger)
 ├── hooks/                  # 공통 hooks
-├── lib/                    # 유틸리티 함수
 ├── store/                  # 상태 관리 (zustand)
-└── types/                  # 공통 타입 정의
+├── types/                  # 공통 타입 정의
+└── utils/                  # 순수 유틸리티 함수
 ```
 
 ## 페이지 컴포넌트 구조
@@ -65,28 +66,28 @@ _components/
 
 ```typescript
 // _api/func.ts
-import axios from 'axios'
+import { api } from '@/api'
 import { ExecutionsResponse, GetExecutionsQuery } from '@/types/execution'
 
 export const getExecutions = async ({ startTimestamp, endTimestamp }: GetExecutionsQuery) => {
-  const response = await axios.get<ExecutionsResponse>('/api/executions', {
+  const response = await api.get<ExecutionsResponse>('/api/executions', {
     params: { startTimestamp, endTimestamp },
   })
   return response.data?.data
 }
 
 export const createExecution = async (data: CreateExecutionBody) => {
-  const response = await axios.post<ExecutionResponse>('/api/executions', data)
+  const response = await api.post<ExecutionResponse>('/api/executions', data)
   return response.data?.data
 }
 
 export const updateExecution = async (id: number, data: UpdateExecutionBody) => {
-  const response = await axios.patch<ExecutionResponse>(`/api/executions/${id}`, data)
+  const response = await api.patch<ExecutionResponse>(`/api/executions/${id}`, data)
   return response.data?.data
 }
 
 export const deleteExecution = async (id: number) => {
-  const response = await axios.delete<ExecutionResponse>(`/api/executions/${id}`)
+  const response = await api.delete<ExecutionResponse>(`/api/executions/${id}`)
   return response.data?.data
 }
 ```
@@ -144,7 +145,7 @@ const validated = createExecutionSchema.parse(body)
 ```typescript
 // 공통 (src 하위)
 import { Button } from '@/components/ui'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils'
 import { useDateStore } from '@/store'
 import type { Execution } from '@/types/execution'
 

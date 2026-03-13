@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 
-import { minutesToDayjs } from '@/lib/utils'
+import { minutesToDayjs } from '@/utils'
 import { useDateStore } from '@/store'
 import type { WeeklySelection } from '~/weekly/_types'
 import { getPositionFromCoordinates, getTooltipPosition } from '~/weekly/_utils'

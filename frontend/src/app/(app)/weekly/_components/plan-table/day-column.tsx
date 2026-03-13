@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils'
 import { useDateStore } from '@/store'
 
 export function DayColumn() {

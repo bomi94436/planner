@@ -1,5 +1,5 @@
 import { HOURS_PER_DAY, MINUTES_PER_HOUR, START_HOUR } from '@/constants'
-import { dateToMinutes } from '@/lib/utils'
+import { dateToMinutes } from '@/utils'
 import type { Minutes } from '@/types'
 import { ROW_HEIGHT } from '~/daily/_constants'
 

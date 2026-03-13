@@ -23,7 +23,7 @@ import {
   Skeleton,
 } from '@/components/ui'
 import { useHandleTaskToggle } from '@/hooks'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils'
 import { useDateStore } from '@/store'
 import type { Task } from '@/types/task'
 import { deleteTask } from '~/daily/_api/func'

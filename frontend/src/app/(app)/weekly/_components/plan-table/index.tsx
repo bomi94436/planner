@@ -22,7 +22,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui'
 import { hours } from '@/constants'
-import { cn, minutesToDayjs } from '@/lib/utils'
+import { cn, minutesToDayjs } from '@/utils'
 import { selectWeekRange, useDateStore } from '@/store'
 import type { Plan } from '@/types/plan'
 import { deletePlan, getPlans } from '~/weekly/_api/func'

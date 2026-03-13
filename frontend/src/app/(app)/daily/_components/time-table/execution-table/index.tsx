@@ -16,7 +16,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui'
 import { hours } from '@/constants'
-import { cn, minutesToDayjs } from '@/lib/utils'
+import { cn, minutesToDayjs } from '@/utils'
 import { selectDayRange, useDateStore } from '@/store'
 import type { Execution } from '@/types/execution'
 import { deleteExecution, getExecutions } from '~/daily/_api/func'

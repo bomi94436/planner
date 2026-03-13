@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 
 import { Checkbox, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui'
 import { useHandleTaskToggle } from '@/hooks'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils'
 import type { Task } from '@/types/task'
 
 interface DayCellProps {

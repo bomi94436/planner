@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 
-import { minutesToDayjs } from '@/lib/utils'
+import { minutesToDayjs } from '@/utils'
 import { useDateStore } from '@/store'
 import type { Minutes } from '@/types'
 import type { Selection } from '~/daily/_types'

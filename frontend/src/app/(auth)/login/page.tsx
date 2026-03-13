@@ -1,7 +1,7 @@
 import { Chrome, Github } from 'lucide-react'
 
 import { Button } from '@/components/ui'
-import { signIn } from '@/lib/auth'
+import { signIn } from '@/config/auth'
 
 export default function LoginPage() {
   return (

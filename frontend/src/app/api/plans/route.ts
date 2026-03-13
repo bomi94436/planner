@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
 
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/config/prisma'
 import type { PlanResponse, PlansResponse } from '@/types/plan'
 
-import { withErrorHandler } from '../_lib'
+import { withAuth } from '../_lib'
 import { createPlanSchema, getPlansQuerySchema } from '../_validations'
 
 /**
@@ -42,7 +42,7 @@ import { createPlanSchema, getPlansQuerySchema } from '../_validations'
  *                   items:
  *                     $ref: '#/components/schemas/Plan'
  */
-export const GET = withErrorHandler(async (request) => {
+export const GET = withAuth(async (request, { userId }) => {
   const searchParams = request.nextUrl.searchParams
   const { startTimestamp, endTimestamp } = getPlansQuerySchema.parse({
     startTimestamp: searchParams.get('startTimestamp') ?? undefined,
@@ -51,6 +51,7 @@ export const GET = withErrorHandler(async (request) => {
 
   const plans = await prisma.plan.findMany({
     where: {
+      userId,
       startTimestamp: { lte: endTimestamp },
       endTimestamp: { gte: startTimestamp },
     },
@@ -91,7 +92,7 @@ export const GET = withErrorHandler(async (request) => {
  *                 data:
  *                   $ref: '#/components/schemas/Plan'
  */
-export const POST = withErrorHandler(async (request) => {
+export const POST = withAuth(async (request, { userId }) => {
   const body = await request.json()
   const validated = createPlanSchema.parse(body)
 
@@ -101,6 +102,7 @@ export const POST = withErrorHandler(async (request) => {
       endTimestamp: new Date(validated.endTimestamp),
       title: validated.title.trim(),
       categoryId: validated.categoryId ?? null,
+      userId,
     },
     select: {
       id: true,

@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
 
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/config/prisma'
 import type { ExecutionResponse, ExecutionsResponse } from '@/types/execution'
 
-import { withErrorHandler } from '../_lib'
+import { withAuth } from '../_lib'
 import { createExecutionSchema, getExecutionsQuerySchema } from '../_validations'
 
 /**
@@ -42,7 +42,7 @@ import { createExecutionSchema, getExecutionsQuerySchema } from '../_validations
  *                   items:
  *                     $ref: '#/components/schemas/Execution'
  */
-export const GET = withErrorHandler(async (request) => {
+export const GET = withAuth(async (request, { userId }) => {
   const searchParams = request.nextUrl.searchParams
   const { startTimestamp, endTimestamp } = getExecutionsQuerySchema.parse({
     startTimestamp: searchParams.get('startTimestamp') ?? undefined,
@@ -51,6 +51,7 @@ export const GET = withErrorHandler(async (request) => {
 
   const executions = await prisma.execution.findMany({
     where: {
+      userId,
       startTimestamp: { lte: endTimestamp },
       endTimestamp: { gte: startTimestamp },
     },
@@ -91,7 +92,7 @@ export const GET = withErrorHandler(async (request) => {
  *                 data:
  *                   $ref: '#/components/schemas/Execution'
  */
-export const POST = withErrorHandler(async (request) => {
+export const POST = withAuth(async (request, { userId }) => {
   const body = await request.json()
   const validated = createExecutionSchema.parse(body)
 
@@ -101,6 +102,7 @@ export const POST = withErrorHandler(async (request) => {
       endTimestamp: new Date(validated.endTimestamp),
       title: validated.title.trim(),
       categoryId: validated.categoryId ?? null,
+      userId,
     },
     select: {
       id: true,

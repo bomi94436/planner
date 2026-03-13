@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
 
-import { withErrorHandler } from '@/app/api/_lib'
+import { withAuth } from '@/app/api/_lib'
 import { updateCategorySchema } from '@/app/api/_validations'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/config/prisma'
 import type { CategoryResponse, DeleteCategoryResponse } from '@/types/category'
 
 /**
@@ -25,11 +25,12 @@ import type { CategoryResponse, DeleteCategoryResponse } from '@/types/category'
  *       404:
  *         description: 해당 카테고리를 찾을 수 없습니다.
  */
-export const PATCH = withErrorHandler<{ id: string }>(async (request, context) => {
-  const params = await context!.params
-  const id = Number(params.id)
+export const PATCH = withAuth<{ id: string }>(async (request, { params, userId }) => {
+  const { id: rawId } = await params
+  const id = Number(rawId)
 
-  const existing = await prisma.category.findUnique({ where: { id } })
+  // userId가 다르면 404 (타인 리소스 존재 노출 방지)
+  const existing = await prisma.category.findFirst({ where: { id, userId } })
   if (!existing) {
     return NextResponse.json<CategoryResponse>(
       { error: '해당 카테고리를 찾을 수 없습니다.' },
@@ -87,11 +88,11 @@ export const PATCH = withErrorHandler<{ id: string }>(async (request, context) =
  *       404:
  *         description: 해당 카테고리를 찾을 수 없습니다.
  */
-export const DELETE = withErrorHandler<{ id: string }>(async (_request, context) => {
-  const params = await context!.params
-  const id = Number(params.id)
+export const DELETE = withAuth<{ id: string }>(async (_request, { params, userId }) => {
+  const { id: rawId } = await params
+  const id = Number(rawId)
 
-  const existing = await prisma.category.findUnique({ where: { id } })
+  const existing = await prisma.category.findFirst({ where: { id, userId } })
   if (!existing) {
     return NextResponse.json<DeleteCategoryResponse>(
       { error: '해당 카테고리를 찾을 수 없습니다.' },

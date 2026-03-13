@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
 
-import { withErrorHandler } from '@/app/api/_lib'
+import { withAuth } from '@/app/api/_lib'
 import { createTaskSchema, getTasksQuerySchema } from '@/app/api/_validations'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/config/prisma'
 import type { TaskResponse, TasksResponse } from '@/types/task'
 
 /**
@@ -41,7 +41,7 @@ import type { TaskResponse, TasksResponse } from '@/types/task'
  *                   items:
  *                     $ref: '#/components/schemas/Task'
  */
-export const GET = withErrorHandler(async (request) => {
+export const GET = withAuth(async (request, { userId }) => {
   const searchParams = request.nextUrl.searchParams
   const { startTimestamp, endTimestamp } = getTasksQuerySchema.parse({
     startTimestamp: searchParams.get('startTimestamp') ?? undefined,
@@ -64,6 +64,7 @@ export const GET = withErrorHandler(async (request) => {
   //   Task:       |---------|
   const tasks = await prisma.task.findMany({
     where: {
+      userId,
       AND: [
         { startTimestamp: { lte: endTimestamp } }, // Task 시작 <= 조회 끝
         { endTimestamp: { gte: startTimestamp } }, // 조회 시작 <= Task 끝
@@ -111,7 +112,7 @@ export const GET = withErrorHandler(async (request) => {
  *                 data:
  *                   $ref: '#/components/schemas/Task'
  */
-export const POST = withErrorHandler(async (request) => {
+export const POST = withAuth(async (request, { userId }) => {
   const body = await request.json()
   const validated = createTaskSchema.parse(body)
 
@@ -122,6 +123,7 @@ export const POST = withErrorHandler(async (request) => {
       endTimestamp: new Date(validated.endTimestamp),
       isAllDay: validated.isAllDay,
       categoryId: validated.categoryId ?? null,
+      userId,
     },
     select: {
       id: true,

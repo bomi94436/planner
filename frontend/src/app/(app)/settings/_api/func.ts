@@ -1,5 +1,4 @@
-import axios from 'axios'
-
+import { api } from '@/api'
 import type {
   CategoriesResponse,
   CategoryResponse,
@@ -17,42 +16,42 @@ import type {
 
 // 카테고리 그룹
 export const getCategoryGroups = async () => {
-  const response = await axios.get<CategoryGroupsResponse>('/api/category-groups')
+  const response = await api.get<CategoryGroupsResponse>('/api/category-groups')
   return response.data?.data
 }
 
 export const createCategoryGroup = async (data: CreateCategoryGroupBody) => {
-  const response = await axios.post<CategoryGroupResponse>('/api/category-groups', data)
+  const response = await api.post<CategoryGroupResponse>('/api/category-groups', data)
   return response.data?.data
 }
 
 export const updateCategoryGroup = async (id: number, data: UpdateCategoryGroupBody) => {
-  const response = await axios.patch<CategoryGroupResponse>(`/api/category-groups/${id}`, data)
+  const response = await api.patch<CategoryGroupResponse>(`/api/category-groups/${id}`, data)
   return response.data?.data
 }
 
 export const deleteCategoryGroup = async (id: number) => {
-  const response = await axios.delete<DeleteCategoryGroupResponse>(`/api/category-groups/${id}`)
+  const response = await api.delete<DeleteCategoryGroupResponse>(`/api/category-groups/${id}`)
   return response.data?.data
 }
 
 // 카테고리
 export const getCategories = async () => {
-  const response = await axios.get<CategoriesResponse>('/api/categories')
+  const response = await api.get<CategoriesResponse>('/api/categories')
   return response.data?.data
 }
 
 export const createCategory = async (data: CreateCategoryBody) => {
-  const response = await axios.post<CategoryResponse>('/api/categories', data)
+  const response = await api.post<CategoryResponse>('/api/categories', data)
   return response.data?.data
 }
 
 export const updateCategory = async (id: number, data: UpdateCategoryBody) => {
-  const response = await axios.patch<CategoryResponse>(`/api/categories/${id}`, data)
+  const response = await api.patch<CategoryResponse>(`/api/categories/${id}`, data)
   return response.data?.data
 }
 
 export const deleteCategory = async (id: number) => {
-  const response = await axios.delete<DeleteCategoryResponse>(`/api/categories/${id}`)
+  const response = await api.delete<DeleteCategoryResponse>(`/api/categories/${id}`)
   return response.data?.data
 }

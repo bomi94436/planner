@@ -1,1 +1,1 @@
-export * from './with-error-handler'
+export * from './with-auth'

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import { auth } from '@/lib/auth'
+import { auth } from '@/config/auth'
 
 export default auth((req) => {
   const isLoggedIn = !!req.auth

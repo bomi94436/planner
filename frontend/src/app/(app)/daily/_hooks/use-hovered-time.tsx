@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useState } from 'react'
 
-import { dateToMinutes, minutesToDayjs } from '@/utils'
 import { useDateStore } from '@/store'
 import type { Minutes } from '@/types'
 import type { Execution } from '@/types/execution'
+import { dateToMinutes, minutesToDayjs } from '@/utils'
 
 import { getPositionFromCoordinates } from '../_utils'
 

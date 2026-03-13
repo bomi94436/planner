@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server'
 
 import { withAuth } from '@/app/api/_lib'
 import { updateTaskSchema } from '@/app/api/_validations'
-import type { TaskUncheckedUpdateInput } from '@/generated/prisma/models/Task'
 import { prisma } from '@/config/prisma'
+import type { TaskUncheckedUpdateInput } from '@/generated/prisma/models/Task'
 import type { DeleteTaskResponse, TaskResponse } from '@/types/task'
 
 /**

@@ -1,6 +1,6 @@
 import { HOURS_PER_DAY, MINUTES_PER_HOUR, START_HOUR } from '@/constants'
-import { dateToMinutes } from '@/utils'
 import type { Minutes } from '@/types'
+import { dateToMinutes } from '@/utils'
 import { ROW_HEIGHT } from '~/daily/_constants'
 
 // 시간 포맷팅

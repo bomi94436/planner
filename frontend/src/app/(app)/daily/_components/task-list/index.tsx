@@ -23,9 +23,9 @@ import {
   Skeleton,
 } from '@/components/ui'
 import { useHandleTaskToggle } from '@/hooks'
-import { cn } from '@/utils'
 import { useDateStore } from '@/store'
 import type { Task } from '@/types/task'
+import { cn } from '@/utils'
 import { deleteTask } from '~/daily/_api/func'
 
 import { TaskFormDialog } from './task-form-dialog'

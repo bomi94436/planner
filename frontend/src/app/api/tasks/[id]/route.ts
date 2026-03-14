@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
 
-import { withErrorHandler } from '@/app/api/_lib'
+import { withAuth } from '@/app/api/_lib'
 import { updateTaskSchema } from '@/app/api/_validations'
+import { prisma } from '@/config/prisma'
 import type { TaskUncheckedUpdateInput } from '@/generated/prisma/models/Task'
-import { prisma } from '@/lib/prisma'
 import type { DeleteTaskResponse, TaskResponse } from '@/types/task'
 
 /**
@@ -46,15 +46,11 @@ import type { DeleteTaskResponse, TaskResponse } from '@/types/task'
  *               properties:
  *                 error: { type: 'string' }
  */
-export const PATCH = withErrorHandler<{ id: string }>(async (request, context) => {
-  const params = await context!.params
-  const id = Number(params.id)
+export const PATCH = withAuth<{ id: string }>(async (request, { params, userId }) => {
+  const { id: rawId } = await params
+  const id = Number(rawId)
 
-  // 존재 여부 확인
-  const existing = await prisma.task.findUnique({
-    where: { id },
-  })
-
+  const existing = await prisma.task.findFirst({ where: { id, userId } })
   if (!existing) {
     return NextResponse.json<TaskResponse>(
       { error: '해당 Task를 찾을 수 없습니다.' },
@@ -130,15 +126,11 @@ export const PATCH = withErrorHandler<{ id: string }>(async (request, context) =
  *               properties:
  *                 error: { type: 'string' }
  */
-export const DELETE = withErrorHandler<{ id: string }>(async (_request, context) => {
-  const params = await context!.params
-  const id = Number(params.id)
+export const DELETE = withAuth<{ id: string }>(async (_request, { params, userId }) => {
+  const { id: rawId } = await params
+  const id = Number(rawId)
 
-  // 존재 여부 확인
-  const existing = await prisma.task.findUnique({
-    where: { id },
-  })
-
+  const existing = await prisma.task.findFirst({ where: { id, userId } })
   if (!existing) {
     return NextResponse.json<DeleteTaskResponse>(
       { error: '해당 Task를 찾을 수 없습니다.' },

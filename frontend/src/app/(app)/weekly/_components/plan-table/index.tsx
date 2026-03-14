@@ -22,9 +22,9 @@ import {
   TooltipTrigger,
 } from '@/components/ui'
 import { hours } from '@/constants'
-import { cn, minutesToDayjs } from '@/lib/utils'
 import { selectWeekRange, useDateStore } from '@/store'
 import type { Plan } from '@/types/plan'
+import { cn, minutesToDayjs } from '@/utils'
 import { deletePlan, getPlans } from '~/weekly/_api/func'
 import { days, ROW_HEIGHT } from '~/weekly/_constants'
 import { useHoveredTime, useWeeklySelection } from '~/weekly/_hooks'

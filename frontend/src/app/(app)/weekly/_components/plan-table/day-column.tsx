@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 
-import { cn } from '@/lib/utils'
 import { useDateStore } from '@/store'
+import { cn } from '@/utils'
 
 export function DayColumn() {
   const selectedDate = useDateStore((state) => state.selectedDate)

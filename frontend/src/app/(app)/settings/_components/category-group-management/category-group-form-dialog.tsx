@@ -4,9 +4,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { ColorPicker } from '@/components/color-picker'
 import {
   Button,
+  ColorPicker,
   Dialog,
   DialogContent,
   DialogFooter,

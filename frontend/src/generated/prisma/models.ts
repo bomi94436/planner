@@ -8,6 +8,8 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/User'
+export type * from './models/Account'
 export type * from './models/Task'
 export type * from './models/Execution'
 export type * from './models/Plan'

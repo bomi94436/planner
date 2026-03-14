@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { ChevronDownIcon } from 'lucide-react'
 import { useState } from 'react'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils'
 
 import { Button, Calendar, Input, Label, Popover, PopoverContent, PopoverTrigger, Switch } from '.'
 

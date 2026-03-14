@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
 
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/config/prisma'
 import type { CategoryGroupResponse, CategoryGroupsResponse } from '@/types/category-group'
 
-import { withErrorHandler } from '../_lib'
+import { withAuth } from '../_lib'
 import { createCategoryGroupSchema } from '../_validations'
 
 /**
@@ -18,8 +18,9 @@ import { createCategoryGroupSchema } from '../_validations'
  *       200:
  *         description: 카테고리 그룹 목록
  */
-export const GET = withErrorHandler(async () => {
+export const GET = withAuth(async (_request, { userId }) => {
   const categoryGroups = await prisma.categoryGroup.findMany({
+    where: { userId },
     select: {
       id: true,
       name: true,
@@ -48,7 +49,7 @@ export const GET = withErrorHandler(async () => {
  *       201:
  *         description: 카테고리 그룹 생성 성공
  */
-export const POST = withErrorHandler(async (request) => {
+export const POST = withAuth(async (request, { userId }) => {
   const body = await request.json()
   const validated = createCategoryGroupSchema.parse(body)
 
@@ -56,6 +57,7 @@ export const POST = withErrorHandler(async (request) => {
     data: {
       name: validated.name.trim(),
       color: validated.color,
+      userId,
     },
     select: {
       id: true,

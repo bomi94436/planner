@@ -1,9 +1,9 @@
 import dayjs from 'dayjs'
 
 import { HOURS_PER_DAY, MINUTES_PER_HOUR } from '@/constants'
-import { dateToMinutes } from '@/lib/utils'
 import type { Minutes } from '@/types'
 import type { Plan } from '@/types/plan'
+import { dateToMinutes } from '@/utils'
 import { DAYS_COUNT, ROW_HEIGHT } from '~/weekly/_constants'
 
 /** 드래그 스냅 단위 (분) */

@@ -1,9 +1,8 @@
-import axios from 'axios'
-
+import { api } from '@/api'
 import { GetTasksQuery, TasksResponse } from '@/types/task'
 
 export const getTasks = async ({ startTimestamp, endTimestamp }: GetTasksQuery) => {
-  const response = await axios.get<TasksResponse>('/api/tasks', {
+  const response = await api.get<TasksResponse>('/api/tasks', {
     params: {
       startTimestamp,
       endTimestamp,

@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
 
-import { withErrorHandler } from '@/app/api/_lib'
+import { withAuth } from '@/app/api/_lib'
 import { updateExecutionSchema } from '@/app/api/_validations'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/config/prisma'
 import type { DeleteExecutionResponse, ExecutionResponse } from '@/types/execution'
 
 /**
@@ -45,15 +45,11 @@ import type { DeleteExecutionResponse, ExecutionResponse } from '@/types/executi
  *               properties:
  *                 error: { type: 'string' }
  */
-export const PATCH = withErrorHandler<{ id: string }>(async (request, context) => {
-  const params = await context!.params
-  const id = Number(params.id)
+export const PATCH = withAuth<{ id: string }>(async (request, { params, userId }) => {
+  const { id: rawId } = await params
+  const id = Number(rawId)
 
-  // 존재 여부 확인
-  const existing = await prisma.execution.findUnique({
-    where: { id },
-  })
-
+  const existing = await prisma.execution.findFirst({ where: { id, userId } })
   if (!existing) {
     return NextResponse.json<ExecutionResponse>(
       { error: '해당 Execution을 찾을 수 없습니다.' },
@@ -124,15 +120,11 @@ export const PATCH = withErrorHandler<{ id: string }>(async (request, context) =
  *               properties:
  *                 error: { type: 'string' }
  */
-export const DELETE = withErrorHandler<{ id: string }>(async (_request, context) => {
-  const params = await context!.params
-  const id = Number(params.id)
+export const DELETE = withAuth<{ id: string }>(async (_request, { params, userId }) => {
+  const { id: rawId } = await params
+  const id = Number(rawId)
 
-  // 존재 여부 확인
-  const existing = await prisma.execution.findUnique({
-    where: { id },
-  })
-
+  const existing = await prisma.execution.findFirst({ where: { id, userId } })
   if (!existing) {
     return NextResponse.json<DeleteExecutionResponse>(
       { error: '해당 Execution을 찾을 수 없습니다.' },

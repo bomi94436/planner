@@ -4,16 +4,28 @@ import {
   Calendar as CalendarIcon,
   CalendarDays as CalendarDaysIcon,
   CalendarRange as CalendarRangeIcon,
+  ChevronsUpDown,
   FolderIcon,
   HomeIcon,
   ListCheckIcon,
+  LogOutIcon,
   SettingsIcon,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { signOut, useSession } from 'next-auth/react'
 
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
   Calendar,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
   Separator,
   Sidebar,
   SidebarContent,
@@ -26,6 +38,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui'
+import { useIsMobile } from '@/hooks'
 import { useDateStore } from '@/store'
 
 type MenuItem = { href: string; label: string; icon: React.ElementType }
@@ -62,9 +75,16 @@ const SIDEBAR_MENUS: MenuGroup[] = [
 ]
 
 export function AppSidebar() {
+  const isMobile = useIsMobile()
   const pathname = usePathname()
   const selectedDate = useDateStore((state) => state.selectedDate)
   const setSelectedDate = useDateStore((state) => state.setSelectedDate)
+  const { data: session } = useSession()
+  const user = {
+    name: session?.user?.name ?? '',
+    email: session?.user?.email ?? '',
+    avatar: session?.user?.image ?? '',
+  }
 
   return (
     <Sidebar>
@@ -127,6 +147,54 @@ export function AppSidebar() {
             required
           />
         </div>
+        <Separator />
+        <SidebarMenu className="px-2">
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
+                  size="lg"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                >
+                  <Avatar className="h-8 w-8 rounded-lg">
+                    <AvatarImage src={user.avatar} alt={user.name} />
+                    <AvatarFallback className="rounded-lg">{user.name.slice(0, 2)}</AvatarFallback>
+                  </Avatar>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-medium">{user.name}</span>
+                  </div>
+                  <ChevronsUpDown className="ml-auto size-4" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                side={isMobile ? 'bottom' : 'right'}
+                align="end"
+                sideOffset={4}
+              >
+                <DropdownMenuLabel className="p-0 font-normal">
+                  <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                    <Avatar className="h-8 w-8 rounded-lg">
+                      <AvatarImage src={user.avatar} alt={user.name} />
+                      <AvatarFallback className="rounded-lg">
+                        {user.name.slice(0, 2)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      <span className="truncate font-medium">{user.name}</span>
+                      <span className="truncate text-xs">{user.email}</span>
+                    </div>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => signOut({ callbackUrl: '/login' })}>
+                  <LogOutIcon />
+                  로그아웃
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   )

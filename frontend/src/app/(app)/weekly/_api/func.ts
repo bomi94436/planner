@@ -1,5 +1,4 @@
-import axios from 'axios'
-
+import { api } from '@/api'
 import type { CategoriesResponse } from '@/types/category'
 import {
   CreatePlanBody,
@@ -11,12 +10,12 @@ import {
 } from '@/types/plan'
 
 export const getCategories = async () => {
-  const response = await axios.get<CategoriesResponse>('/api/categories')
+  const response = await api.get<CategoriesResponse>('/api/categories')
   return response.data?.data
 }
 
 export const getPlans = async ({ startTimestamp, endTimestamp }: GetPlansQuery) => {
-  const response = await axios.get<PlansResponse>('/api/plans', {
+  const response = await api.get<PlansResponse>('/api/plans', {
     params: {
       startTimestamp,
       endTimestamp,
@@ -26,16 +25,16 @@ export const getPlans = async ({ startTimestamp, endTimestamp }: GetPlansQuery) 
 }
 
 export const createPlan = async (data: CreatePlanBody) => {
-  const response = await axios.post<PlanResponse>('/api/plans', data)
+  const response = await api.post<PlanResponse>('/api/plans', data)
   return response.data?.data
 }
 
 export const updatePlan = async (id: number, data: UpdatePlanBody) => {
-  const response = await axios.patch<PlanResponse>(`/api/plans/${id}`, data)
+  const response = await api.patch<PlanResponse>(`/api/plans/${id}`, data)
   return response.data?.data
 }
 
 export const deletePlan = async (id: number) => {
-  const response = await axios.delete<DeletePlanResponse>(`/api/plans/${id}`)
+  const response = await api.delete<DeletePlanResponse>(`/api/plans/${id}`)
   return response.data?.data
 }

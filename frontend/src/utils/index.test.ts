@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { dateToMinutes, toHourIndex, toMinuteInHour } from './utils'
+import { dateToMinutes, toHourIndex, toMinuteInHour } from '.'
 
 // START_HOUR = 4 기준
 describe('dateToMinutes', () => {

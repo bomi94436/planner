@@ -1,5 +1,6 @@
 export * from './category'
 export * from './category-group'
 export * from './execution'
+export * from './habit'
 export * from './plan'
 export * from './task'

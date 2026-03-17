@@ -145,4 +145,85 @@ export const schemas: Schemas = {
       categoryGroupId: { type: 'integer', nullable: true },
     },
   },
+  HabitStats: {
+    type: 'object',
+    properties: {
+      currentStreak: { type: 'integer' },
+      maxStreak: { type: 'integer' },
+      totalDays: { type: 'integer' },
+    },
+  },
+  HabitLogItem: {
+    type: 'object',
+    properties: {
+      id: { type: 'integer' },
+      date: { type: 'string', format: 'date' },
+      completedLevel: { type: 'integer', enum: [1, 2, 3] },
+    },
+  },
+  Habit: {
+    type: 'object',
+    properties: {
+      id: { type: 'integer' },
+      name: { type: 'string' },
+      levelEasy: { type: 'string' },
+      levelNormal: { type: 'string' },
+      levelChallenge: { type: 'string' },
+      categoryId: { type: 'integer', nullable: true },
+      category: { $ref: '#/components/schemas/Category', nullable: true },
+      stats: { $ref: '#/components/schemas/HabitStats' },
+      logs: { type: 'array', items: { $ref: '#/components/schemas/HabitLogItem' } },
+    },
+  },
+  HabitBase: {
+    type: 'object',
+    properties: {
+      id: { type: 'integer' },
+      name: { type: 'string' },
+      levelEasy: { type: 'string' },
+      levelNormal: { type: 'string' },
+      levelChallenge: { type: 'string' },
+      categoryId: { type: 'integer', nullable: true },
+      category: { $ref: '#/components/schemas/Category', nullable: true },
+    },
+  },
+  HabitLog: {
+    type: 'object',
+    properties: {
+      id: { type: 'integer' },
+      habitId: { type: 'integer' },
+      date: { type: 'string', format: 'date' },
+      completedLevel: { type: 'integer', enum: [1, 2, 3] },
+    },
+  },
+  CreateHabitBody: {
+    type: 'object',
+    required: ['name', 'levelEasy', 'levelNormal', 'levelChallenge'],
+    properties: {
+      name: { type: 'string' },
+      levelEasy: { type: 'string' },
+      levelNormal: { type: 'string' },
+      levelChallenge: { type: 'string' },
+      categoryId: { type: 'integer', nullable: true },
+    },
+  },
+  UpdateHabitBody: {
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      levelEasy: { type: 'string' },
+      levelNormal: { type: 'string' },
+      levelChallenge: { type: 'string' },
+      categoryId: { type: 'integer', nullable: true },
+    },
+  },
+  UpsertHabitLogBody: {
+    type: 'object',
+    required: ['habitId', 'date', 'completedLevel'],
+    properties: {
+      habitId: { type: 'integer' },
+      date: { type: 'string', format: 'date' },
+      completedLevel: { type: 'integer', enum: [1, 2, 3] },
+    },
+  },
 }

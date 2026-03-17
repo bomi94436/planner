@@ -50,11 +50,11 @@
 
 각 습관별로 아래 통계를 표시한다:
 
-| 항목         | 설명                                      |
-| ------------ | ----------------------------------------- |
-| 현재 연속일  | 오늘 기준으로 연속 달성 중인 일수         |
-| 최대 연속일  | 역대 가장 길게 연속 달성한 일수           |
-| 누적일       | 전체 기간 동안 달성한 총 일수             |
+| 항목        | 설명                              |
+| ----------- | --------------------------------- |
+| 현재 연속일 | 오늘 기준으로 연속 달성 중인 일수 |
+| 최대 연속일 | 역대 가장 길게 연속 달성한 일수   |
+| 누적일      | 전체 기간 동안 달성한 총 일수     |
 
 - 연속일 계산 기준: 1단계 이상 달성 시 연속으로 간주
 
@@ -65,11 +65,13 @@
 습관별로 카드 섹션으로 표시한다.
 
 **카드 구성:**
+
 - 습관명 (아이콘, 색상 포함)
 - 통계: 현재 연속일 / 최대 연속일 / 누적일
 - 월별 캘린더: 해당 월의 날짜별 달성 단계 표시
 
 **인터랙션:**
+
 - 캘린더의 각 날짜 셀을 클릭하면 ContextMenu가 표시된다
 - ContextMenu 선택지:
   - 1단계 달성 (쉬움)
@@ -101,26 +103,22 @@
 ```typescript
 // 습관 정의
 interface Habit {
-  id: string
-  userId: string // 소유 사용자
+  id: number
   name: string
-  category?: string
-  color?: string
-  icon?: string
   levelEasy: string // 1단계 목표 설명
   levelNormal: string // 2단계 목표 설명
   levelChallenge: string // 3단계 목표 설명
-  createdAt: Date
-  updatedAt: Date
+  userId: string // 소유 사용자
+  categoryId: string
 }
 
 // 습관 달성 기록
 interface HabitLog {
-  id: string
-  userId: string // 소유 사용자
-  habitId: string
+  id: number
   date: Date
   completedLevel: 1 | 2 | 3
+  userId: string // 소유 사용자
+  habitId: string
 }
 ```
 

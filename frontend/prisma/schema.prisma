@@ -27,6 +27,8 @@ model User {
   plans          Plan[]
   categories     Category[]
   categoryGroups CategoryGroup[]
+  habits         Habit[]
+  habitLogs      HabitLog[]
 
   @@map("users")
 }
@@ -52,14 +54,14 @@ model Task {
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
-  userId      String    @map("user_id")
-  user        User      @relation(fields: [userId], references: [id])
-  planId      Int?      @map("plan_id")
-  plan        Plan?     @relation(fields: [planId], references: [id], onDelete: SetNull)
-  executionId Int?      @map("execution_id")
+  userId      String     @map("user_id")
+  user        User       @relation(fields: [userId], references: [id])
+  planId      Int?       @map("plan_id")
+  plan        Plan?      @relation(fields: [planId], references: [id], onDelete: SetNull)
+  executionId Int?       @map("execution_id")
   execution   Execution? @relation(fields: [executionId], references: [id], onDelete: SetNull)
-  categoryId  Int?      @map("category_id")
-  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId  Int?       @map("category_id")
+  category    Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   @@map("tasks")
 }
@@ -126,6 +128,41 @@ model Category {
   tasks           Task[]
   executions      Execution[]
   plans           Plan[]
+  habits          Habit[]
 
   @@map("categories")
+}
+
+model Habit {
+  id             Int      @id @default(autoincrement())
+  name           String   @db.VarChar(100)
+  levelEasy      String   @map("level_easy") @db.VarChar(255)
+  levelNormal    String   @map("level_normal") @db.VarChar(255)
+  levelChallenge String   @map("level_challenge") @db.VarChar(255)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  userId     String     @map("user_id")
+  user       User       @relation(fields: [userId], references: [id])
+  categoryId Int?       @map("category_id")
+  category   Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  logs       HabitLog[]
+
+  @@map("habits")
+}
+
+model HabitLog {
+  id             Int      @id @default(autoincrement())
+  date           DateTime @db.Date
+  completedLevel Int      @map("completed_level") // 1: 쉬움, 2: 보통, 3: 챌린지
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  userId  String @map("user_id")
+  user    User   @relation(fields: [userId], references: [id])
+  habitId Int    @map("habit_id")
+  habit   Habit  @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  @@unique([habitId, date])
+  @@map("habit_logs")
 }

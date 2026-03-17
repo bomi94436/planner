@@ -57,7 +57,9 @@ export const ModelName = {
   Execution: 'Execution',
   Plan: 'Plan',
   CategoryGroup: 'CategoryGroup',
-  Category: 'Category'
+  Category: 'Category',
+  Habit: 'Habit',
+  HabitLog: 'HabitLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -167,6 +169,34 @@ export const CategoryScalarFieldEnum = {
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const HabitScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  levelEasy: 'levelEasy',
+  levelNormal: 'levelNormal',
+  levelChallenge: 'levelChallenge',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  categoryId: 'categoryId'
+} as const
+
+export type HabitScalarFieldEnum = (typeof HabitScalarFieldEnum)[keyof typeof HabitScalarFieldEnum]
+
+
+export const HabitLogScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  completedLevel: 'completedLevel',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  habitId: 'habitId'
+} as const
+
+export type HabitLogScalarFieldEnum = (typeof HabitLogScalarFieldEnum)[keyof typeof HabitLogScalarFieldEnum]
 
 
 export const SortOrder = {

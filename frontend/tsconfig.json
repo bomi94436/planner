@@ -22,6 +22,8 @@
       "~/monthly/*": ["./src/app/(app)/monthly/*"],
       "~/yearly/*": ["./src/app/(app)/yearly/*"],
       "~/settings/*": ["./src/app/(app)/settings/*"],
+      "~/habits/*": ["./src/app/(app)/habits/*"],
+      "~/projects/*": ["./src/app/(app)/projects/*"],
       "~/api/*": ["./src/app/api/*"]
     }
   },

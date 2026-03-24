@@ -74,3 +74,13 @@ export type CategoryGroup = Prisma.CategoryGroupModel
  * 
  */
 export type Category = Prisma.CategoryModel
+/**
+ * Model Habit
+ * 
+ */
+export type Habit = Prisma.HabitModel
+/**
+ * Model HabitLog
+ * 
+ */
+export type HabitLog = Prisma.HabitLogModel

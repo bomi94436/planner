@@ -196,6 +196,8 @@ export type UserWhereInput = {
   plans?: Prisma.PlanListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
   categoryGroups?: Prisma.CategoryGroupListRelationFilter
+  habits?: Prisma.HabitListRelationFilter
+  habitLogs?: Prisma.HabitLogListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -211,6 +213,8 @@ export type UserOrderByWithRelationInput = {
   plans?: Prisma.PlanOrderByRelationAggregateInput
   categories?: Prisma.CategoryOrderByRelationAggregateInput
   categoryGroups?: Prisma.CategoryGroupOrderByRelationAggregateInput
+  habits?: Prisma.HabitOrderByRelationAggregateInput
+  habitLogs?: Prisma.HabitLogOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -229,6 +233,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   plans?: Prisma.PlanListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
   categoryGroups?: Prisma.CategoryGroupListRelationFilter
+  habits?: Prisma.HabitListRelationFilter
+  habitLogs?: Prisma.HabitLogListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -268,6 +274,8 @@ export type UserCreateInput = {
   plans?: Prisma.PlanCreateNestedManyWithoutUserInput
   categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
   categoryGroups?: Prisma.CategoryGroupCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -283,6 +291,8 @@ export type UserUncheckedCreateInput = {
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutUserInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
   categoryGroups?: Prisma.CategoryGroupUncheckedCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -298,6 +308,8 @@ export type UserUpdateInput = {
   plans?: Prisma.PlanUpdateManyWithoutUserNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
   categoryGroups?: Prisma.CategoryGroupUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -313,6 +325,8 @@ export type UserUncheckedUpdateInput = {
   plans?: Prisma.PlanUncheckedUpdateManyWithoutUserNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
   categoryGroups?: Prisma.CategoryGroupUncheckedUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -470,6 +484,34 @@ export type UserUpdateOneRequiredWithoutCategoriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCategoriesInput, Prisma.UserUpdateWithoutCategoriesInput>, Prisma.UserUncheckedUpdateWithoutCategoriesInput>
 }
 
+export type UserCreateNestedOneWithoutHabitsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutHabitsInput, Prisma.UserUncheckedCreateWithoutHabitsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutHabitsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutHabitsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutHabitsInput, Prisma.UserUncheckedCreateWithoutHabitsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutHabitsInput
+  upsert?: Prisma.UserUpsertWithoutHabitsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutHabitsInput, Prisma.UserUpdateWithoutHabitsInput>, Prisma.UserUncheckedUpdateWithoutHabitsInput>
+}
+
+export type UserCreateNestedOneWithoutHabitLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutHabitLogsInput, Prisma.UserUncheckedCreateWithoutHabitLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutHabitLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutHabitLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutHabitLogsInput, Prisma.UserUncheckedCreateWithoutHabitLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutHabitLogsInput
+  upsert?: Prisma.UserUpsertWithoutHabitLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutHabitLogsInput, Prisma.UserUpdateWithoutHabitLogsInput>, Prisma.UserUncheckedUpdateWithoutHabitLogsInput>
+}
+
 export type UserCreateWithoutAccountsInput = {
   id?: string
   email?: string | null
@@ -482,6 +524,8 @@ export type UserCreateWithoutAccountsInput = {
   plans?: Prisma.PlanCreateNestedManyWithoutUserInput
   categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
   categoryGroups?: Prisma.CategoryGroupCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -496,6 +540,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutUserInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
   categoryGroups?: Prisma.CategoryGroupUncheckedCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -526,6 +572,8 @@ export type UserUpdateWithoutAccountsInput = {
   plans?: Prisma.PlanUpdateManyWithoutUserNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
   categoryGroups?: Prisma.CategoryGroupUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -540,6 +588,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   plans?: Prisma.PlanUncheckedUpdateManyWithoutUserNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
   categoryGroups?: Prisma.CategoryGroupUncheckedUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTasksInput = {
@@ -554,6 +604,8 @@ export type UserCreateWithoutTasksInput = {
   plans?: Prisma.PlanCreateNestedManyWithoutUserInput
   categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
   categoryGroups?: Prisma.CategoryGroupCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTasksInput = {
@@ -568,6 +620,8 @@ export type UserUncheckedCreateWithoutTasksInput = {
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutUserInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
   categoryGroups?: Prisma.CategoryGroupUncheckedCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTasksInput = {
@@ -598,6 +652,8 @@ export type UserUpdateWithoutTasksInput = {
   plans?: Prisma.PlanUpdateManyWithoutUserNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
   categoryGroups?: Prisma.CategoryGroupUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTasksInput = {
@@ -612,6 +668,8 @@ export type UserUncheckedUpdateWithoutTasksInput = {
   plans?: Prisma.PlanUncheckedUpdateManyWithoutUserNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
   categoryGroups?: Prisma.CategoryGroupUncheckedUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutExecutionsInput = {
@@ -626,6 +684,8 @@ export type UserCreateWithoutExecutionsInput = {
   plans?: Prisma.PlanCreateNestedManyWithoutUserInput
   categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
   categoryGroups?: Prisma.CategoryGroupCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutExecutionsInput = {
@@ -640,6 +700,8 @@ export type UserUncheckedCreateWithoutExecutionsInput = {
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutUserInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
   categoryGroups?: Prisma.CategoryGroupUncheckedCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutExecutionsInput = {
@@ -670,6 +732,8 @@ export type UserUpdateWithoutExecutionsInput = {
   plans?: Prisma.PlanUpdateManyWithoutUserNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
   categoryGroups?: Prisma.CategoryGroupUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutExecutionsInput = {
@@ -684,6 +748,8 @@ export type UserUncheckedUpdateWithoutExecutionsInput = {
   plans?: Prisma.PlanUncheckedUpdateManyWithoutUserNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
   categoryGroups?: Prisma.CategoryGroupUncheckedUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPlansInput = {
@@ -698,6 +764,8 @@ export type UserCreateWithoutPlansInput = {
   executions?: Prisma.ExecutionCreateNestedManyWithoutUserInput
   categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
   categoryGroups?: Prisma.CategoryGroupCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPlansInput = {
@@ -712,6 +780,8 @@ export type UserUncheckedCreateWithoutPlansInput = {
   executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutUserInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
   categoryGroups?: Prisma.CategoryGroupUncheckedCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPlansInput = {
@@ -742,6 +812,8 @@ export type UserUpdateWithoutPlansInput = {
   executions?: Prisma.ExecutionUpdateManyWithoutUserNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
   categoryGroups?: Prisma.CategoryGroupUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPlansInput = {
@@ -756,6 +828,8 @@ export type UserUncheckedUpdateWithoutPlansInput = {
   executions?: Prisma.ExecutionUncheckedUpdateManyWithoutUserNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
   categoryGroups?: Prisma.CategoryGroupUncheckedUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCategoryGroupsInput = {
@@ -770,6 +844,8 @@ export type UserCreateWithoutCategoryGroupsInput = {
   executions?: Prisma.ExecutionCreateNestedManyWithoutUserInput
   plans?: Prisma.PlanCreateNestedManyWithoutUserInput
   categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCategoryGroupsInput = {
@@ -784,6 +860,8 @@ export type UserUncheckedCreateWithoutCategoryGroupsInput = {
   executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutUserInput
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutUserInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCategoryGroupsInput = {
@@ -814,6 +892,8 @@ export type UserUpdateWithoutCategoryGroupsInput = {
   executions?: Prisma.ExecutionUpdateManyWithoutUserNestedInput
   plans?: Prisma.PlanUpdateManyWithoutUserNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCategoryGroupsInput = {
@@ -828,6 +908,8 @@ export type UserUncheckedUpdateWithoutCategoryGroupsInput = {
   executions?: Prisma.ExecutionUncheckedUpdateManyWithoutUserNestedInput
   plans?: Prisma.PlanUncheckedUpdateManyWithoutUserNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCategoriesInput = {
@@ -842,6 +924,8 @@ export type UserCreateWithoutCategoriesInput = {
   executions?: Prisma.ExecutionCreateNestedManyWithoutUserInput
   plans?: Prisma.PlanCreateNestedManyWithoutUserInput
   categoryGroups?: Prisma.CategoryGroupCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCategoriesInput = {
@@ -856,6 +940,8 @@ export type UserUncheckedCreateWithoutCategoriesInput = {
   executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutUserInput
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutUserInput
   categoryGroups?: Prisma.CategoryGroupUncheckedCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCategoriesInput = {
@@ -886,6 +972,8 @@ export type UserUpdateWithoutCategoriesInput = {
   executions?: Prisma.ExecutionUpdateManyWithoutUserNestedInput
   plans?: Prisma.PlanUpdateManyWithoutUserNestedInput
   categoryGroups?: Prisma.CategoryGroupUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCategoriesInput = {
@@ -900,6 +988,168 @@ export type UserUncheckedUpdateWithoutCategoriesInput = {
   executions?: Prisma.ExecutionUncheckedUpdateManyWithoutUserNestedInput
   plans?: Prisma.PlanUncheckedUpdateManyWithoutUserNestedInput
   categoryGroups?: Prisma.CategoryGroupUncheckedUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutHabitsInput = {
+  id?: string
+  email?: string | null
+  name?: string | null
+  password?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
+  executions?: Prisma.ExecutionCreateNestedManyWithoutUserInput
+  plans?: Prisma.PlanCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  categoryGroups?: Prisma.CategoryGroupCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutHabitsInput = {
+  id?: string
+  email?: string | null
+  name?: string | null
+  password?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
+  executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutUserInput
+  plans?: Prisma.PlanUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  categoryGroups?: Prisma.CategoryGroupUncheckedCreateNestedManyWithoutUserInput
+  habitLogs?: Prisma.HabitLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutHabitsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutHabitsInput, Prisma.UserUncheckedCreateWithoutHabitsInput>
+}
+
+export type UserUpsertWithoutHabitsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutHabitsInput, Prisma.UserUncheckedUpdateWithoutHabitsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutHabitsInput, Prisma.UserUncheckedCreateWithoutHabitsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutHabitsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutHabitsInput, Prisma.UserUncheckedUpdateWithoutHabitsInput>
+}
+
+export type UserUpdateWithoutHabitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
+  executions?: Prisma.ExecutionUpdateManyWithoutUserNestedInput
+  plans?: Prisma.PlanUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  categoryGroups?: Prisma.CategoryGroupUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutHabitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
+  executions?: Prisma.ExecutionUncheckedUpdateManyWithoutUserNestedInput
+  plans?: Prisma.PlanUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  categoryGroups?: Prisma.CategoryGroupUncheckedUpdateManyWithoutUserNestedInput
+  habitLogs?: Prisma.HabitLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutHabitLogsInput = {
+  id?: string
+  email?: string | null
+  name?: string | null
+  password?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
+  executions?: Prisma.ExecutionCreateNestedManyWithoutUserInput
+  plans?: Prisma.PlanCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  categoryGroups?: Prisma.CategoryGroupCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutHabitLogsInput = {
+  id?: string
+  email?: string | null
+  name?: string | null
+  password?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
+  executions?: Prisma.ExecutionUncheckedCreateNestedManyWithoutUserInput
+  plans?: Prisma.PlanUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  categoryGroups?: Prisma.CategoryGroupUncheckedCreateNestedManyWithoutUserInput
+  habits?: Prisma.HabitUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutHabitLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutHabitLogsInput, Prisma.UserUncheckedCreateWithoutHabitLogsInput>
+}
+
+export type UserUpsertWithoutHabitLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutHabitLogsInput, Prisma.UserUncheckedUpdateWithoutHabitLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutHabitLogsInput, Prisma.UserUncheckedCreateWithoutHabitLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutHabitLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutHabitLogsInput, Prisma.UserUncheckedUpdateWithoutHabitLogsInput>
+}
+
+export type UserUpdateWithoutHabitLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
+  executions?: Prisma.ExecutionUpdateManyWithoutUserNestedInput
+  plans?: Prisma.PlanUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  categoryGroups?: Prisma.CategoryGroupUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutHabitLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
+  executions?: Prisma.ExecutionUncheckedUpdateManyWithoutUserNestedInput
+  plans?: Prisma.PlanUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  categoryGroups?: Prisma.CategoryGroupUncheckedUpdateManyWithoutUserNestedInput
+  habits?: Prisma.HabitUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -914,6 +1164,8 @@ export type UserCountOutputType = {
   plans: number
   categories: number
   categoryGroups: number
+  habits: number
+  habitLogs: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -923,6 +1175,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   plans?: boolean | UserCountOutputTypeCountPlansArgs
   categories?: boolean | UserCountOutputTypeCountCategoriesArgs
   categoryGroups?: boolean | UserCountOutputTypeCountCategoryGroupsArgs
+  habits?: boolean | UserCountOutputTypeCountHabitsArgs
+  habitLogs?: boolean | UserCountOutputTypeCountHabitLogsArgs
 }
 
 /**
@@ -977,6 +1231,20 @@ export type UserCountOutputTypeCountCategoryGroupsArgs<ExtArgs extends runtime.T
   where?: Prisma.CategoryGroupWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountHabitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HabitWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountHabitLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HabitLogWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -991,6 +1259,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   plans?: boolean | Prisma.User$plansArgs<ExtArgs>
   categories?: boolean | Prisma.User$categoriesArgs<ExtArgs>
   categoryGroups?: boolean | Prisma.User$categoryGroupsArgs<ExtArgs>
+  habits?: boolean | Prisma.User$habitsArgs<ExtArgs>
+  habitLogs?: boolean | Prisma.User$habitLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1029,6 +1299,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   plans?: boolean | Prisma.User$plansArgs<ExtArgs>
   categories?: boolean | Prisma.User$categoriesArgs<ExtArgs>
   categoryGroups?: boolean | Prisma.User$categoryGroupsArgs<ExtArgs>
+  habits?: boolean | Prisma.User$habitsArgs<ExtArgs>
+  habitLogs?: boolean | Prisma.User$habitLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1043,6 +1315,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     plans: Prisma.$PlanPayload<ExtArgs>[]
     categories: Prisma.$CategoryPayload<ExtArgs>[]
     categoryGroups: Prisma.$CategoryGroupPayload<ExtArgs>[]
+    habits: Prisma.$HabitPayload<ExtArgs>[]
+    habitLogs: Prisma.$HabitLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1451,6 +1725,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   plans<T extends Prisma.User$plansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$plansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   categories<T extends Prisma.User$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   categoryGroups<T extends Prisma.User$categoryGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$categoryGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  habits<T extends Prisma.User$habitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$habitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HabitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  habitLogs<T extends Prisma.User$habitLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$habitLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HabitLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2015,6 +2291,54 @@ export type User$categoryGroupsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.CategoryGroupScalarFieldEnum | Prisma.CategoryGroupScalarFieldEnum[]
+}
+
+/**
+ * User.habits
+ */
+export type User$habitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Habit
+   */
+  select?: Prisma.HabitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Habit
+   */
+  omit?: Prisma.HabitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HabitInclude<ExtArgs> | null
+  where?: Prisma.HabitWhereInput
+  orderBy?: Prisma.HabitOrderByWithRelationInput | Prisma.HabitOrderByWithRelationInput[]
+  cursor?: Prisma.HabitWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HabitScalarFieldEnum | Prisma.HabitScalarFieldEnum[]
+}
+
+/**
+ * User.habitLogs
+ */
+export type User$habitLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HabitLog
+   */
+  select?: Prisma.HabitLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HabitLog
+   */
+  omit?: Prisma.HabitLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HabitLogInclude<ExtArgs> | null
+  where?: Prisma.HabitLogWhereInput
+  orderBy?: Prisma.HabitLogOrderByWithRelationInput | Prisma.HabitLogOrderByWithRelationInput[]
+  cursor?: Prisma.HabitLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HabitLogScalarFieldEnum | Prisma.HabitLogScalarFieldEnum[]
 }
 
 /**

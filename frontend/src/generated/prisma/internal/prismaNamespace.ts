@@ -390,7 +390,9 @@ export const ModelName = {
   Execution: 'Execution',
   Plan: 'Plan',
   CategoryGroup: 'CategoryGroup',
-  Category: 'Category'
+  Category: 'Category',
+  Habit: 'Habit',
+  HabitLog: 'HabitLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -406,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "task" | "execution" | "plan" | "categoryGroup" | "category"
+    modelProps: "user" | "account" | "task" | "execution" | "plan" | "categoryGroup" | "category" | "habit" | "habitLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -928,6 +930,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Habit: {
+      payload: Prisma.$HabitPayload<ExtArgs>
+      fields: Prisma.HabitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HabitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HabitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitPayload>
+        }
+        findFirst: {
+          args: Prisma.HabitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HabitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitPayload>
+        }
+        findMany: {
+          args: Prisma.HabitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitPayload>[]
+        }
+        create: {
+          args: Prisma.HabitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitPayload>
+        }
+        createMany: {
+          args: Prisma.HabitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HabitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitPayload>[]
+        }
+        delete: {
+          args: Prisma.HabitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitPayload>
+        }
+        update: {
+          args: Prisma.HabitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitPayload>
+        }
+        deleteMany: {
+          args: Prisma.HabitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HabitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HabitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitPayload>[]
+        }
+        upsert: {
+          args: Prisma.HabitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitPayload>
+        }
+        aggregate: {
+          args: Prisma.HabitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHabit>
+        }
+        groupBy: {
+          args: Prisma.HabitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HabitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HabitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HabitCountAggregateOutputType> | number
+        }
+      }
+    }
+    HabitLog: {
+      payload: Prisma.$HabitLogPayload<ExtArgs>
+      fields: Prisma.HabitLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HabitLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HabitLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitLogPayload>
+        }
+        findFirst: {
+          args: Prisma.HabitLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HabitLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitLogPayload>
+        }
+        findMany: {
+          args: Prisma.HabitLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitLogPayload>[]
+        }
+        create: {
+          args: Prisma.HabitLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitLogPayload>
+        }
+        createMany: {
+          args: Prisma.HabitLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HabitLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitLogPayload>[]
+        }
+        delete: {
+          args: Prisma.HabitLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitLogPayload>
+        }
+        update: {
+          args: Prisma.HabitLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.HabitLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HabitLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HabitLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.HabitLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HabitLogPayload>
+        }
+        aggregate: {
+          args: Prisma.HabitLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHabitLog>
+        }
+        groupBy: {
+          args: Prisma.HabitLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HabitLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HabitLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HabitLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1058,6 +1208,34 @@ export const CategoryScalarFieldEnum = {
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const HabitScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  levelEasy: 'levelEasy',
+  levelNormal: 'levelNormal',
+  levelChallenge: 'levelChallenge',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  categoryId: 'categoryId'
+} as const
+
+export type HabitScalarFieldEnum = (typeof HabitScalarFieldEnum)[keyof typeof HabitScalarFieldEnum]
+
+
+export const HabitLogScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  completedLevel: 'completedLevel',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  habitId: 'habitId'
+} as const
+
+export type HabitLogScalarFieldEnum = (typeof HabitLogScalarFieldEnum)[keyof typeof HabitLogScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1254,6 +1432,8 @@ export type GlobalOmitConfig = {
   plan?: Prisma.PlanOmit
   categoryGroup?: Prisma.CategoryGroupOmit
   category?: Prisma.CategoryOmit
+  habit?: Prisma.HabitOmit
+  habitLog?: Prisma.HabitLogOmit
 }
 
 /* Types for Logging */

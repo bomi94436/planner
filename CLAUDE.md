@@ -126,15 +126,26 @@ PR 작성 시 `.github/pull_request_template.md` 템플릿을 사용한다.
 나쁜 예: 백엔드 작업
 ```
 
-#### 변경 파일
+각 섹션은 **변경 내용**과 **변경 파일** 두 파트로 구성한다.
 
-- **핵심 변경 파일만** 명시한다 (전체 파일 나열 금지)
-- 설정 파일, lock 파일 등 부수적인 변경은 생략한다
-- 경로는 프로젝트 루트 기준으로 작성한다
+**변경 내용**: 추가/수정/삭제된 기능을 bullet로 나열한다
 
+```markdown
+- (추가) 습관 CRUD 기능
+- (수정) 습관 달성 시 연속일 계산 로직
+- (삭제) 레거시 습관 상태 관리 방식
 ```
-예시:
-- 변경 파일: `frontend/src/app/api/habits/route.ts`, `frontend/src/types/habit.ts`
+
+**변경 파일**: 핵심 변경 파일만 테이블 형식으로 작성한다
+
+- 전체 파일 나열 금지, 설정 파일·lock 파일 등 부수적인 변경은 생략
+- 경로는 프로젝트 루트 기준으로 작성
+
+```markdown
+| 파일 | 설명 |
+| ---- | ---- |
+| `frontend/src/app/api/habits/route.ts` | 습관 CRUD API 구현 |
+| `frontend/src/types/habit.ts` | Habit, HabitLog 타입 정의 |
 ```
 
 #### 스크린샷

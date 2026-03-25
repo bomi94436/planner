@@ -173,8 +173,9 @@ export const HabitCard: React.FC<HabitCardProps> = ({ habit }) => {
                   <div
                     key={cell.date}
                     className={cn(
-                      'flex aspect-square w-full items-center justify-center rounded text-xs font-medium opacity-50 bg-muted text-muted-foreground',
+                      'flex aspect-square w-full items-center justify-center rounded text-xs font-medium bg-muted text-muted-foreground',
                       {
+                        'opacity-50': dayjs().isBefore(cell.date),
                         'bg-green-100 text-green-700': log?.completedLevel === 1,
                         'bg-yellow-100 text-yellow-700': log?.completedLevel === 2,
                         'bg-red-100 text-red-700': log?.completedLevel === 3,

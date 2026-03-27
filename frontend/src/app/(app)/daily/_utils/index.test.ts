@@ -71,6 +71,30 @@ describe('preprocessTimeBlocks', () => {
     expect(result[0].startIndex).toBe(30)
     expect(result[0].endIndex).toBe(31)
   })
+
+  it('01:00~04:00 블럭 (자정 넘긴 종료) → startIndex=1260, endIndex=1440', () => {
+    const blocks = [
+      {
+        startTimestamp: new Date(2024, 0, 2, 1, 0, 0),
+        endTimestamp: new Date(2024, 0, 2, 4, 0, 0),
+      },
+    ]
+    const result = preprocessTimeBlocks(blocks)
+    expect(result[0].startIndex).toBe(1260)
+    expect(result[0].endIndex).toBe(1440)
+  })
+
+  it('03:30~04:00 블럭 (자정 넘긴 종료) → startIndex=1410, endIndex=1440', () => {
+    const blocks = [
+      {
+        startTimestamp: new Date(2024, 0, 2, 3, 30, 0),
+        endTimestamp: new Date(2024, 0, 2, 4, 0, 0),
+      },
+    ]
+    const result = preprocessTimeBlocks(blocks)
+    expect(result[0].startIndex).toBe(1410)
+    expect(result[0].endIndex).toBe(1440)
+  })
 })
 
 // hourIndex=1 기준: minutesStart=60, minutesEnd=120

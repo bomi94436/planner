@@ -25,11 +25,15 @@ export function preprocessTimeBlocks<T extends TimeBlock>(blocks: T[]): Processe
     const startIndex = dateToMinutes(item.startTimestamp)
     const endIndex = dateToMinutes(item.endTimestamp)
 
+    // endIndex가 startIndex보다 작으면 자정(04:00)을 넘긴 것 → 하루치 분 추가
+    const correctedEndIndex =
+      endIndex < startIndex ? endIndex + HOURS_PER_DAY * MINUTES_PER_HOUR : endIndex
+
     return {
       item,
       startIndex,
       // 최소 1블럭 보장 (시작과 끝이 같은 블럭일 경우)
-      endIndex: endIndex <= startIndex ? startIndex + 1 : endIndex,
+      endIndex: correctedEndIndex <= startIndex ? startIndex + 1 : correctedEndIndex,
     }
   })
 }

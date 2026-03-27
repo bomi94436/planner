@@ -73,7 +73,7 @@ export function useHoveredTime(containerRef: React.RefObject<HTMLDivElement | nu
 
   const displayHoveredTime = useMemo(() => {
     if (!hoveredTime) return null
-    if (hoveredTime.end) {
+    if (hoveredTime.end !== undefined) {
       return `${minutesToDayjs(hoveredTime.start, selectedDate).format('HH:mm')} - ${minutesToDayjs(hoveredTime.end, selectedDate).format('HH:mm')}`
     }
     return minutesToDayjs(hoveredTime.start, selectedDate).format('HH:mm')

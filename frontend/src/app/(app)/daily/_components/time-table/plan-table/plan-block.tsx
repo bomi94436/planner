@@ -1,3 +1,12 @@
+import { PencilIcon, TrashIcon } from 'lucide-react'
+import { useCallback } from 'react'
+
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '@/components/ui'
 import type { Plan } from '@/types/plan'
 import { BLOCK_PADDING } from '~/daily/_constants'
 
@@ -7,28 +16,72 @@ interface PlanBlockProps {
   span: number
   isStart: boolean
   onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => void
+  onContextMenuChange?: (open: boolean) => void
+  handleEditClick: () => void
+  handleDeleteClick: () => void
 }
 
 /**
  * 타임블럭 (그리드 위에 overlay)
  */
-export function PlanBlock({ plan, offsetInRow, span, isStart, onMouseMove }: PlanBlockProps) {
+export function PlanBlock({
+  plan,
+  offsetInRow,
+  span,
+  isStart,
+  onMouseMove,
+  onContextMenuChange,
+  handleEditClick,
+  handleDeleteClick,
+}: PlanBlockProps) {
   const leftPercent = (offsetInRow / 60) * 100
   const widthPercent = (span / 60) * 100
 
+  // 좌클릭 시 클릭 위치에 컨텍스트 메뉴 표시
+  const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation()
+    e.currentTarget.dispatchEvent(
+      new MouseEvent('contextmenu', {
+        bubbles: true,
+        clientX: e.clientX,
+        clientY: e.clientY,
+      })
+    )
+  }, [])
+
   return (
-    <div
-      className="absolute flex items-center overflow-hidden rounded text-sm text-white opacity-60"
-      style={{
-        bottom: `${BLOCK_PADDING}px`,
-        top: `${BLOCK_PADDING}px`,
-        left: `calc(${leftPercent}% + ${BLOCK_PADDING}px)`,
-        width: `calc(${widthPercent}% - ${BLOCK_PADDING * 2}px)`,
-        backgroundColor: plan.category?.color ?? '#a1a1aa',
-      }}
-      onMouseMove={onMouseMove}
-    >
-      {isStart && <span className="truncate px-2">{plan.title}</span>}
-    </div>
+    <ContextMenu onOpenChange={onContextMenuChange}>
+      <ContextMenuTrigger asChild>
+        <div
+          className="absolute flex items-center overflow-hidden rounded text-sm text-white cursor-pointer"
+          style={{
+            bottom: `${BLOCK_PADDING}px`,
+            top: `${BLOCK_PADDING}px`,
+            left: `calc(${leftPercent}% + ${BLOCK_PADDING}px)`,
+            width: `calc(${widthPercent}% - ${BLOCK_PADDING * 2}px)`,
+            backgroundColor: plan.category?.color ?? '#a1a1aa',
+          }}
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={handleClick}
+          onMouseMove={onMouseMove}
+        >
+          {isStart && <span className="truncate px-2">{plan.title}</span>}
+        </div>
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem onPointerDown={(e) => e.stopPropagation()} onClick={handleEditClick}>
+          <PencilIcon />
+          <span>수정</span>
+        </ContextMenuItem>
+        <ContextMenuItem
+          variant="destructive"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={handleDeleteClick}
+        >
+          <TrashIcon />
+          <span>삭제</span>
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   )
 }

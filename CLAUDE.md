@@ -65,6 +65,15 @@ refactor: 타임 트래커 컴포넌트 분리
 
 타입: `feat`, `fix`, `refactor`, `style`, `docs`, `test`, `chore`, `perf`
 
+#### 설명 작성 원칙
+
+설명은 **코드 변경 내용이 아닌 기능/동작 관점**으로 서술한다.
+
+```
+좋은 예: fix: 22:00~00:00 selection 후 종료일이 다음날로 설정되지 않는 버그 수정
+나쁜 예: fix: minutesToDayjs에서 % HOURS_PER_DAY를 dayOffset 계산으로 변경
+```
+
 ### 커밋 전 체크리스트
 
 코드 변경 후 커밋하기 전에 반드시 아래 3가지를 확인한다:

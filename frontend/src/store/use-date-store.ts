@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import { create } from 'zustand'
 
 import { START_HOUR } from '@/constants'
+import { getCurrentPlannerDate } from '@/utils'
 
 interface DateStore {
   // 선택된 날짜 (기본값: 오늘)
@@ -11,7 +12,7 @@ interface DateStore {
 }
 
 export const useDateStore = create<DateStore>((set) => ({
-  selectedDate: new Date(),
+  selectedDate: getCurrentPlannerDate(),
   setSelectedDate: (date) => set({ selectedDate: date }),
 }))
 

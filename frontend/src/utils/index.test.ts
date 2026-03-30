@@ -1,8 +1,40 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
-import { dateToMinutes, minutesToDayjs, toHourIndex, toMinuteInHour } from '.'
+import {
+  dateToMinutes,
+  getCurrentPlannerDate,
+  minutesToDayjs,
+  toHourIndex,
+  toMinuteInHour,
+} from '.'
 
 // START_HOUR = 4 기준
+describe('getCurrentPlannerDate', () => {
+  it('04:00 이전 (01:00) → 전날 날짜 반환', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2024, 0, 2, 1, 0, 0)) // 2024-01-02 01:00
+    const result = getCurrentPlannerDate()
+    expect(result.getDate()).toBe(1) // 전날 (2024-01-01)
+    vi.useRealTimers()
+  })
+
+  it('04:00 이후 (10:00) → 오늘 날짜 반환', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2024, 0, 2, 10, 0, 0)) // 2024-01-02 10:00
+    const result = getCurrentPlannerDate()
+    expect(result.getDate()).toBe(2) // 오늘 (2024-01-02)
+    vi.useRealTimers()
+  })
+
+  it('정확히 04:00 → 오늘 날짜 반환', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2024, 0, 2, 4, 0, 0)) // 2024-01-02 04:00
+    const result = getCurrentPlannerDate()
+    expect(result.getDate()).toBe(2) // 오늘 (2024-01-02)
+    vi.useRealTimers()
+  })
+})
+
 describe('dateToMinutes', () => {
   it('04:00은 0분을 반환한다', () => {
     expect(dateToMinutes(new Date(2024, 0, 1, 4, 0, 0))).toBe(0)

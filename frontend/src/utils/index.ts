@@ -25,6 +25,15 @@ export const toMinuteInHour = (minutes: Minutes): number => minutes % MINUTES_PE
 
 // 분 → dayjs 객체 (포맷팅용)
 export const minutesToDayjs = (minutes: Minutes, baseDate: Date): dayjs.Dayjs => {
-  const hour = (START_HOUR + toHourIndex(minutes)) % HOURS_PER_DAY
-  return dayjs(baseDate).hour(hour).minute(toMinuteInHour(minutes))
+  const totalHours = START_HOUR + toHourIndex(minutes)
+  const dayOffset = Math.floor(totalHours / HOURS_PER_DAY)
+  const hour = totalHours % HOURS_PER_DAY
+  return dayjs(baseDate).add(dayOffset, 'day').hour(hour).minute(toMinuteInHour(minutes))
+}
+
+// START_HOUR 기준 현재 플래너 날짜 반환 (04:00 이전이면 전날)
+export const getCurrentPlannerDate = (): Date => {
+  const now = dayjs()
+  const d = now.hour() < START_HOUR ? now.subtract(1, 'day') : now
+  return d.startOf('day').toDate()
 }

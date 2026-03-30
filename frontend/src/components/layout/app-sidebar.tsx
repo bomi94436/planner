@@ -38,7 +38,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui'
-import { useIsMobile } from '@/hooks'
+import { useAutoDateAdvance, useIsMobile } from '@/hooks'
 import { useDateStore } from '@/store'
 
 type MenuItem = { href: string; label: string; icon: React.ElementType }
@@ -75,6 +75,7 @@ const SIDEBAR_MENUS: MenuGroup[] = [
 ]
 
 export function AppSidebar() {
+  useAutoDateAdvance()
   const isMobile = useIsMobile()
   const pathname = usePathname()
   const selectedDate = useDateStore((state) => state.selectedDate)
